@@ -119,23 +119,23 @@ export default function SellerDashboardPage ({
 
     return (
         <div>
-            {/* <div className='flex lg:flex-row gap-2 flex-col mb-4 justify-between w-full'>
-                flex flex-col w-full justify-between lg:flex-col 2xl:items-center gap-8 mb-8
-                <CategoryNavigation
+            <div className='flex lg:flex-row gap-2 flex-col mb-4 justify-between w-full'>
+                {/* flex flex-col w-full justify-between lg:flex-col 2xl:items-center gap-8 mb-8 */}
+                {/* <CategoryNavigation
                     categories={filter_options}
                     defaultOption={defaultFilterOption}
                     handleCategoryChange={handleCategoryChange}
-                />
+                /> */}
 
                 <div className='flex items-center gap-[16px]'>
-                    <Link href='/admin/products/new'>
+                    <Link href='/dashboard/seller/create-listing'>
                         <button className='rounded-[8px] h-fit w-fit text-[14px] text-[#090917] gap-[4px] flex items-center whitespace-nowrap bg-[#F2C94C] py-[10px] px-[14px] ' >
                             <FaPlus />
-                            Add Product
+                            Add Pet listing
                         </button>
                     </Link>
                 </div>
-            </div> */}
+            </div>
             <StatCards 
                 dashboardData={null}
             />

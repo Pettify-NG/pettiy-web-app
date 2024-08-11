@@ -8,10 +8,11 @@ import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
+// Rest of your imports from custom components...
 import logoIcon from '../../../public/Pettify 1.png';
 import logo from '../../../public/Pettify.png';
-import { ISidebarLink, links } from '@/static';
-// Rest of your imports...
+import { ISidebarLink, sellerLinks, buyerLinks } from '@/static';
+
 
 type SidebarProps = {
   isOpen: Boolean;
@@ -48,6 +49,9 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
       setIsExpanded(index);               
     }                    
   }
+
+  const userRole = JSON.parse(localStorage.getItem("pettify-details") ?? "").role;
+  const links = userRole.toLowerCase() === "seller" ? sellerLinks : buyerLinks;
 
   return (
     <>
