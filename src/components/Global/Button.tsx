@@ -3,7 +3,7 @@ import clsx from 'clsx/lite';
 import { CgSpinner } from 'react-icons/cg';
 
 const colors = {
-  primary: '#F2C94C',
+  primary: '#ED770B',
   'primary-2': '#CFA31C',
   dark: '#1b1b1b',
 };

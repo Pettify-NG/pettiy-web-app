@@ -242,7 +242,7 @@ export default function Register() {
           </Link> */}
 
           <Link
-            href='/auth/admin/login'
+            href='/login'
             className='font-semibold text-primary'
           >
             Have an account? Log in.

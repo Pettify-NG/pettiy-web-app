@@ -144,10 +144,10 @@ export default function Login() {
 
         <div className='flex items-center justify-end mb-6'>
           <Link
-            href='/auth/signup'
+            href='/register'
             className='font-semibold text-primary'
           >
-            Dont have an account? Create one
+            Dont have an account? <span className='hover:text-underline hover:opacity-80 cursor-pointer hover:text-gray'>Create one</span>
           </Link>
         </div>
 
