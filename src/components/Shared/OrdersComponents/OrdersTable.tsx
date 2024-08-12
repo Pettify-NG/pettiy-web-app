@@ -11,8 +11,8 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 
 import Button from '../../Global/Button';
-import { formatCurrency } from '@/src/helpers';
-import { IOrder, OrderProductItem } from '@/src/interfaces/orders';
+import { formatCurrency } from '@/helpers';
+import { OrderProductItem, IOrder } from '@/interfaces/orders';
 
 export default function OrdersTable({
   orders,

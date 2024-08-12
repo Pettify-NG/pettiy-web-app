@@ -17,7 +17,7 @@ import OrdersTable from './OrdersTable';
 import TextInput from '../../Global/TextInput';
 import Pagination from '../Paginatioin';
 import Button from '../../Global/Button';
-import { IOrder } from '@/src/interfaces/orders';
+import { IOrder } from '@/interfaces/orders';
 
 export default function Orders(
   { 

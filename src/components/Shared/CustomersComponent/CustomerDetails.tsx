@@ -8,12 +8,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import moment from "moment";
 
-import { ICustomer } from "@/src/interfaces/customers";
+import { ICustomer } from "@/interfaces/customers";
 import logo from "../../../../public/Pettify.png"
-import { IUser } from "@/src/interfaces/users";
-import { IOrder, OrderProductItem } from "@/src/interfaces/orders";
+import { IUser } from "@/interfaces/users";
+import { OrderProductItem, IOrder } from "@/interfaces/orders";
 import { FaEye } from "react-icons/fa";
-import { formatCurrency } from "@/src/helpers";
+import { formatCurrency } from "@/helpers";
 import { CiMoneyBill } from "react-icons/ci";
 import { FiShoppingCart } from "react-icons/fi";
 import { TbLineScan } from "react-icons/tb";

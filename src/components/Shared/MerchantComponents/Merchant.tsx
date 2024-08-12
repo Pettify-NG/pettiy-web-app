@@ -8,14 +8,14 @@ import Cookies from 'universal-cookie';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
-import ENDPOINTS from '@/src/config/ENDPOINTS';
+import ENDPOINTS from '@/config/ENDPOINTS';
 import Pagination from '../Paginatioin';
 import TextInput from '../../Global/TextInput';
 import Button from '../../Global/Button';
 import MerchantsTable from './MerchantsTable';
-import { ICustomer, ICustomers } from '@/src/interfaces/customers';
-import HTTPService from '@/src/services/http';
-import { IUser, IUsers } from '@/src/interfaces/users';
+import { ICustomers, ICustomer } from '@/interfaces/customers';
+import HTTPService from '@/services/http';
+import { IUser, IUsers } from '@/interfaces/users';
 
 export default function Merchants({
   merchants,

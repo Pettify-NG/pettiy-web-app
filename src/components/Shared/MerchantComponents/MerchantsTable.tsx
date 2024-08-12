@@ -15,11 +15,10 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Cookies from 'universal-cookie';
 
-
-import HTTPService from '@/src/services/http';
-import ENDPOINTS from '@/src/config/ENDPOINTS';
-import { formatCurrency, formatDate } from '@/src/helpers';
-import { IUser, IUsers } from '@/src/interfaces/users';
+import HTTPService from '@/services/http';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import { formatCurrency, formatDate } from '@/helpers';
+import { IUsers, IUser } from '@/interfaces/users';
 
 export default function MerchantsTable({
   selectedDate,

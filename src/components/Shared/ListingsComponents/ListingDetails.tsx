@@ -3,7 +3,7 @@ import React from 'react'
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import Image from 'next/image';
 
-import { IListing } from '@/src/interfaces/listings'
+import { IListing } from '@/interfaces/listings';
 import Button from '../../Global/Button';
 import logoIcon from '../../../../Pettify 1.png';
 import logo from "../../../../public/Pettify.png"

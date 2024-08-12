@@ -15,12 +15,11 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Cookies from 'universal-cookie';
 
-
-import HTTPService from '@/src/services/http';
-import ENDPOINTS from '@/src/config/ENDPOINTS';
-import { formatCurrency, formatDate } from '@/src/helpers';
+import HTTPService from '@/services/http';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import { formatCurrency, formatDate } from '@/helpers';
 // import { ICustomer, ICustomers } from '@/src/interfaces/customers';
-import { IUser, IUsers } from '@/src/interfaces/users';
+import { IUser, IUsers } from '@/interfaces/users';
 
 export default function UsersTable({
   selectedDate,

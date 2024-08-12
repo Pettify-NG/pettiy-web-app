@@ -6,7 +6,7 @@ import { GiReceiveMoney } from 'react-icons/gi';
 import { TbLineScan } from 'react-icons/tb';
 import Link from 'next/link';
 
-import { IDashboardData } from '@/src/interfaces/dashboard';
+import { IDashboardData } from '@/interfaces/dashboard';
 
 export default function StatCards({
   dashboardData,

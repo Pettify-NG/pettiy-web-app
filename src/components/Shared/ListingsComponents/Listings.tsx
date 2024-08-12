@@ -8,13 +8,13 @@ import Cookies from 'universal-cookie';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
-import ENDPOINTS from '@/src/config/ENDPOINTS';
+import ENDPOINTS from '@/config/ENDPOINTS';
 import Pagination from '../Paginatioin';
 import TextInput from '../../Global/TextInput';
 import Button from '../../Global/Button';
 import ListingsTable from './ListingsTable';
-import HTTPService from '@/src/services/http';
-import { IListing } from '@/src/interfaces/listings';
+import HTTPService from '@/services/http';
+import { IListing } from '@/interfaces/listings';
 
 export default function Listings({
   listings,

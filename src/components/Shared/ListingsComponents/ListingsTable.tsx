@@ -15,11 +15,11 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Cookies from 'universal-cookie';
 
-import HTTPService from '@/src/services/http';
-import ENDPOINTS from '@/src/config/ENDPOINTS';
-import { formatCurrency, formatDate } from '@/src/helpers';
-import { IUser, IUsers } from '@/src/interfaces/users';
-import { IListing } from '@/src/interfaces/listings';
+import { formatCurrency, formatDate } from '@/helpers';
+import { IListing } from '@/interfaces/listings';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import HTTPService from '@/services/http';
+import { IUser, IUsers } from '@/interfaces/users';
 
 export default function ListingsTable({
   selectedDate,

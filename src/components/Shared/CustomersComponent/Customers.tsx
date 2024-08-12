@@ -8,14 +8,14 @@ import Cookies from 'universal-cookie';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
-import ENDPOINTS from '@/src/config/ENDPOINTS';
+import ENDPOINTS from '@/config/ENDPOINTS';
 import Pagination from '../Paginatioin';
 import TextInput from '../../Global/TextInput';
 import Button from '../../Global/Button';
 import CustomersTable from './CustomersTable';
-import { ICustomer, ICustomers } from '@/src/interfaces/customers';
-import HTTPService from '@/src/services/http';
-import { dummyCustomer } from '@/src/interfaces/customers';
+import { ICustomer, ICustomers } from '@/interfaces/customers';
+import HTTPService from '@/services/http';
+import { dummyCustomer } from '@/interfaces/customers';
 
 export default function Customers({
   customers,
