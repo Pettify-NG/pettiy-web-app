@@ -8,7 +8,7 @@ import ENDPOINTS from "@/config/ENDPOINTS";
 
 
 const CreateListingForm = () => {
-
+    return <div className="div">Create Listing</div>
 };
 
 export default CreateListingForm;
