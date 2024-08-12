@@ -50,7 +50,7 @@ export default function Login() {
             //   },
             // ]);
   
-            localStorage.setItem('pettify-details', JSON.stringify(res.data));
+            window.localStorage.setItem('pettify-details', JSON.stringify(res.data));
             push('/dashbooard/seller');
           } 
 
@@ -67,7 +67,7 @@ export default function Login() {
               //   },
               // ]);
     
-              localStorage.setItem('pettify-details', JSON.stringify(res.data));
+              window.localStorage.setItem('pettify-details', JSON.stringify(res.data));
               push('/dashbooard/buyer');
           }
         } 
