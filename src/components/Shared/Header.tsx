@@ -48,7 +48,7 @@ export default function Header({
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const admin_info = window.localStorage.getItem('pettify-details');
+      const admin_info = localStorage.getItem('pettify-details');
 
       if (admin_info) {
         setAdminDetails(JSON.parse(admin_info).user);
