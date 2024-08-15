@@ -1,7 +1,8 @@
 import React from 'react';
 
 import SellerDashboardPage from '@/components/Seller/SellerDashboardPage';
-const Dashboard = async () => {
+
+export default function SellerDashboard () {
 
   return (
     <section>
@@ -14,5 +15,3 @@ const Dashboard = async () => {
     </section>
   );
 };
-
-export default Dashboard;

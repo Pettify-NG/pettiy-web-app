@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react'
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
@@ -128,7 +128,7 @@ export default function SellerDashboardPage ({
                 /> */}
 
                 <div className='flex items-center gap-[16px]'>
-                    <Link href='/dashboard/seller/create-listing'>
+                    <Link href='/dashboard/create-listing'>
                         <button className='rounded-[8px] h-fit w-fit text-[14px] text-[#090917] gap-[4px] flex items-center whitespace-nowrap bg-[#F2C94C] py-[10px] px-[14px] ' >
                             <FaPlus />
                             Add Pet listing

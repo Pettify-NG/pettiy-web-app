@@ -1,10 +1,11 @@
 import React from 'react';
+import Link from 'next/link';
 import { BiWallet } from 'react-icons/bi';
 import { CiMoneyBill } from 'react-icons/ci';
 import { FiShoppingCart } from 'react-icons/fi';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { TbLineScan } from 'react-icons/tb';
-import Link from 'next/link';
+
 
 import { IDashboardData } from '@/interfaces/dashboard';
 

@@ -49,26 +49,16 @@ export default function Login() {
             //     value: res.data.token,
             //   },
             // ]);
+
+            if(typeof window !== undefined) {
+              localStorage.setItem('pettify-details', JSON.stringify(res.data));
+            }
   
-            localStorage.setItem('pettify-details', JSON.stringify(res.data));
-            push('/dashbooard/seller');
+            push('/dashboard');
           } 
 
           if (res.data.user.role === "buyer") {
-            toast.success(
-                API_RESPONSES.SIGN_IN[res.statusCode] ||
-                  API_RESPONSES.SIGN_IN[res.status]
-              );
-    
-              // storeCookies([
-              //   {
-              //     key: 'pettify-token',
-              //     value: res.data.token,
-              //   },
-              // ]);
-    
-              localStorage.setItem('pettify-details', JSON.stringify(res.data));
-              push('/dashbooard/buyer');
+              toast.error("You are not allowed to login as a seller.");
           }
         } 
 

@@ -50,8 +50,8 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
     }                    
   }
 
-  const userRole = JSON.parse(localStorage.getItem("pettify-details") ?? "").role;
-  const links = userRole.toLowerCase() === "seller" ? sellerLinks : buyerLinks;
+  // const userRole = JSON.parse(localStorage.getItem("pettify-details") ?? "").role;
+  const links = sellerLinks;
 
   return (
     <>
