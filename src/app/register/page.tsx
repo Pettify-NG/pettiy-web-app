@@ -56,14 +56,19 @@ export default function Register() {
 
       if (res.error) toast.error(API_RESPONSES.SIGN_UP[res.statusCode]);
       else {
-        if (res.status === 200 && (res.data.userType.toLowerCase() === "seller" || res.data.userType.toLowerCase() === "buyer")) {
+        // && (res.data.userType.toLowerCase() === "seller" || res.data.userType.toLowerCase() === "buyer")
+        if (res.status === 200) {
           toast.success(
             API_RESPONSES.SIGN_UP[res.statusCode] ||
               API_RESPONSES.SIGN_UP[res.status]
           );
 
+          // setTimeout(() => {
+          //   push(`/auth/verify-email?role=${res.data.userType.toLowerCase()}`);
+          // }, 1000);
+          localStorage.setItem('pettify-details', JSON.stringify(res.data));
           setTimeout(() => {
-            push(`/auth/verify-email?role=${res.data.userType.toLowerCase()}`);
+            push(`/dashboard`);
           }, 1000);
 
           // storeCookies([
