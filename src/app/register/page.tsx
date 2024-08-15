@@ -57,7 +57,7 @@ export default function Register() {
       if (res.error) toast.error(API_RESPONSES.SIGN_UP[res.statusCode]);
       else {
         // && (res.data.userType.toLowerCase() === "seller" || res.data.userType.toLowerCase() === "buyer")
-        if (res.status === 200) {
+        if (res.status === 200 || res.status === 201) {
           toast.success(
             API_RESPONSES.SIGN_UP[res.statusCode] ||
               API_RESPONSES.SIGN_UP[res.status]
