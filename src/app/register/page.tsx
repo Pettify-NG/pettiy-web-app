@@ -55,21 +55,35 @@ export default function Register() {
       console.log(res);
 
       if (res.error) toast.error(API_RESPONSES.SIGN_UP[res.statusCode]);
-      else {
+
+      if (res.success && !res.error) {
+        toast.success(
+          // API_RESPONSES.SIGN_UP[res.statusCode] ||
+          //   API_RESPONSES.SIGN_UP[res.status]
+          API_RESPONSES.SIGN_UP[201]
+        );
+
+        localStorage.setItem('pettify-details', JSON.stringify(res.newUser));
+        
+        setTimeout(() => {
+          push(`/dashboard`);
+        }, 1000);
+      }
+      // else {
         // && (res.data.userType.toLowerCase() === "seller" || res.data.userType.toLowerCase() === "buyer")
-        if (res.status === 200 || res.status === 201) {
-          toast.success(
-            API_RESPONSES.SIGN_UP[res.statusCode] ||
-              API_RESPONSES.SIGN_UP[res.status]
-          );
+        // if (res.success) {
+          // toast.success(
+          //   API_RESPONSES.SIGN_UP[res.statusCode] ||
+          //     API_RESPONSES.SIGN_UP[res.status]
+          // );
 
           // setTimeout(() => {
           //   push(`/auth/verify-email?role=${res.data.userType.toLowerCase()}`);
           // }, 1000);
-          localStorage.setItem('pettify-details', JSON.stringify(res.data));
-          setTimeout(() => {
-            push(`/dashboard`);
-          }, 1000);
+          // localStorage.setItem('pettify-details', JSON.stringify(res.data.newUser));
+          // setTimeout(() => {
+          //   push(`/dashboard`);
+          // }, 1000);
 
           // storeCookies([
           //   {
@@ -80,7 +94,7 @@ export default function Register() {
 
           // localStorage.setItem('pettify-admin', JSON.stringify(res.data));
           // push('/admin/dashboard');
-        }
+        // }
 
         // if (res.statusCode === 203) {
         //   storeCookies([
@@ -95,7 +109,7 @@ export default function Register() {
         //     },
         //   ]);
         // }
-      }
+      // }
     },
 
     validateOnChange: true,

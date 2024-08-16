@@ -17,6 +17,7 @@ export const API_RESPONSES: ResponsesType = {
     201: 'Registration Successful. OTP has been sent to your email.',
     302: 'User with this email already exists.',
     404: 'Cannot process request at the moment',
+    
   },
 
   VERIFY_OTP: {
