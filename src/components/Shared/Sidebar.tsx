@@ -11,7 +11,7 @@ import Image from 'next/image';
 // Rest of your imports from custom components...
 import logoIcon from '../../../public/Pettify 1.png';
 import logo from '../../../public/Pettify.png';
-import { ISidebarLink, sellerLinks, buyerLinks } from '@/static';
+import { ISidebarLink, sellerLinks } from '@/static';
 
 
 type SidebarProps = {
@@ -240,10 +240,10 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
             })
         }
         {/* Logout */}
-        <div className='cursor-pointer mt-[20px] p-2 flex items-center'>
+        <div className='cursor-pointer mt-[20px] p-2 flex items-center bg-[#ED770B]'>
             <div
               onClick={() => logOut()}
-              className={`uo-tool-tip py-4 flex  gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
+              className={`uo-tool-tip py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
               } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
               data-pr-tooltip="Logout"
               data-pr-position="right"

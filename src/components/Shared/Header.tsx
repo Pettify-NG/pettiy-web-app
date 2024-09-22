@@ -23,7 +23,7 @@ export interface AdminType {
   token: string;
   twoFactorAuth: number;
   updatedAt: string;
-  userType: 'ADMIN';
+  role: 'SELLER';
   uuid: string;
   verified: number;
 }
@@ -95,7 +95,7 @@ export default function Header({
 
         <UserAvatar
           name={`${adminDetails?.firstName} ${adminDetails?.lastName}`}
-          title={adminDetails?.userType}
+          title={adminDetails?.role}
           // dropDown={dropDown} 
           // setDropDown={setDropDown} 
           // logOutRef={logOutRef}

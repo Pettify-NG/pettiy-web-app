@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
 import Cookies from 'universal-cookie';
+import { TabPanel, TabView } from 'primereact/tabview';
 
 // import ENDPOINTS from '@/config/ENDPOINTS';
 // import { months_labels } from '@/utils/chart';
@@ -25,11 +26,10 @@ import OrdersTable from '../Shared/OrdersComponents/OrdersTable';
 import { DummyOrders } from '@/interfaces/orders';
 
 const filter_options = [
-    'all time',
-    '12 months',
-    '30 days',
-    '7 days',
-    '24 hours',
+    "All orders",
+    "Last Week",
+    "Last Month",
+    "Last Year"
 ];
 
 export default function SellerDashboardPage ({
@@ -52,107 +52,78 @@ export default function SellerDashboardPage ({
     // const [timeFilter, setTimeFilter] = useState<string>("All-time");
     // const [defaultFilterOption, setDefaultFilterOption] = useState(0);
 
-    // const handleCategoryChange = (newIndex: number, option: any) => {            
-    //     switch (option) {
-    //         case 'all time':
-    //             setTimeFilter("All-Time");
-    //             break;
-    //         case '12 months':
-    //             setTimeFilter("12-Month");
-    //             break;
-    //         case '30 days':
-    //             setTimeFilter("30-Days");
-    //             break;
-    //         case '7 days':
-    //             setTimeFilter("7-Days");
-    //             break;
-    //         case '24 hours':
-    //             setTimeFilter("24-Hours");
-    //             break;
-    //         default:
-    //             return; // return null for unknown filter options
-    //     }
-    //     setDefaultFilterOption(newIndex);
-    //     console.log(option);
-    // }
-
-    // const currentMonthIndex = useMemo(() => {
-    //     const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
-    //     return months_labels.indexOf(currentMonth) + 1;
-    // }, []);
-      
-    // const slicedMonths = useMemo(() => {
-    //     return months_labels.filter((month, index) => index <= currentMonthIndex);
-    // }, [currentMonthIndex]);
-      
-
-    // useEffect(() => {
-    //     const fetchData = () => {
-    //         const cookies = new Cookies();
-    //         const token = cookies.get('urban-token');
-    //         console.log(token);
-    //         const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
-
-    //         fetch(`${baseUrl}/api/v1/${ENDPOINTS.DASHBOARD_TOP_CHART}?type=${timeFilter}`, {
-    //             headers: {
-    //                 Authorization: `Bearer ${token}`,
-    //             },
-    //             cache: 'no-store',
-    //         }).then(response => {
-    //             if (!response.ok) {
-    //                 throw new Error('Network response was not ok');
-    //             }
-    //             return response.json();
-    //         }).then(data => {
-    //             if (data.data) {
-    //                 console.log(data.data);
-    //                 setNewDashboardData(data.data);
-    //             }
-    //         }).catch(error => {
-    //             console.error('There was a problem with the fetch operation:', error);
-    //         });
-    //     };
-
-    //     fetchData();
-    // }, [timeFilter]);
-    // console.log(newMonthLabels);
+    const [activeIndex, setActiveIndex] = useState<number>(0);
 
     return (
         <div>
-            <div className='flex lg:flex-row gap-2 flex-col mb-4 justify-between w-full'>
-                {/* flex flex-col w-full justify-between lg:flex-col 2xl:items-center gap-8 mb-8 */}
-                {/* <CategoryNavigation
-                    categories={filter_options}
-                    defaultOption={defaultFilterOption}
-                    handleCategoryChange={handleCategoryChange}
-                /> */}
+            {/* Statistic cards */}
+            <StatCards 
+                dashboardData={null}
+            />
 
+            {/* Add pet listing button. */}
+            <div className='flex my-4 items-center justify-center w-full'>
                 <div className='flex items-center gap-[16px]'>
                     <Link href='/dashboard/create-listing'>
                         <button className='rounded-[8px] h-fit w-fit text-[14px] text-[#090917] gap-[4px] flex items-center whitespace-nowrap bg-[#F2C94C] py-[10px] px-[14px] ' >
                             <FaPlus />
-                            Add Pet listing
+                            Create A New Pet listing
                         </button>
                     </Link>
                 </div>
             </div>
-            <StatCards 
-                dashboardData={null}
-            />
-            {/* <SalesChart 
-                graph={graph!} 
-                month_labels={slicedMonths}
-            />
-            <Sales 
-                products={topSellingProducts?.topProducts} 
-                salesByLocation={topSellingProducts?.topOrdersLocation}
-            /> */}
-            <OrdersTable
-                orders={DummyOrders}
-                selectedOrders={[]}
-                searchValue=''
-                page="recent orders"
-            />
+
+            {/* // Orders Table - Income and Payouts */}
+            <section className='my-4'>
+                <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} scrollable>
+                    {
+                        filter_options.map((time, index) => {
+                            return  (
+                                <TabPanel header={time} key={index}>
+                                    <OrdersTable
+                                        orders={DummyOrders}
+                                        selectedOrders={[]}
+                                        searchValue=''
+                                        page="recent orders"
+                                    />
+                                </TabPanel>
+                            )
+                        })
+                    }
+                    {/* <TabPanel header="All orders">
+                        <OrdersTable
+                            orders={DummyOrders}
+                            selectedOrders={[]}
+                            searchValue=''
+                            page="recent orders"
+                        />
+                    </TabPanel>
+                    <TabPanel header="Last Week">
+                        <OrdersTable
+                            orders={DummyOrders}
+                            selectedOrders={[]}
+                            searchValue=''
+                            page="recent orders"
+                        />
+                    </TabPanel>
+                    <TabPanel header="Last Month">
+                        <OrdersTable
+                            orders={DummyOrders}
+                            selectedOrders={[]}
+                            searchValue=''
+                            page="recent orders"
+                        />
+                    </TabPanel>
+                    <TabPanel header="Last Year">
+                        <OrdersTable
+                            orders={DummyOrders}
+                            selectedOrders={[]}
+                            searchValue=''
+                            page="recent orders"
+                        />
+                    </TabPanel> */}
+                </TabView>
+            </section>
         </div>
     )
 };
