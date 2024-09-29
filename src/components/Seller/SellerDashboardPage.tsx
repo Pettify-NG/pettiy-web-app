@@ -6,21 +6,6 @@ import { FaPlus } from 'react-icons/fa';
 import Cookies from 'universal-cookie';
 import { TabPanel, TabView } from 'primereact/tabview';
 
-// import ENDPOINTS from '@/config/ENDPOINTS';
-// import { months_labels } from '@/utils/chart';
-// import Header from './Header';
-// import StatCards from '../StatCards';
-// import Sales from '../Sales';
-// import SalesChart from '../SalesChart';
-// import OrdersTable from '../Orders/OrdersTable';
-// import { IGraphDetails } from '@/interfaces/graph';
-// import CategoryNavigation from '@/components/Shared/CategoryNavigation';
-// import { ITopSellingProducts } from '@/interfaces/top-selling-products';
-// import { IOrder } from '@/interfaces/orders';
-// import StatCards from './StatsCard';
-// import OrdersTable from '../OrdersComponents/OrdersTable';
-// import { DummyOrders } from '@/src/interfaces/orders';
-
 import StatCards from '../Shared/DashboardComponents/StatsCard';
 import OrdersTable from '../Shared/OrdersComponents/OrdersTable';
 import { DummyOrders } from '@/interfaces/orders';
@@ -43,15 +28,6 @@ export default function SellerDashboardPage ({
     // topSellingProducts?: ITopSellingProducts | undefined,
     // orders?: IOrder[] | null;
 }) {
-
-    // const [newDashboardData, setNewDashboardData] = useState<IDashboardData>({} as IDashboardData);
-
-    // const [currentMonth, setCurrentMonth] = useState('');
-    // const [newMonthLabels, setNewMonthLabels] = useState<string[]>([]);
-
-    // const [timeFilter, setTimeFilter] = useState<string>("All-time");
-    // const [defaultFilterOption, setDefaultFilterOption] = useState(0);
-
     const [activeIndex, setActiveIndex] = useState<number>(0);
 
     return (
@@ -73,7 +49,7 @@ export default function SellerDashboardPage ({
                 </div>
             </div>
 
-            {/* // Orders Table - Income and Payouts */}
+            {/* // Orders Table - All time, last week, last month, & last year. */}
             <section className='my-4'>
                 <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} scrollable>
                     {

@@ -16,6 +16,11 @@
   }
 }
 
+/* Auth Image */
+.auth-image {
+  background: url('../../public/auth-image.png') no-repeat center center/cover;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

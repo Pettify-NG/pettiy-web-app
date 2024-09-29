@@ -45,13 +45,21 @@ export default function AuthLayout(props: Readonly<Props>) {
 
       <div className='relative hidden lg:block w-full h-full logo p-8 bg-gray-800'>
         <Image src={authImage} alt='Hero image' className={`${ pageName === "Login" ? "h-screen" : "" } object-fit rounded-lg`} />
-        {/* {greetingText && (
+        {greetingText && (
           <p className='pl-8 absolute bottom-8 left-8 text-primary font-bold text-5xl'>
             Hey <br />
             {greetingText}
           </p>
-        )} */}
+        )}
       </div>
+      {/* <div className='relative hidden lg:block w-full h-full auth-image p-8 bg-gray-800'>
+        {greetingText && (
+          <p className='pl-8 absolute bottom-8 left-8 text-primary font-bold text-5xl'>
+            Hey <br />
+            {greetingText}
+          </p>
+        )}
+      </div> */}
     </div>
   );
 }
