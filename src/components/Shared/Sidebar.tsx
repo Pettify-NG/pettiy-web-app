@@ -195,7 +195,7 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
         </div>
 
         {/* User profile */}
-        <div className='border border-gray-400 p-4 rounded'>
+        <div className='border border-gray-800 p-4 rounded mb-6'>
           <div className='flex justify-between items-center'>
               <Image
                 src={adminDetails?.profileImage ?? ""}

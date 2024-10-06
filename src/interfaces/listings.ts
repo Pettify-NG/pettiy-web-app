@@ -15,6 +15,7 @@ export interface IListing {
     vaccineStatus: boolean
     status: string
     description: string
+    createdAt: string
 }
 
 enum Sex {

@@ -49,4 +49,38 @@ export function formatCurrency(amount: number) {
   
     return +percentageMatch.toFixed(2);
   }
+
+  export function calculatePetAge(dateOfBirth: string) {
+    const dob = new Date(dateOfBirth);
+    const today = new Date();
+    
+    let years = today.getFullYear() - dob.getFullYear();
+    let months = today.getMonth() - dob.getMonth();
+    let days = today.getDate() - dob.getDate();
+  
+    // Adjust for negative months or days
+    if (days < 0) {
+      months--;
+      days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+    }
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+  
+    // Calculate weeks
+    const totalDays = Math.floor((today.getTime() - dob.getTime()) / (1000 * 60 * 60 * 24));
+    const weeks = Math.floor(totalDays / 7);
+  
+    // Format the result
+    if (years > 0) {
+      return `${years} year${years > 1 ? 's' : ''} ${months} month${months !== 1 ? 's' : ''}`;
+    } else if (months > 0) {
+      return `${months} month${months !== 1 ? 's' : ''}`;
+    } else if (weeks > 0) {
+      return `${weeks} week${weeks !== 1 ? 's' : ''}`;
+    } else {
+      return `${days} day${days !== 1 ? 's' : ''}`;
+    }
+  }
   
