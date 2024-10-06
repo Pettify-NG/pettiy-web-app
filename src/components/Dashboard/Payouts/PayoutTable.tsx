@@ -218,26 +218,30 @@ export default function PayoutTable ({
           onRowClick={(e) => router.push(`/dashboard/payouts/${e.data.id}`)}
           rowClassName={rowClassTemplate}
         >
-          <Column field='id' header='Payout ID' sortable />
-          <Column
-            field=''
-            header='Bank Details'
-            body={bankDetailsTemplate}
-            sortable
-          />
-          <Column
-            field='amount'
-            header='Amount'
-            body={amountTemplate}
-            sortable
-          />
-          <Column
-            field='status'
-            header='Status'
-            sortable
-            body={payoutStatusTemplate}
-          />
-          <Column field='createdAt' header='Created' body={dateTemplate} sortable />
+            <Column field='createdAt' header='Date' body={dateTemplate} sortable />
+          
+            <Column
+                field=''
+                header='Bank Details'
+                body={bankDetailsTemplate}
+                sortable
+            />
+
+            <Column
+                field='amount'
+                header='Amount'
+                body={amountTemplate}
+                sortable
+            />
+
+            <Column
+                field='status'
+                header='Status'
+                sortable
+                body={payoutStatusTemplate}
+            />
+            
+            <Column field='id' header='Payout ID/Reference no' sortable />
         </DataTable>
       </div>
       </div>
