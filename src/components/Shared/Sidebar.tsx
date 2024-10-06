@@ -196,14 +196,14 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
 
         {/* User profile */}
         <div className='border border-gray-800 p-4 rounded mb-6'>
-          <div className='flex justify-between items-center'>
+          <div className={`flex ${isOpen ? "justify-between" : "justify-center"} items-center`}>
               <Image
                 src={adminDetails?.profileImage ?? ""}
                 alt='User profile image'
-                className={`duration-500 rounded-full ${isOpen ? 'w-2/3' : 'w-1/2'}`}
+                className={`duration-500 rounded-full border border-gray-400 w-10 h-10`}
               />
 
-              <div className='flex flex-col gap-2'>
+              <div className={`flex flex-col gap-2 ${isOpen ? '' : 'hidden'}`}>
                   <p>{adminDetails?.firstName + " " + adminDetails?.lastName}</p>
                   <p className='text-[#F2C94C] '>{adminDetails?.username}</p>
               </div>

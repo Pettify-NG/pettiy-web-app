@@ -85,7 +85,10 @@ export default function OrdersTable({
       case 'delivered':
         styles = 'bg-green-100 text-green-600';
         break;
-      case 'cancelled' || 'refunded':
+      case 'cancelled':
+        styles = 'bg-red-100 text-red-600';
+        break;
+      case 'refunded':
         styles = 'bg-red-100 text-red-600';
         break;
       case 'packed':

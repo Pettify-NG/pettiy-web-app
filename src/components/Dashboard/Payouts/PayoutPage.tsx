@@ -3,6 +3,7 @@ import { AiFillBank } from "react-icons/ai";
 
 import Pagination from "@/components/Shared/Paginatioin";
 import Button from "@/components/Global/Button";
+import PayoutTable from "./PayoutTable";
 
 export default function PayoutPage ({ payouts, accountDetails, funds }: { payouts: any, accountDetails: any, funds: any }) {
     return (
@@ -60,6 +61,15 @@ export default function PayoutPage ({ payouts, accountDetails, funds }: { payout
                             Withdraw funds
                         </button>
                     </div>
+                </div>
+
+                {/* Tables */}
+                <div className="w-full my-6">
+                    <PayoutTable 
+                        selectedDate={null}
+                        searchValue=""
+                        payouts={null}
+                    />
                 </div>
             </div>
         </section>
