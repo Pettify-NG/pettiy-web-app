@@ -5,23 +5,23 @@ import { MdOutlinePets } from "react-icons/md";
 import { GiReceiveMoney } from "react-icons/gi";
 
 export const sellerLinks: ISidebarLink[] = [
-  { name: 'home', icon: <IoMdHome />, page: '/dashboard/seller' },
+  { name: 'home', icon: <IoMdHome />, page: '/dashboard' },
   {
     name: 'pet listings',
     icon: <MdOutlinePets />,
-    page: '/dashboard/seller/listings',
+    page: '/dashboard/pet-listings',
   },
   {
     name: 'payout',
     icon: <GiReceiveMoney />,
-    page: '/dashboard/seller/payout',
+    page: '/dashboard/payouts',
   },
   {
     name: 'profile',
     icon: <IoMdPerson />,
-    page: '/dashboard/seller/profile',
+    page: '/dashboard/profile',
   },
-  { name: 'settings', icon: <IoMdSettings />, page: '/admin/dashboard/settings' },
+  { name: 'settings', icon: <IoMdSettings />, page: '/dashboard/settings' },
   // { name: 'notification', icon: <LuMail />, page: '/admin/dashboard/notifications' },
 ];
 
