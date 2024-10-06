@@ -153,7 +153,7 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
         </div>
 
         {/* Logout */}
-        <div className='cursor-pointer self-end  p-2 flex items-center'>
+        <div className='cursor-pointer self-end rounded p-2 flex items-center'>
             <div
               onClick={() => logOut()}
               className={`uo-tool-tip py-4 flex  gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
@@ -267,8 +267,9 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
                 );             
               })
           }
+
           {/* Logout */}
-          <div className='cursor-pointer mt-[20px] p-2 flex items-center bg-[#ED770B]'>
+          <div className='cursor-pointer mt-[20px] rounded p-2 flex items-center bg-[#ED770B]'>
               <div
                 onClick={() => logOut()}
                 className={`uo-tool-tip py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50

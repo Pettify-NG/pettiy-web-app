@@ -8,7 +8,7 @@ import { FaShoppingBag } from "react-icons/fa";
 import Pagination from "@/components/Shared/Paginatioin";
 import PetListingsTable from "./PetListingsTable";
 
-export default function PetListingspage ({ petListings }: {
+export default function PetListingPage ({ petListings }: {
     petListings: any
 }) {
 
@@ -47,34 +47,30 @@ export default function PetListingspage ({ petListings }: {
 
     return (
         <section>
-          <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-8 py-4'>
+          <div className='w-full mb-8 py-4'>
             <div>
-              <p className='text-xl font-bold text-gray-700'>Pet Listings</p>
-              <Pagination/>
-            </div>
-    
-            <div className='flex items-center justify-between w-full'>
               <div className="flex gap-3">
                 <FaShoppingBag />
 
                 <h2>Pet Listings</h2>
               </div>
-
-              {/* Add pet listing button. */}
-              <div className='flex my-4 items-center justify-center w-full'>
-                  <div className='flex items-center gap-[16px]'>
-                      <Link href='/dashboard/create-listing'>
-                          <button className='rounded-[8px] h-fit w-fit text-[14px] text-[#090917] gap-[4px] flex items-center whitespace-nowrap bg-[#F2C94C] py-[10px] px-[14px] ' >
-                              <FaPlus />
-                              Create A New Pet listing
-                          </button>
-                      </Link>
-                  </div>
-              </div>
+              <Pagination/>
+            </div>
+    
+            {/* Add pet listing button. */}
+            <div className='flex my-4 items-center justify-center w-full'>
+                <div className='flex items-center gap-[16px]'>
+                    <Link href='/dashboard/create-listing'>
+                        <button className='rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap bg-[#ED770B] py-[10px] px-[14px] ' >
+                            <FaPlus />
+                            Create A New Pet listing
+                        </button>
+                    </Link>
+                </div>
             </div>
           </div>
     
-          {/* Products Table */}
+          {/* Pet listings Table */}
           <PetListingsTable
             selectedDate={selectedDate}
             petListings={petListings}

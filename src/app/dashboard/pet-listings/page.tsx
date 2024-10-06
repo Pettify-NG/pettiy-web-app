@@ -1,9 +1,11 @@
 import React from "react";
 
+import PetListingPage from "@/components/Dashboard/PetListings/PetListingPage";
+
 export default function PetListings () {
     return (
         <div>
-            Pet listings dashboard.
+            <PetListingPage petListings={null}/>
         </div>
     )
-}
+};

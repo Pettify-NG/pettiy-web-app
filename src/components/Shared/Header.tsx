@@ -64,33 +64,23 @@ export default function Header({
         isOpen ? 'lg:left-[16.66%] lg:w-5/6' : 'lg:left-[8.33%] lg:w-11/12'
       }`}
     >
+
       <button
         className='font-bold capitalize text-2xl text-gray-700 lg:hidden'
         onClick={toggleSidebar}
       >
         <CgMenu />
       </button>
+
       <div className="hidden cursor-pointer font-bold text-gray-700 lg:flex items-center justify-center" onClick={toggleSidebar}>
           {isOpen ? <CgClose className='h-[20px] w-[20px]' /> : <CgMenu className='h-[20px] w-[20px] '/>}
       </div>
-      {/* <div className='flex w-full justify-between'></div> */}
+
       <div className='flex items-center w-full justify-between mx-4'>
         <h3 className='font-semibold'>Welcome, {adminDetails?.username}</h3>
-
-        <div className='w-full max-w-md'>
-          <TextInput
-            placeholder='Search...'
-            leftIcon={<CiSearch />}
-            // onChange={debouncedSearch}
-          />
-        </div> 
       </div>  
+      
       <div className='flex items-center gap-8'>
-        {/* <button className='text-xl'>
-          <IoSearchOutline />
-        </button> */}
-        {/* <Notification icon={<FiMail />} number={unreadNotifications ?? 0} /> */}
-
         <div className='h-12 w-[2px] bg-gray-200'></div>
 
         <UserAvatar
