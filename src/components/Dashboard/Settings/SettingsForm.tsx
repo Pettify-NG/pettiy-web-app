@@ -30,71 +30,75 @@ const SettingsForm = () => {
     });
 
     return (
-        <form
-            action=''
-            className='w-full max-w-md'
-            onSubmit={formik.handleSubmit}
-        >
-            {/* Email address */}
-            <div className='my-6'>
-                <label htmlFor='email' className='text-black text-lg font-semibold'>
-                    Email
-                </label>
-                <p className="my-4">Used to sign in, for email receipts, updates  and notifications</p>
-                <TextInput
-                    onChange={formik.handleChange}
-                    placeholder='Enter your email'
-                    type='text'
-                    id='email'
-                    value={formik.values.email}
-                    error={formik.errors.email}
-                />
-            </div>
+        <>
+            <h2 className="border-b-2 border-black py-4 w-full font-semibold text-xl">Settings</h2>
 
-            {/* Phone Number */}
-            <div className='my-6'>
-                <label htmlFor='phoneNumber' className='mb-3 text-black text-lg font-semibold'>
-                    Phone number
-                </label>
-                <TextInput
-                    onChange={formik.handleChange}
-                    placeholder='Enter your phone number'
-                    type='text'
-                    id='phoneNumber'
-                    value={formik.values.phoneNumber}
-                    error={formik.errors.phoneNumber}
-                />
-            </div>
+            <form
+                action=''
+                className='w-full max-w-md'
+                onSubmit={formik.handleSubmit}
+            >
+                {/* Email address */}
+                <div className='my-6'>
+                    <label htmlFor='email' className='text-black text-lg font-semibold'>
+                        Email
+                    </label>
+                    <p className="my-4">Used to sign in, for email receipts, updates  and notifications</p>
+                    <TextInput
+                        onChange={formik.handleChange}
+                        placeholder='Enter your email'
+                        type='text'
+                        id='email'
+                        value={formik.values.email}
+                        error={formik.errors.email}
+                    />
+                </div>
 
-            {/* Password */}
-            <div className='my-6 flex flex-col gap-3'>
-                <label htmlFor='' className='mb-3 text-black text-lg font-semibold'>
-                    Password
-                </label>
+                {/* Phone Number */}
+                <div className='my-6'>
+                    <label htmlFor='phoneNumber' className='mb-3 text-black text-lg font-semibold'>
+                        Phone number
+                    </label>
+                    <TextInput
+                        onChange={formik.handleChange}
+                        placeholder='Enter your phone number'
+                        type='text'
+                        id='phoneNumber'
+                        value={formik.values.phoneNumber}
+                        error={formik.errors.phoneNumber}
+                    />
+                </div>
 
-                <TextInput
-                    onChange={formik.handleChange}
-                    placeholder='Enter your phone number'
-                    type='text'
-                    id='currentPassword'
-                    value={formik.values.currentPassword}
-                    error={formik.errors.currentPassword}
-                />
+                {/* Password */}
+                <div className='my-6 flex flex-col gap-3'>
+                    <label htmlFor='' className='mb-3 text-black text-lg font-semibold'>
+                        Password
+                    </label>
 
-                <TextInput
-                    onChange={formik.handleChange}
-                    placeholder='Enter new password'
-                    type='text'
-                    id='newPassword'
-                    value={formik.values.newPassword}
-                    error={formik.errors.newPassword}
-                />
-            </div>
+                    <TextInput
+                        onChange={formik.handleChange}
+                        placeholder='Enter your phone number'
+                        type='text'
+                        id='currentPassword'
+                        value={formik.values.currentPassword}
+                        error={formik.errors.currentPassword}
+                    />
 
-            <Button block loading={formik.isSubmitting} type='submit'>
-                Submit
-            </Button>
-        </form>
+                    <TextInput
+                        onChange={formik.handleChange}
+                        placeholder='Enter new password'
+                        type='text'
+                        id='newPassword'
+                        value={formik.values.newPassword}
+                        error={formik.errors.newPassword}
+                    />
+                </div>
+
+                <Button block loading={formik.isSubmitting} type='submit'>
+                    Submit
+                </Button>
+            </form>
+        </>
     );
 }
 
