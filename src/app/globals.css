@@ -11,7 +11,7 @@
 @layer components {
   textarea,
   select {
-    @apply h-full text-sm w-full font-light text-gray-500 focus:outline-none block appearance-none border border-gray-200 py-3 px-4 rounded-md resize-none;
+    @apply h-full text-sm w-full font-light text-gray-500 focus:outline-none block appearance-none border border-black py-3 px-4 resize-none;
   }
   textarea {
     @apply min-h-32;
