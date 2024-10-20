@@ -88,7 +88,7 @@ export default function Login() {
 
   return (
     <AuthLayout
-      pageName='Login'
+      pageName='Log In'
       greetingText='Welcome Back'
       altPage=''
       altPageText=''
@@ -108,7 +108,7 @@ export default function Login() {
             placeholder='Enter your email/username'
             type='text'
             id='email_or_username'
-            rightIcon={<IoMailSharp />}
+            // rightIcon={<IoMailSharp />}
             // rounded
             value={formik.values.email_or_username}
             error={formik.errors.email_or_username}
@@ -137,7 +137,7 @@ export default function Login() {
             href='/register'
             className='font-semibold text-primary'
           >
-            Dont have an account? <span className='hover:text-underline hover:opacity-80 cursor-pointer hover:text-gray'>Create one</span>
+            Dont have an account? <span className='hover:text-underline hover:opacity-80 cursor-pointer hover:text-gray'>Sign Up</span>
           </Link>
         </div>
 

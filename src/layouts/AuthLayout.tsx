@@ -29,7 +29,9 @@ export default function AuthLayout(props: Readonly<Props>) {
         <Link href='/'>
           <Image src={logo} alt='Urban Overstock Logo' className='block w-52' />
         </Link>
-        <p className='font-bold text-4xl mb-8 text-center'>{pageName}</p>
+        <p className='font-bold text-4xl mb-8 text-center text-[#ED770B]'>
+          {pageName}
+        </p>
 
         {children}
 

@@ -117,7 +117,7 @@ export default function Register() {
 
   return (
     <AuthLayout
-      pageName='Sign up'
+      pageName='Sign Up'
       greetingText='Welcome'
       altPage=''
       altPageText=''
@@ -140,7 +140,7 @@ export default function Register() {
               placeholder='Enter firstname'
               type='text'
               id='firstname'
-              rightIcon={<FaRegUser />}
+              // rightIcon={<FaRegUser />}
               // rounded
               value={formik.values.firstname}
               error={formik.errors.firstname}
@@ -157,7 +157,7 @@ export default function Register() {
               placeholder='Enter lastname'
               type='text'
               id='lastname'
-              rightIcon={<FaRegUser />}
+              // rightIcon={<FaRegUser />}
               // rounded
               value={formik.values.lastname}
               error={formik.errors.lastname}
@@ -175,7 +175,7 @@ export default function Register() {
             placeholder='Enter your email'
             type='email'
             id='email'
-            rightIcon={<IoMailSharp />}
+            // rightIcon={<IoMailSharp />}
             // rounded
             value={formik.values.email}
             error={formik.errors.email}
@@ -192,7 +192,7 @@ export default function Register() {
             placeholder='Enter your username'
             type='text'
             id='username'
-            rightIcon={<FaRegUser />}
+            // rightIcon={<FaRegUser />}
             // rounded
             value={formik.values.username}
             error={formik.errors.username}
@@ -209,7 +209,7 @@ export default function Register() {
             placeholder='Enter your phone number'
             type='number'
             id='phonenumber'
-            rightIcon={<FaPhone />}
+            // rightIcon={<FaPhone />}
             // rounded
             value={formik.values.phonenumber}
             error={formik.errors.phonenumber}
@@ -253,23 +253,16 @@ export default function Register() {
         </div>
 
         <div className='flex items-center justify-end mb-6'>
-          {/* <Link
-            href='/auth/reset-password'
-            className='font-semibold text-primary'
-          >
-            Forgot Password?
-          </Link> */}
-
           <Link
             href='/login'
             className='font-semibold text-primary'
           >
-            Have an account? Log in.
+            Have an account? Log In.
           </Link>
         </div>
 
         <Button block loading={formik.isSubmitting} type='submit'>
-          Sign up
+          Sign Up
         </Button>
       </form>
     </AuthLayout>
