@@ -28,7 +28,8 @@
 
 /* Auth Image */
 .auth-image {
-  background: url('../../public/auth-image.png') no-repeat center center/cover;
+  background: url('../../public/auth-image.png') ;
+  /* background: url('/auth-image.png') no-repeat center center/cover; */
 }
 
 body {
