@@ -40,7 +40,7 @@ const CreatePetListingForm = () => {
 
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
 
-  const [vaccineCardImage, setVaccineCardImage] = useState<File | null>();
+  const [vaccineCardImage, setVaccineCardImage] = useState<File | null>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -429,30 +429,30 @@ const CreatePetListingForm = () => {
                 onChange={addNewVaccineCardImage}
               />
               {!vaccineCardImage && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>}
-              <div className='flex items-center flex-wrap gap-2 mb-4'>
-                    <div
-                      // key={`${index}-${img.image.name}`}
-                      className='h-28 w-28 relative rounded-xl'
-                    >
-                      {/* <span className='text-xs absolute top-2 left-2 text-dark bg-green-100 py-1 px-2 rounded-md'>
-                        {index + 1}
-                      </span> */}
-
-                      <Image
-                        src={URL.createObjectURL(vaccineCardImage!)}
-                        alt={vaccineCardImage?.name ?? "vaccine card"}
-                        width={100}
-                        height={100}
-                        className='rounded-lg w-full h-full object-cover'
-                      />
-                      <button
-                        className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
-                        onClick={() => removeVaccineCardImage()}
-                      >
-                        <RiDeleteBin6Fill />
-                      </button>
-                    </div>
-              </div>
+              
+              {
+                vaccineCardImage && 
+                  <div className='flex items-center flex-wrap gap-2 mb-4'>
+                        <div
+                          // key={`${index}-${img.image.name}`}
+                          className='h-28 w-28 relative rounded-xl'
+                        >
+                          <Image
+                            src={vaccineCardImage !== null ? URL.createObjectURL(vaccineCardImage) : ""}
+                            alt={vaccineCardImage?.name ?? "vaccine card"}
+                            width={100}
+                            height={100}
+                            className='rounded-lg w-full h-full object-cover'
+                          />
+                          <button
+                            className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
+                            onClick={() => removeVaccineCardImage()}
+                          >
+                            <RiDeleteBin6Fill />
+                          </button>
+                        </div>
+                  </div>
+              }
               <Button
                 size='small'
                 onClick={() => vaccineImageRef.current?.click()}
