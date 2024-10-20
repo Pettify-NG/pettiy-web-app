@@ -6,9 +6,9 @@ import { FaPlus } from "react-icons/fa";
 import { FaShoppingBag } from "react-icons/fa";
 
 import Pagination from "@/components/Shared/Paginatioin";
-import PetListingsTable from "./PetListingsTable";
+import ProductListingsTable from "./ProductListingTable";
 
-export default function PetListingPage ({ petListings }: {
+export default function ProductListingPage ({ petListings }: {
     petListings: any
 }) {
 
@@ -57,21 +57,21 @@ export default function PetListingPage ({ petListings }: {
               <Pagination/>
             </div>
     
-            {/* Add pet listing button. */}
+            {/* Add product listing button. */}
             <div className='flex my-4 items-center justify-center w-full'>
                 <div className='flex items-center gap-[16px]'>
-                    <Link href='/dashboard/pet-listings/create'>
+                    <Link href='/dashboard/product-listings/create'>
                         <button className='rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap bg-[#ED770B] py-[10px] px-[14px] ' >
                             <FaPlus />
-                            Create A New Pet listing
+                            Create A New Product listing
                         </button>
                     </Link>
                 </div>
             </div>
           </div>
     
-          {/* Pet listings Table */}
-          <PetListingsTable
+          {/* Product listings Table */}
+          <ProductListingsTable
             selectedDate={selectedDate}
             petListings={petListings}
             searchValue={searchValue.toLowerCase()}
