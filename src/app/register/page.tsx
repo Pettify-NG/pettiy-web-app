@@ -124,7 +124,7 @@ export default function Register() {
         </Link>
       </div>
 
-      <div className='flex space-between gap-6 bg-white w-full px-14 py-14 mt-14 bg-blue-200'>
+      <div className='flex space-between gap-6 bg-white w-full px-4 lg:px-14 py-14 mt-14 bg-blue-200'>
         <div className='w-full rounded-md p-6 shadow-xl bg-white flex justify-center align-start flex-col'>
             <p className='font-bold text-3xl mb-4 text-black'>
               Create an account
@@ -136,7 +136,7 @@ export default function Register() {
               onSubmit={formik.handleSubmit}
             >
               {/* Firstname and last name field */}
-              <div className='my-4 flex justify-between w-full gap-3'>
+              <div className='my-4 flex flex-col lg:flex-row justify-between w-full gap-3'>
                 {/* Firstname */}
                 <div className='w-full'>
                   <label htmlFor='firstname' className='mb-2 font-semibold'>
@@ -268,7 +268,7 @@ export default function Register() {
             </form>
         </div>
 
-        <div className='w-full h-[52rem] rounded-md shadow-lg '>
+        <div className='w-full h-[52rem] rounded-md shadow-lg hidden lg:block'>
           <Image 
             src={authImage} 
             alt='Hero image' 

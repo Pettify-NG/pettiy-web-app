@@ -97,7 +97,7 @@ export default function Login() {
         </Link>
       </div>
 
-      <div className='flex space-between gap-6 bg-white w-full px-14 py-14 mt-14 bg-blue-100'>
+      <div className='flex space-between gap-6 bg-white h-full w-full px-4 lg:px-14 py-14 mt-14 bg-blue-200'>
         <div className='w-full rounded-md p-6 shadow-xl bg-white flex justify-center align-start flex-col'>
             <p className='font-bold text-3xl mb-4 text-black'>
               Log In
@@ -154,7 +154,7 @@ export default function Login() {
             </form>
         </div>
 
-        <div className='w-full h-[40rem] rounded-md shadow-lg '>
+        <div className='w-full h-[40rem] rounded-md shadow-lg hidden lg:block'>
           <Image 
             src={authImage} 
             alt='Hero image' 
