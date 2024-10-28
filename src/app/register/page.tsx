@@ -4,18 +4,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { IoEye, IoEyeOff, IoMailSharp } from 'react-icons/io5';
+import { IoEye, IoEyeOff } from 'react-icons/io5';
 import * as Yup from 'yup';
-import { FaPhone } from "react-icons/fa6";
-import { FaRegUser } from "react-icons/fa";
+import Image from 'next/image';
 
+import logo from "../../../public/1-resized.png"
+import authImage from "../../../public/auth-image.png"
 import TextInput from '@/components/Global/TextInput';
 import Button from '@/components/Global/Button';
 import storeCookies from '@/libs/cookies';
 import ENDPOINTS from '@/config/ENDPOINTS';
 import { API_RESPONSES } from '@/config/API_RESPONSES';
 import HTTPService from '@/services/http';
-import AuthLayout from '@/layouts/AuthLayout';
 
 export default function Register() {
   const httpService = new HTTPService();
@@ -116,155 +116,166 @@ export default function Register() {
   });
 
   return (
-    <AuthLayout
-      pageName='Sign Up'
-      greetingText='Welcome'
-      altPage=''
-      altPageText=''
-      altPageUrl=''
-    >
-      <form
-        action=''
-        className='w-full max-w-md mx-auto'
-        onSubmit={formik.handleSubmit}
-      >
-        {/* Firstname and last name field */}
-        <div className='my-6 flex justify-between w-full gap-3'>
-          {/* Firstname */}
-          <div>
-            <label htmlFor='firstname' className='mb-2'>
-              Firstname
-            </label>
-            <TextInput
-              onChange={formik.handleChange}
-              placeholder='Enter firstname'
-              type='text'
-              id='firstname'
-              // rightIcon={<FaRegUser />}
-              // rounded
-              value={formik.values.firstname}
-              error={formik.errors.firstname}
-            />
-          </div>
+    <div className='bg-white'>
 
-          {/* Lastname */}
-          <div>
-            <label htmlFor='lastname' className='mb-2'>
-              Lastname
-            </label>
-            <TextInput
-              onChange={formik.handleChange}
-              placeholder='Enter lastname'
-              type='text'
-              id='lastname'
-              // rightIcon={<FaRegUser />}
-              // rounded
-              value={formik.values.lastname}
-              error={formik.errors.lastname}
-            />
-          </div>
+      <div className='p-4 bg-white fixed top-0 left-0 w-full shadow-md z-10'>
+        <Link href='/'>
+          <Image src={logo} alt='Urban Overstock Logo' className='w-[120px] h-[60px]' />
+        </Link>
+      </div>
+
+      <div className='flex space-between gap-6 bg-white w-full px-14 py-14 mt-14 bg-blue-200'>
+        <div className='w-full rounded-md p-6 shadow-xl bg-white flex justify-center align-start flex-col'>
+            <p className='font-bold text-3xl mb-4 text-black'>
+              Create an account
+            </p>
+
+            <form
+              action=''
+              className='w-full'
+              onSubmit={formik.handleSubmit}
+            >
+              {/* Firstname and last name field */}
+              <div className='my-4 flex justify-between w-full gap-3'>
+                {/* Firstname */}
+                <div className='w-full'>
+                  <label htmlFor='firstname' className='mb-2 font-semibold'>
+                    Firstname
+                  </label>
+                  <TextInput
+                    onChange={formik.handleChange}
+                    placeholder='Enter firstname'
+                    type='text'
+                    id='firstname'
+                    value={formik.values.firstname}
+                    error={formik.errors.firstname}
+                  />
+                </div>
+
+                {/* Lastname */}
+                <div className='w-full'>
+                  <label htmlFor='lastname' className='mb-2 font-semibold'>
+                    Lastname
+                  </label>
+                  <TextInput
+                    onChange={formik.handleChange}
+                    placeholder='Enter lastname'
+                    type='text'
+                    id='lastname'
+                    value={formik.values.lastname}
+                    error={formik.errors.lastname}
+                  />
+                </div>
+              </div>
+
+              {/* Email input field */}
+              <div className='my-4'>
+                <label htmlFor='email' className='mb-2 font-semibold'>
+                  Email
+                </label>
+                <TextInput
+                  onChange={formik.handleChange}
+                  placeholder='Enter your email'
+                  type='email'
+                  id='email'
+                  value={formik.values.email}
+                  error={formik.errors.email}
+                />
+              </div>
+
+              {/* Username input field */}
+              <div className='my-4'>
+                <label htmlFor='username' className='mb-2 font-semibold'>
+                  Username
+                </label>
+                <TextInput
+                  onChange={formik.handleChange}
+                  placeholder='Enter your username'
+                  type='text'
+                  id='username'
+                  value={formik.values.username}
+                  error={formik.errors.username}
+                />
+              </div>
+
+              {/* Phonenumber input field */}
+              <div className='my-4'>
+                <label htmlFor='phonenumber' className='mb-2 font-semibold'>
+                  Phone number
+                </label>
+                <TextInput
+                  onChange={formik.handleChange}
+                  placeholder='Enter your phone number'
+                  type='number'
+                  id='phonenumber'
+                  value={formik.values.phonenumber}
+                  error={formik.errors.phonenumber}
+                />
+              </div>
+
+              {/* Password input field */}
+              <div className='my-4'>
+                <label htmlFor='password' className='mb-2 font-semibold'>
+                  Password
+                </label>
+                <TextInput
+                  onChange={formik.handleChange}
+                  placeholder='* * * * * *'
+                  type={showPassword ? 'text' : 'password'}
+                  id='password'
+                  rightIcon={showPassword ?  <IoEye /> : <IoEyeOff />}
+                  rightIconClick={() => setShowPassword((prev) => !prev)}
+                  value={formik.values.password}
+                  error={formik.errors.password}
+                />
+              </div>
+
+              {/* Confirm Password Input Field */}
+              <div className='my-4'>
+                <label htmlFor='confirmPassword' className='mb-2 font-semibold'>
+                  Confirm Password
+                </label>
+                <TextInput
+                  onChange={formik.handleChange}
+                  placeholder='* * * * * *'
+                  type={showPassword ? 'text' : 'password'}
+                  id='confirmPassword'
+                  rightIcon={showPassword ?  <IoEye /> : <IoEyeOff />}
+                  rightIconClick={() => setShowPassword((prev) => !prev)}
+                  value={formik.values.confirmPassword}
+                  error={formik.errors.confirmPassword}
+                />
+              </div>
+
+              <Button block loading={formik.isSubmitting} className='text-white font-semibold' type='submit'>
+                Create Account
+              </Button>
+
+              <div className='text-xs text-black font-semibold my-4'>
+                <span>
+                  By clicking create account, I acknowledge that I have read and do hereby accept the terms and conditions in the Prettifys <a href="#" className='text-underline'>Terms of service</a>
+                </span>
+              </div>
+
+              <div className='flex items-center justify-end'>
+                <Link
+                  href='/login'
+                  className='font-semibold text-black'
+                >
+                  Already have an account? <span className='text-primary'> Log In.</span>
+                </Link>
+              </div>
+            </form>
         </div>
 
-        {/* Email input field */}
-        <div className='my-6'>
-          <label htmlFor='email' className='mb-2'>
-            Email
-          </label>
-          <TextInput
-            onChange={formik.handleChange}
-            placeholder='Enter your email'
-            type='email'
-            id='email'
-            // rightIcon={<IoMailSharp />}
-            // rounded
-            value={formik.values.email}
-            error={formik.errors.email}
+        <div className='w-full h-[52rem] rounded-md shadow-lg '>
+          <Image 
+            src={authImage} 
+            alt='Hero image' 
+            className='object-cover h-full rounded'
           />
         </div>
-
-        {/* Username input field */}
-        <div className='my-6'>
-          <label htmlFor='username' className='mb-2'>
-            Username
-          </label>
-          <TextInput
-            onChange={formik.handleChange}
-            placeholder='Enter your username'
-            type='text'
-            id='username'
-            // rightIcon={<FaRegUser />}
-            // rounded
-            value={formik.values.username}
-            error={formik.errors.username}
-          />
-        </div>
-
-        {/* Phonenumber input field */}
-        <div className='my-6'>
-          <label htmlFor='phonenumber' className='mb-2'>
-            Phone number
-          </label>
-          <TextInput
-            onChange={formik.handleChange}
-            placeholder='Enter your phone number'
-            type='number'
-            id='phonenumber'
-            // rightIcon={<FaPhone />}
-            // rounded
-            value={formik.values.phonenumber}
-            error={formik.errors.phonenumber}
-          />
-        </div>
-
-        {/* Password input field */}
-        <div className='my-6'>
-          <label htmlFor='password' className='mb-2'>
-            Password
-          </label>
-          <TextInput
-            onChange={formik.handleChange}
-            placeholder='* * * * * *'
-            type={showPassword ? 'text' : 'password'}
-            id='password'
-            rightIcon={showPassword ?  <IoEye /> : <IoEyeOff />}
-            rightIconClick={() => setShowPassword((prev) => !prev)}
-            // rounded
-            value={formik.values.password}
-            error={formik.errors.password}
-          />
-        </div>
-
-        {/* Confirm Password Input Field */}
-        <div className='my-6'>
-          <label htmlFor='confirmPassword' className='mb-2'>
-            Confirm Password
-          </label>
-          <TextInput
-            onChange={formik.handleChange}
-            placeholder='* * * * * *'
-            type={showPassword ? 'text' : 'password'}
-            id='confirmPassword'
-            rightIcon={showPassword ?  <IoEye /> : <IoEyeOff />}
-            rightIconClick={() => setShowPassword((prev) => !prev)}
-            // rounded
-            value={formik.values.confirmPassword}
-            error={formik.errors.confirmPassword}
-          />
-        </div>
-
-        <div className='flex items-center justify-end mb-6'>
-          <Link
-            href='/login'
-            className='font-semibold text-primary'
-          >
-            Have an account? Log In.
-          </Link>
-        </div>
-
-        <Button block loading={formik.isSubmitting} type='submit'>
-          Sign Up
-        </Button>
-      </form>
-    </AuthLayout>
+      </div>
+    </div>
   );
 }

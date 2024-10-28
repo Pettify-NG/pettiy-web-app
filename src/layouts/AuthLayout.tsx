@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import authImage from '../../public/auth-image.png';
-import logo from '../../public/Pettify.png';
+import logo from "../../public/1-resized.png";
 
 interface Props {
   greetingText?: string;
@@ -24,44 +24,30 @@ export default function AuthLayout(props: Readonly<Props>) {
   } = props;
 
   return (
-    <div className='flex space-between '>
-      <div className='p-4 bg-white flex flex-col gap-8 items-center md:px-8 xl:px-16 w-full pt-24'>
-        <Link href='/'>
-          <Image src={logo} alt='Urban Overstock Logo' className='block w-52' />
-        </Link>
-        <p className='font-bold text-4xl mb-8 text-center text-[#ED770B]'>
-          {pageName}
-        </p>
-
-        {children}
-
-        {/* {altPage && altPageUrl && altPageText && (
-          <p className='text-neutral'>
-            {altPageText}{' '}
-            <Link href={altPageUrl} className='font-semibold text-primary'>
-              {altPage}
-            </Link>
-          </p>
-        )} */}
+    <>
+      <div className='p-4 bg-white h-50px fixed w-full shadow-md'>
+         <Link href='/'>
+            <Image src={logo} alt='Urban Overstock Logo' className='w-[100px] h-[50px]' />
+          </Link>
       </div>
 
-      <div className='relative hidden lg:block auth-image w-full h-full logo '>
-        <Image src={authImage} alt='Hero image'  />
-        {/* {greetingText && (
-          <p className='pl-8 absolute bottom-8 left-8 text-primary font-bold text-5xl'>
-            Hey <br />
-            {greetingText}
-          </p>
-        )} */}
+      <div className='flex space-between gap-6 bg-white w-full px-10 py-6 bg-blue-200'>
+        <div className='w-full w-1/2 rounded shadow-lg bg-white flex justify-center align-start flex-col border-red'>
+            <p className='font-bold text-3xl mb-4 text-black'>
+              {pageName}
+            </p>
+          {children}
+        </div>
+
+        <div className='w-1/2 h-[40rem] rounded shadow-lg relative p-4 border border-red-400'>
+          <Image 
+            src={authImage} 
+            alt='Hero image' 
+            fill
+            className='object-cover rounded'
+          />
+        </div>
       </div>
-      {/* <div className='relative hidden lg:block w-full h-full auth-image p-8 bg-gray-800'>
-        {greetingText && (
-          <p className='pl-8 absolute bottom-8 left-8 text-primary font-bold text-5xl'>
-            Hey <br />
-            {greetingText}
-          </p>
-        )}
-      </div> */}
-    </div>
+    </>
   );
 }
