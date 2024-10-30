@@ -8,7 +8,7 @@ import { IoEye, IoEyeOff } from 'react-icons/io5';
 import * as Yup from 'yup';
 import Image from 'next/image';
 
-import logo from "../../../public/1-resized.png"
+import logo from "../../../public/1-Photoroom.png";
 import authImage from "../../../public/auth-image.png"
 import TextInput from '@/components/Global/TextInput';
 import Button from '@/components/Global/Button';
@@ -120,11 +120,11 @@ export default function Register() {
 
       <div className='p-4 bg-white fixed top-0 left-0 w-full shadow-md z-10'>
         <Link href='/'>
-          <Image src={logo} alt='Urban Overstock Logo' className='w-[120px] h-[60px]' />
+          <Image src={logo} alt='Urban Overstock Logo' className='w-[140px] h-[50px]' />
         </Link>
       </div>
 
-      <div className='flex space-between gap-6 bg-white w-full px-4 lg:px-14 py-14 mt-14 bg-blue-200'>
+      <div className='flex space-between gap-6 bg-white w-full px-4 lg:px-14 py-14 mt-14 bg-orange-200'>
         <div className='w-full rounded-md p-6 shadow-xl bg-white flex justify-center align-start flex-col'>
             <p className='font-bold text-3xl mb-4 text-black'>
               Create an account
@@ -139,7 +139,7 @@ export default function Register() {
               <div className='my-4 flex flex-col lg:flex-row justify-between w-full gap-3'>
                 {/* Firstname */}
                 <div className='w-full'>
-                  <label htmlFor='firstname' className='mb-2 font-semibold'>
+                  <label htmlFor='firstname' className='mb-2  '>
                     Firstname
                   </label>
                   <TextInput
@@ -154,7 +154,7 @@ export default function Register() {
 
                 {/* Lastname */}
                 <div className='w-full'>
-                  <label htmlFor='lastname' className='mb-2 font-semibold'>
+                  <label htmlFor='lastname' className='mb-2'>
                     Lastname
                   </label>
                   <TextInput
@@ -170,7 +170,7 @@ export default function Register() {
 
               {/* Email input field */}
               <div className='my-4'>
-                <label htmlFor='email' className='mb-2 font-semibold'>
+                <label htmlFor='email' className='mb-2'>
                   Email
                 </label>
                 <TextInput
@@ -185,7 +185,7 @@ export default function Register() {
 
               {/* Username input field */}
               <div className='my-4'>
-                <label htmlFor='username' className='mb-2 font-semibold'>
+                <label htmlFor='username' className='mb-2  '>
                   Username
                 </label>
                 <TextInput
@@ -200,7 +200,7 @@ export default function Register() {
 
               {/* Phonenumber input field */}
               <div className='my-4'>
-                <label htmlFor='phonenumber' className='mb-2 font-semibold'>
+                <label htmlFor='phonenumber' className='mb-2  '>
                   Phone number
                 </label>
                 <TextInput
@@ -215,7 +215,7 @@ export default function Register() {
 
               {/* Password input field */}
               <div className='my-4'>
-                <label htmlFor='password' className='mb-2 font-semibold'>
+                <label htmlFor='password' className='mb-2  '>
                   Password
                 </label>
                 <TextInput
@@ -232,7 +232,7 @@ export default function Register() {
 
               {/* Confirm Password Input Field */}
               <div className='my-4'>
-                <label htmlFor='confirmPassword' className='mb-2 font-semibold'>
+                <label htmlFor='confirmPassword' className='mb-2  '>
                   Confirm Password
                 </label>
                 <TextInput
@@ -251,19 +251,19 @@ export default function Register() {
                 Create Account
               </Button>
 
-              <div className='text-xs text-black font-semibold my-4'>
-                <span>
-                  By clicking create account, I acknowledge that I have read and do hereby accept the terms and conditions in the Prettifys <a href="#" className='text-underline'>Terms of service</a>
-                </span>
-              </div>
-
               <div className='flex items-center justify-end'>
                 <Link
                   href='/login'
                   className='font-semibold text-black'
                 >
-                  Already have an account? <span className='text-primary'> Log In.</span>
+                  Already have an account? <span className='hover:text-underline text-[#ED770B] hover:opacity-80 cursor-pointer hover:text-gray'> Log In.</span>
                 </Link>
+              </div>
+
+              <div className='text-xs text-black font-semibold my-4'>
+                <span>
+                  By clicking create account, I acknowledge that I have read and do hereby accept the terms and conditions in the Pettifys <a href="#" className='text-underline'>Terms of service</a>
+                </span>
               </div>
             </form>
         </div>

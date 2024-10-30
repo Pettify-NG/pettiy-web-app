@@ -8,8 +8,8 @@ import { IoEye, IoEyeOff, IoMailSharp } from 'react-icons/io5';
 import * as Yup from 'yup';
 import Image from 'next/image';
 
-import logo from "../../../public/1-resized.png"
-import authImage from "../../../public/auth-image.png"
+import logo from "../../../public/1-Photoroom.png";
+import authImage from "../../../public/auth-image.png";
 import TextInput from '@/components/Global/TextInput';
 import Button from '@/components/Global/Button';
 import ENDPOINTS from '@/config/ENDPOINTS';
@@ -93,14 +93,14 @@ export default function Login() {
     <div className='bg-white'>
       <div className='p-4 bg-white fixed top-0 left-0 w-full shadow-md z-10'>
         <Link href='/'>
-          <Image src={logo} alt='Urban Overstock Logo' className='w-[120px] h-[60px]' />
+          <Image src={logo} alt='Urban Overstock Logo' className='w-[140px] h-[50px]' />
         </Link>
       </div>
 
-      <div className='flex space-between gap-6 bg-white h-full w-full px-4 lg:px-14 py-14 mt-14 bg-blue-200'>
+      <div className='flex space-between gap-6 bg-white h-full w-full px-4 lg:px-14 py-14 mt-14 bg-orange-200 '>
         <div className='w-full rounded-md p-6 shadow-xl bg-white flex justify-center align-start flex-col'>
             <p className='font-bold text-3xl mb-4 text-black'>
-              Log In
+              Log in to your account
             </p>
 
             <form
@@ -109,7 +109,7 @@ export default function Login() {
               onSubmit={formik.handleSubmit}
             >
               <div className='my-4'>
-                <label htmlFor='email_or_username' className='mb-2 font-semibold'>
+                <label htmlFor='email_or_username' className='mb-2'>
                   Email or username
                 </label>
                 <TextInput
@@ -124,7 +124,7 @@ export default function Login() {
               
               {/*  */}
               <div className='my-4'>
-                <label htmlFor='password' className='mb-2 font-semibold'>
+                <label htmlFor='password' className='mb-2'>
                   Password
                 </label>
                 <TextInput
@@ -148,7 +148,7 @@ export default function Login() {
                   href='/register'
                   className='font-semibold text-black'
                 >
-                  Dont have an account? <span className='hover:text-underline text-primary hover:opacity-80 cursor-pointer hover:text-gray'>Sign Up</span>
+                  {`Don't have an account? `} <span className='hover:text-underline text-[#ED770B] hover:opacity-80 cursor-pointer hover:text-gray'>Sign Up</span>
                 </Link>
               </div>
             </form>
