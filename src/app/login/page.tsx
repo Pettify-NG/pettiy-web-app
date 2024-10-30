@@ -93,7 +93,7 @@ export default function Login() {
     <div className='bg-white'>
       <div className='p-4 bg-white fixed top-0 left-0 w-full shadow-md z-10'>
         <Link href='/'>
-          <Image src={logo} alt='Urban Overstock Logo' className='w-[140px] h-[50px]' />
+          <Image src={logo} alt='Urban Overstock Logo' className='w-[100px] h-[30px]'/>
         </Link>
       </div>
 
