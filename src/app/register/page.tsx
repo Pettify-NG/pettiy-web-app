@@ -116,7 +116,7 @@ export default function Register() {
   });
 
   return (
-    <div className='bg-white'>
+    <div className=''>
 
       <div className='p-4 bg-white fixed top-0 left-0 w-full shadow-md z-10'>
         <Link href='/'>
@@ -124,7 +124,7 @@ export default function Register() {
         </Link>
       </div>
 
-      <div className='flex space-between gap-6 bg-white w-full px-4 lg:px-14 py-14 mt-14 bg-orange-200'>
+      <div className='flex space-between gap-6 bg-orange-300 w-full px-4 lg:px-14 py-14 mt-14'>
         <div className='w-full rounded-md p-6 shadow-xl bg-white flex justify-center align-start flex-col'>
             <p className='font-bold text-3xl mb-4 text-black'>
               Create an account
@@ -262,7 +262,7 @@ export default function Register() {
 
               <div className='text-xs text-black font-semibold my-4'>
                 <span>
-                  By clicking create account, I acknowledge that I have read and do hereby accept the terms and conditions in the Pettifys <a href="#" className='text-underline'>Terms of service</a>
+                  {`By clicking create account, I acknowledge that I have read and do hereby accept the terms and conditions in the Pettify's`} <a href="#" className='text-underline'>Terms of service</a>
                 </span>
               </div>
             </form>

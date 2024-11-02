@@ -90,14 +90,14 @@ export default function Login() {
   });
 
   return (
-    <div className='bg-white'>
+    <div className=''>
       <div className='p-4 bg-white fixed top-0 left-0 w-full shadow-md z-10'>
         <Link href='/'>
           <Image src={logo} alt='Urban Overstock Logo' className='w-[100px] h-[30px]'/>
         </Link>
       </div>
 
-      <div className='flex space-between gap-6 bg-white h-full w-full px-4 lg:px-14 py-14 mt-14 bg-orange-200 '>
+      <div className='flex space-between gap-6 bg-orange-300 h-full w-full px-4 lg:px-14 py-14 mt-14'>
         <div className='w-full rounded-md p-6 shadow-xl bg-white flex justify-center align-start flex-col'>
             <p className='font-bold text-3xl mb-4 text-black'>
               Log in to your account
