@@ -11,7 +11,7 @@ export default function Customer () {
                 searchValue=""
                 customers={undefined}
                 selectedCustomers={[] as ICustomers}
-                handleChangeSelectedCustomers={() => {}}
+                // handleChangeSelectedCustomers=() => {}
             />
         </div>
     )
