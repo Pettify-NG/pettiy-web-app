@@ -31,7 +31,7 @@ export default function CustomersTable({
   searchValue: string;
   customers: ICustomers | undefined;
   selectedCustomers: ICustomers;
-  handleChangeSelectedCustomers?: (e: any) => void;
+  handleChangeSelectedCustomers: (e: any) => void;
 }) {
   // const [selectedCustomers, setSelectedCustomers] = useState<
   //   ICustomer[] | null
