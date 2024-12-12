@@ -3,6 +3,7 @@ import { IoMdHome } from "react-icons/io";
 import { IoMdPerson } from "react-icons/io";
 import { MdOutlinePets } from "react-icons/md";
 import { GiReceiveMoney } from "react-icons/gi";
+import { IoIosPeople } from "react-icons/io";
 
 export const sellerLinks: ISidebarLink[] = [
   { name: 'home', icon: <IoMdHome />, page: '/dashboard' },
@@ -10,6 +11,16 @@ export const sellerLinks: ISidebarLink[] = [
     name: 'pet listings',
     icon: <MdOutlinePets />,
     page: '/dashboard/pet-listings',
+  },
+  {
+    name: 'customers',
+    icon: <IoIosPeople />,
+    page: '/dashboard/customers',
+  },
+  {
+    name: 'orders',
+    icon: <MdOutlinePets />,
+    page: '/dashboard/orders',
   },
   {
     name: 'payout',

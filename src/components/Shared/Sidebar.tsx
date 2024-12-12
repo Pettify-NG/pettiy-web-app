@@ -39,9 +39,9 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
     router.push("/auth/login");
   }
 
-  console.log(notifications);
-  console.log(orders);
-  console.log(returnRequests);
+  // console.log(notifications);
+  // console.log(orders);
+  // console.log(returnRequests);
 
   const expand = (index: number) => {
     if(isExpanded === index) {
@@ -204,7 +204,7 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
               />
 
               <div className={`flex flex-col gap-2 ${isOpen ? '' : 'hidden'}`}>
-                  <p>{adminDetails?.firstName + " " + adminDetails?.lastName}</p>
+                  <p>{adminDetails?.firstname + " " + adminDetails?.lastname}</p>
                   <p className='text-[#F2C94C] '>{adminDetails?.username}</p>
               </div>
           </div>
@@ -269,10 +269,10 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
           }
 
           {/* Logout */}
-          <div className='cursor-pointer mt-[20px] rounded p-2 flex items-center bg-[#ED770B]'>
+          <div className='cursor-pointer mt-[20px] rounded p-2 flex items-center bg-[#ED770B] hover:bg-white'>
               <div
                 onClick={() => logOut()}
-                className={`uo-tool-tip py-4 flex gap-4 w-full h-10 items-center duration-500 rounded-md font-medium white text-neutral hover:bg-gray-50
+                className={`uo-tool-tip py-4 flex gap-4 w-full h-10 items-center duration-500 text-white rounded-md font-medium white hover:text-neutral hover:bg-gray-50
                 } ${isOpen ? 'justify-start pl-6' : 'justify-center pl-0'}`}
                 data-pr-tooltip="Logout"
                 data-pr-position="right"

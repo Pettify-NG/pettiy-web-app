@@ -214,7 +214,7 @@ export default function OrdersTable({
           <p className="text-black text-md font-semibold">Recent orders</p>
         
           <Link
-            href="/admin/orders"
+            href="/dashboard/orders"
           >
             <Button className='text-black' size="small">
               See more
@@ -224,6 +224,7 @@ export default function OrdersTable({
       )}
       <DataTable
         value={orders ?? []}
+        emptyMessage="You do not have any orders at the moment. Create a new pet listing to get started."
         selectionMode={rowClick ? null : 'multiple'}
         selection={selectedOrders!}
         onSelectionChange={handleChangeSelectedOrders}

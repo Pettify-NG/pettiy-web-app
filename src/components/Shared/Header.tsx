@@ -14,10 +14,10 @@ import UserAvatar from './UserAvatar';
 export interface AdminType {
   createdAt: string;
   email: string;
-  firstName: string;
+  firstname: string;
   username: string;
   id: number;
-  lastName: string;
+  lastname: string;
   profileImage: string | null;
   status: 'ACTIVATED';
   token: string;
@@ -84,7 +84,7 @@ export default function Header({
         <div className='h-12 w-[2px] bg-gray-200'></div>
 
         <UserAvatar
-          name={`${adminDetails?.firstName} ${adminDetails?.lastName}`}
+          name={`${adminDetails?.firstname} ${adminDetails?.lastname}`}
           title={adminDetails?.role}
           // dropDown={dropDown} 
           // setDropDown={setDropDown} 

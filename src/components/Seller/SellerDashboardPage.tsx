@@ -41,8 +41,7 @@ export default function SellerDashboardPage ({
             <div className='flex my-4 items-center justify-center w-full'>
                 <div className='flex items-center gap-[16px]'>
                     <Link href='/dashboard/pet-listings/create'>
-                        <button className='rounded-[8px] h-fit w-fit text-[14px] text-[#090917] gap-[4px] flex items-center whitespace-nowrap bg-[#F2C94C] py-[10px] px-[14px] ' >
-                            <FaPlus />
+                        <button className='rounded-[8px] h-fit w-fit text-[14px] text-[#090917] gap-[4px] flex items-center whitespace-nowrap bg-[#ed770b] py-[10px] px-[14px] ' >
                             Create A New Pet listing
                         </button>
                     </Link>
@@ -57,7 +56,7 @@ export default function SellerDashboardPage ({
                             return  (
                                 <TabPanel header={time} key={index}>
                                     <OrdersTable
-                                        orders={DummyOrders}
+                                        orders={null}
                                         selectedOrders={[]}
                                         searchValue=''
                                         page="recent orders"

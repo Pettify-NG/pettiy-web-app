@@ -13,7 +13,7 @@ export default function StatCards({
   const card_icon_style =
     'h-10 w-10 text-xl flex items-center justify-center rounded-full';
   return (
-    <section className='my-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4'>
+    <section className='my-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4'>
       {/*  */}
       <Link href="/dashboard/revenue">
         <div className='rounded-lg bg-white border border-neural p-6'>
@@ -57,6 +57,21 @@ export default function StatCards({
         </div>
       </Link>
       {/*  */}
+      <Link href="/dashboard/customers">
+        <div className='rounded-lg bg-white border border-neural p-6'>
+          <span className={`${card_icon_style} bg-[#FAE1CF] text-blue-700`}>
+            <BiWallet className='fill-[#E46A11]'/>
+          </span>
+          <p className='my-3 text-neutral text-sm'>Total customers</p>
+
+          <div className='flex items-center gap-4'>
+            <p className='text-gray-700 text-3xl font-medium'>
+              {(91).toLocaleString()}
+              {/* {dashboardData?.costomers ? (dashboardData.costomers).toLocaleString() : (0).toLocaleString()} */}
+            </p>
+          </div>
+        </div>
+      </Link>
     </section>
   );
 }

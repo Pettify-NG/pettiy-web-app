@@ -62,7 +62,7 @@ export default function PetListingPage ({ petListings }: {
                 <div className='flex items-center gap-[16px]'>
                     <Link href='/dashboard/pet-listings/create'>
                         <button className='rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap bg-[#ED770B] py-[10px] px-[14px] ' >
-                            <FaPlus />
+                            {/* <FaPlus /> */}
                             Create A New Pet listing
                         </button>
                     </Link>
