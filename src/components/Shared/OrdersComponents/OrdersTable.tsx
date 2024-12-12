@@ -209,7 +209,7 @@ export default function OrdersTable({
 
   return (
     <div className='card rounded-xl p-4 bg-white border border-gray-200'>
-      {page.toLowerCase() === "recent orders" && (
+      {(page.toLowerCase() === "recent orders" && orders) && (
         <div className='flex justify-between items-center mb-3'>
           <p className="text-black text-md font-semibold">Recent orders</p>
         
