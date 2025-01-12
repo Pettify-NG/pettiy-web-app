@@ -15,8 +15,8 @@ interface IData {
   export default class HTTPService {
     baseURL: string;
     constructor() {
-      // this.baseURL = process.env.API_BASE_URL + '/api/v1';
-      this.baseURL = "https://pettify-backend.onrender.com/api/v1"
+      this.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL + '/api/v1';
+      // this.baseURL = "https://pettify-backend.onrender.com/api/v1"
     }
   
     private request(

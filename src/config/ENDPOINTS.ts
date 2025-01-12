@@ -6,6 +6,10 @@ const ENDPOINTS = {
   FORGOT_PASSWORD: `auth/forgot`,
   RESET_PASSWORD: `auth/reset`,
   RESEND_OTP: `auth/resend-otp`,
+
+  UPLOAD_FILE: `upload`,
+
+  CREATE_LISTING: `listings/create`
 };
 
 export default ENDPOINTS;
