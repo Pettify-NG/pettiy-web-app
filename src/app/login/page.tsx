@@ -37,35 +37,28 @@ export default function Login() {
       const res = await httpService.post(ENDPOINTS.SIGN_IN, values);
       console.log(res);
 
-      if (res.error) toast.error(API_RESPONSES.SIGN_IN[res.statusCode]);
+      if (!res.status) toast.error(res.message);
       else {
-        if (res.status === "success")  {
-          if(res.data.user.role === "seller") {
-            toast.success(
-              API_RESPONSES.SIGN_IN[res.statusCode] ||
-                API_RESPONSES.SIGN_IN[res.status]
-            );
-  
-            // storeCookies([
-            //   {
-            //     key: 'pettify-token',
-            //     value: res.data.token,
-            //   },
-            // ]);
+        if(res.data.user.role === "seller") {
+          toast.success("Login successful.");
 
-            if(typeof window !== undefined) {
-              localStorage.setItem('pettify-details', JSON.stringify(res.data));
-            }
-  
-            push('/dashboard');
-          } 
+          storeCookies([
+            {
+              key: 'pettify-token',
+              value: res.data.token,
+            },
+          ]);
 
-          if (res.data.user.role === "buyer") {
-              toast.error("You are not allowed to login as a seller.");
+          if(typeof window !== undefined) {
+            localStorage.setItem('pettify-details', JSON.stringify(res.data));
           }
+
+          push('/dashboard');
         } 
 
-        // console.log(res.data.user.role);
+        if (res.data.user.role === "buyer") {
+            toast.error("You are not allowed to login as a seller.");
+        }
 
         if (res.statusCode === 203) {
           storeCookies([
@@ -81,7 +74,7 @@ export default function Login() {
           ]);
 
           setTimeout(() => {
-            push('/auth/verify-email?role=admin');
+            push('/auth/verify-email?role=seller');
           }, 1000);
         }
       }

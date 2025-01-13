@@ -45,10 +45,14 @@ const CreatePetListingForm = () => {
   const [vaccineCardImage, setVaccineCardImage] = useState<ProductImage>();
 
   // JWT Token gotten from the backend. Not yet implemented from the backend.
-  // const cookies = new Cookies();
-  // const token = cookies.get('urban-token');
+  const cookies = new Cookies();
+  const token = cookies.get('pettify-token');
 
-  // const seller_info = localStorage.getItem("pettify-details");
+  const pettify_details = localStorage.getItem("pettify-details");
+  const seller_info = JSON.parse(pettify_details ?? "").user;
+
+  // console.log(pettify_details);
+  // console.log(seller_info);
 
   const httpService = new HTTPService();
 
@@ -91,9 +95,9 @@ const CreatePetListingForm = () => {
             const requestOptions = {
               method: 'POST',
               body: formdata,
-              // headers: {
-              //   Authorization: `Bearer ${token}`,
-              // },
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             };
 
             promises.push(
@@ -127,9 +131,9 @@ const CreatePetListingForm = () => {
             const requestOptions = {
               method: 'POST',
               body: formdata,
-              // headers: {
-              //   Authorization: `Bearer ${token}`,
-              // },
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             };
 
             const response = await fetch(
@@ -156,7 +160,8 @@ const CreatePetListingForm = () => {
               color: values.petColor,
               price: values.price,
               location: values.location,
-              owner: "667950aa0c0c062e46a02011",
+              // owner: "667950aa0c0c062e46a02011",
+              owner: seller_info._id ?? "",
             };
 
             console.log('Request Body: ', data);
@@ -165,7 +170,7 @@ const CreatePetListingForm = () => {
               .post(
                 ENDPOINTS.CREATE_LISTING, 
                 data, 
-                // `Bearer ${token}`
+                `Bearer ${token}`
               )
               .then((apiRes) => {
                 console.log('Response: ', apiRes);
@@ -179,7 +184,6 @@ const CreatePetListingForm = () => {
                   // setTimeout(() => {
                   //   router.push('/dashboard/pet-listings');
                   // }, 1000);
-                  
                 }
               });
           } else console.log('Products array not provided');
@@ -404,7 +408,6 @@ const CreatePetListingForm = () => {
                 showIcon
                 iconPos='left'
                 hideOnDateTimeSelect={true}
-                minDate={new Date()}
               />
             </div>
 

@@ -62,7 +62,7 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
 
       console.log(adminDetails);
     }
-  }, [adminDetails]);
+  }, []);
 
   // const userRole = JSON.parse(localStorage.getItem("pettify-details") ?? "").role;
   const links = sellerLinks;

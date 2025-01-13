@@ -56,7 +56,7 @@ export default function Header({
 
       console.log(adminDetails);
     }
-  }, [adminDetails]);
+  }, []);
 
   return (
     <div
