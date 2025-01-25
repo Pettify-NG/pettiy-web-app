@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { BiWallet } from 'react-icons/bi';
 import { CiMoneyBill } from 'react-icons/ci';
+import { FaPeopleCarry } from "react-icons/fa";
 
 import { IDashboardData } from '@/interfaces/dashboard';
 
@@ -18,15 +19,15 @@ export default function StatCards({
       <Link href="/dashboard/revenue">
         <div className='rounded-lg bg-white border border-neural p-6'>
           {/* <span className={`${card_icon_style} bg-purple-30 text-purple-700`}> */}
-            <span className={`${card_icon_style} bg-[#DEDEFA] text-purple-700`}>
-              <CiMoneyBill className='text-2xl fill-[#F2C94C]' />
+            <span className={`${card_icon_style} bg-[#FAE1CF] text-purple-700`}>
+              <CiMoneyBill className='text-2xl fill-[#E46A11]' />
             </span>
           {/* </span> */}
           <p className='my-3 text-neutral text-sm'>Total Revenue</p>
 
           <div className='flex items-center gap-4'>
             <p className='text-gray-700 text-3xl font-medium'>
-              ${(59000).toLocaleString()}
+            ₦{(0).toLocaleString()}
               {/* ${dashboardData?.revenue ? (dashboardData?.revenue).toLocaleString() : (0).toLocaleString()} */}
             </p>
 
@@ -46,7 +47,7 @@ export default function StatCards({
 
           <div className='flex items-center gap-4'>
             <p className='text-gray-700 text-3xl font-medium'>
-              {(781).toLocaleString()}
+              {(0).toLocaleString()}
               {/* {dashboardData?.costomers ? (dashboardData.costomers).toLocaleString() : (0).toLocaleString()} */}
             </p>
 
@@ -60,13 +61,13 @@ export default function StatCards({
       <Link href="/dashboard/customers">
         <div className='rounded-lg bg-white border border-neural p-6'>
           <span className={`${card_icon_style} bg-[#FAE1CF] text-blue-700`}>
-            <BiWallet className='fill-[#E46A11]'/>
+            <FaPeopleCarry className='fill-[#E46A11]'/>
           </span>
           <p className='my-3 text-neutral text-sm'>Total customers</p>
 
           <div className='flex items-center gap-4'>
             <p className='text-gray-700 text-3xl font-medium'>
-              {(91).toLocaleString()}
+              {(0).toLocaleString()}
               {/* {dashboardData?.costomers ? (dashboardData.costomers).toLocaleString() : (0).toLocaleString()} */}
             </p>
           </div>

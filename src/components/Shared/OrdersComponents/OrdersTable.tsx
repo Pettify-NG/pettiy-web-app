@@ -233,7 +233,7 @@ export default function OrdersTable({
         paginator={page !== "recent orders" ? true : false}
         rows={10}
         rowsPerPageOptions={[20, 50, 100, 250]}
-        className='rounded-md text-sm'
+        className='rounded-md text-sm text-center'
         sortOrder={-1}
         sortField='createdAt'
         showSelectAll
