@@ -74,7 +74,8 @@ const MerchantDetails = ({ customer, transactionHistory }: ICustomerDetails) => 
             case 'delivered':
             styles = 'bg-green-100 text-green-600';
             break;
-            case 'cancelled' || 'refunded':
+            case 'cancelled':
+            case 'refunded':
             styles = 'bg-red-100 text-red-600';
             break;
             case 'packed':

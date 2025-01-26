@@ -9,8 +9,8 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 // Rest of your imports from custom components...
-import logoIcon from '../../../public/Pettify 1.png';
-import logo from '../../../public/Pettify.png';
+import logoIcon from '../../../public/favicon.ico';
+import logo from '../../../public/pettify-logo.png';
 import { ISidebarLink, sellerLinks } from '@/static';
 import { AdminType } from './Header';
 
@@ -185,17 +185,19 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
         }`}
       >
         {/* Button for toggling sidebar */}
-        <div className='flex items-center justify-center py-[15px] px-[20px]'>
+        <div className='flex items-center justify-center'>
           <Image
               onClick={toggleSidebar}
               src={isOpen? logo : logoIcon}
-              alt='Urban Overstock Logo'
-              className={`duration-500 ${isOpen ? 'w-2/3' : 'w-1/2'}`}
-            />
+              alt='Pettify Logo'
+              className={`duration-500 ${isOpen ? 'w-40 h-30' : 'w-20'}`}
+            /> 
+
+            {/* <h4 className='text-3xl text-orange font-bold'>Pettify</h4> */}
         </div>
 
         {/* User profile */}
-        <div className='border border-gray-800 p-4 rounded mb-6'>
+        {/* <div className='border border-gray-800 p-4 rounded mb-6'>
           <div className={`flex ${isOpen ? "justify-between" : "justify-center"} items-center`}>
               <Image
                 src={adminDetails?.profileImage ?? ""}
@@ -208,7 +210,7 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
                   <p className='text-[#F2C94C] '>{adminDetails?.username}</p>
               </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Sidebar content */}
         <div className="flex flex-col h-full gap-[10px] px-[18px]">
