@@ -9,7 +9,10 @@ const ENDPOINTS = {
 
   UPLOAD_FILE: `upload`,
 
-  CREATE_LISTING: `listings/create`
+  CREATE_LISTING: `listings/create`,
+
+  // Users
+  USER: `users/`
 };
 
 export default ENDPOINTS;

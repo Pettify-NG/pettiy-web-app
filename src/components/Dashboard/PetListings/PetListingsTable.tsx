@@ -248,7 +248,7 @@ export default function PetListinsTable ({
           showSelectAll
           selectionAutoFocus={true}
           alwaysShowPaginator={true}
-          onRowClick={(e) => router.push(`/dashboard/pet-listings/${e.data.id}`)}
+          onRowClick={(e) => router.push(`/dashboard/pets/${e.data.id}`)}
           rowClassName={rowClassTemplate}
         >
           <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} />

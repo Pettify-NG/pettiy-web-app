@@ -43,7 +43,7 @@ export default function SellerDashboardPage ({
             {/* Add pet listing button. */}
             <div className='flex my-4 items-center justify-center w-full'>
                 <div className='flex items-center gap-[16px]' onClick={() => setPopupVisible(true)}>
-                    {/* <Link href='/dashboard/pet-listings/create'> */}
+                    {/* <Link href='/dashboard/pets/create'> */}
                         <button className='rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap bg-[#ed770b] py-[10px] px-[14px] ' >
                             Create New Listing
                         </button>

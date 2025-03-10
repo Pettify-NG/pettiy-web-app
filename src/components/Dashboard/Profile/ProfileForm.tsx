@@ -1,15 +1,59 @@
 "use client";
 
+import { useState, useEffect, ChangeEvent } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
+import Image from "next/image";
+import Cookies from "universal-cookie";
+import { useRouter } from "next/navigation";
 
 import TextInput from "@/components/Global/TextInput";
 import Button from "@/components/Global/Button";
 import ENDPOINTS from "@/config/ENDPOINTS";
 import HTTPService from "@/services/http";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { AdminType } from "@/components/Shared/Header";
+
+interface IProfileImage {
+    image: File
+}
 
 const ProfileForm = () => {
+    const [user, setUser] = useState<any>({});
+
+    const [profileImage, setProfileImage] = useState<IProfileImage>({} as IProfileImage);
+
+    const [seller_info, setSellerInfo] = useLocalStorage<AdminType>("pettify-details", {} as AdminType);
+
+    const httpService = new HTTPService();
+
+    // JWT Token gotten from the backend. Not yet implemented from the backend.
+    const cookies = new Cookies();
+    const token = cookies.get('pettify-token');
+
+    const router = useRouter();
+
+    const addNewImage = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+          const fileSizeInBytes = e.target.files[0].size;
+          const fileType = e.target.files[0].type;
+          const fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+    
+          if (fileType !== 'image/jpeg' && fileType !== 'image/png') {
+            toast.error('File type is not supported!');
+            return;
+          }
+    
+          if (fileSizeInMB >= 1) {
+            toast.error('File size too large');
+            return;
+          }
+
+          setProfileImage({ image: e.target.files[0] });
+        }
+    };
+
     const formik = useFormik({
         initialValues: {
             firstname: "",
@@ -32,10 +76,76 @@ const ProfileForm = () => {
             state: Yup.string().required().label("State"),
         }),
         onSubmit: async (values) => {
+            try {
+                let profileImageUrl: string = "";
+                if(profileImage) {
+                    const formdata = new FormData();
+                    formdata.append('file', profileImage?.image);
+        
+                    const requestOptions = {
+                        method: 'POST',
+                        body: formdata,
+                        // headers: {
+                        //     Authorization: `Bearer ${token}`,
+                        // },
+                    };
+        
+                    const response = await fetch(
+                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
+                        requestOptions
+                    );
+        
+                    const data = await response.json();
 
+                    profileImageUrl = data.url;
+                    console.log(data);
+                }
+
+                const data = {
+                    firstname: values.firstname,
+                    lastname: values.lastname,
+                    address: values.address,
+                    country: values.country,
+                    state: values.state,
+                    profileImage: profileImageUrl,
+                };
+    
+                console.log('Request Body: ', data);
+
+                httpService
+                    .put(
+                        `${ENDPOINTS.USER}/${seller_info._id}`, 
+                        data, 
+                        // `Bearer ${token}`
+                    )
+                    .then((apiRes) => {
+                        console.log('Response: ', apiRes);
+    
+                        if (apiRes.success) {
+                            formik.resetForm();
+                            setProfileImage({} as IProfileImage);
+        
+                            toast.success('Profile updated.');
+        
+                            setTimeout(() => {
+                            router.push('/dashboard');
+                            }, 1000);
+                        }
+                    });
+
+            } catch (error: any) {
+                console.log(error);
+                toast.error(error.message);
+            }
         },
         validateOnChange: true,
     });
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            
+        }
+    }, []);
 
     return (
         <>
@@ -46,6 +156,29 @@ const ProfileForm = () => {
                 className='w-full max-w-md'
                 onSubmit={formik.handleSubmit}
             >
+                {/* Profile picture  */}
+                <div className="flex gap-2 my-6 justify-between align-center">
+                    {/* <div className=""> */}
+                        <Image
+                            src={user.profileImage ? user.profileImage : URL.createObjectURL(profileImage.image ?? null)}
+                            alt="profile picture"
+                            width={200}
+                            height={200}
+                            className='rounded-full w-full h-full object-cover'
+                        />
+                    {/* </div> */}
+
+                    <div>
+                        <input
+                            type='file'
+                            accept='.jpg,.png,.jpeg'
+                            id='image'
+                            className='pointer-events-none opacity-0'
+                            onChange={addNewImage}
+                        />
+                    </div>
+                </div>
+
                 <div className="flex justify-between align-center gap-2 my-6">
                     {/* Firstname */}
                     <div className=''>
@@ -125,6 +258,7 @@ const ProfileForm = () => {
                         id='email'
                         value={formik.values.email}
                         error={formik.errors.email}
+                        disabled
                     />
                 </div>
 
@@ -191,12 +325,12 @@ const ProfileForm = () => {
                     <CustomError error={formik.errors.categoryId} /> */}
                 </div>
 
-                <span className="flex gap-3">
+                <span className="flex gap-3 w-1/2">
                     <Button block loading={formik.isSubmitting} type='submit'>
                         Update Profile
                     </Button>
                     
-                    <Button block  variant="outlined">
+                    <Button block variant="outlined">
                         Discard changes
                     </Button>
                 </span>

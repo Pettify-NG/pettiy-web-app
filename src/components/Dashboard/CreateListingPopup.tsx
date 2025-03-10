@@ -15,7 +15,7 @@ const CreateListingPopup: React.FC<ICreateListingProp> = ({ closePopup }) => {
 
   const handleContinue = () => {
     if (selectedOption === "pet") {
-      router.push("/dashboard/pet/create");
+      router.push("/dashboard/pets/create");
     } else if (selectedOption === "accessory") {
       router.push("/dashboard/accessories/create");
     }

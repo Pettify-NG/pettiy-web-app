@@ -2,8 +2,6 @@ import { IoMdSettings } from "react-icons/io";
 import { IoMdHome } from "react-icons/io";
 import { IoMdPerson } from "react-icons/io";
 import { MdOutlinePets } from "react-icons/md";
-import { GiReceiveMoney } from "react-icons/gi";
-import { IoIosPeople } from "react-icons/io";
 import { FaWallet } from "react-icons/fa6";
 
 export const sellerLinks: ISidebarLink[] = [
@@ -11,23 +9,18 @@ export const sellerLinks: ISidebarLink[] = [
   {
     name: 'pet listings',
     icon: <MdOutlinePets />,
-    page: '/dashboard/pet-listings',
+    page: '/dashboard/pets',
   },
   {
-    name: 'customers',
-    icon: <IoIosPeople />,
-    page: '/dashboard/customers',
+    name: 'accessories listings',
+    icon: <MdOutlinePets />,
+    page: '/dashboard/accessories'
   },
   {
     name: 'orders',
     icon: <MdOutlinePets />,
     page: '/dashboard/orders',
   },
-  // {
-  //   name: 'payouts',
-  //   icon: <GiReceiveMoney />,
-  //   page: '/dashboard/payouts',
-  // },
   {
     name: 'wallet',
     icon: <FaWallet />,

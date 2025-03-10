@@ -50,13 +50,7 @@ const CreatePetListingForm = () => {
   const cookies = new Cookies();
   const token = cookies.get('pettify-token');
 
-  // const pettify_details = localStorage.getItem("pettify-details");
-  // const seller_info = JSON.parse(pettify_details ?? "").user;
-
   const [seller_info, setSellerInfo] = useLocalStorage<AdminType>("pettify-details", {} as AdminType);
-
-  // console.log(pettify_details);
-  // console.log(seller_info);
 
   const httpService = new HTTPService();
 
@@ -186,7 +180,7 @@ const CreatePetListingForm = () => {
                   console.log(apiRes);
 
                   // setTimeout(() => {
-                  //   router.push('/dashboard/pet-listings');
+                  //   router.push('/dashboard/pets');
                   // }, 1000);
                 }
               });
@@ -594,7 +588,7 @@ const CreatePetListingForm = () => {
         <div className='fixed right-0 bottom-0 w-full p-4 bg-white flex items-center justify-end'>
 
             <div className='flex items-center gap-4'>
-                <Link href='/dashboard/pet-listings'>
+                <Link href='/dashboard/pets'>
                   <Button variant='outlined' color='dark'>
                     <FaX />
                     Cancel

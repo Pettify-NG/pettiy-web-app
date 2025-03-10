@@ -62,6 +62,12 @@ interface IData {
   
       return this.request(url, method, data, Authorization).then((res) => res.json());
     }
+
+    async put(url: string, data: IData, Authorization?: string | null) {
+      const method = "PUT";
+
+      return this.request(url, method, data, Authorization).then((res) => res.json());
+    }
   
     async patchById(url: string, Authorization?: string | null) {
       const method = 'PATCH';

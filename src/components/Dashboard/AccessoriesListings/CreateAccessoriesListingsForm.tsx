@@ -33,7 +33,7 @@ function CustomError({ error }: { error?: string }) {
   );
 }
 
-const CreateProductListingForm = () => {
+const CreateAccessoriesListingForm = () => {
   const imageInputRef = useRef<HTMLInputElement | null>(null);
 
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
@@ -281,4 +281,4 @@ const CreateProductListingForm = () => {
   )
 }
 
-export default CreateProductListingForm;
+export default CreateAccessoriesListingForm;

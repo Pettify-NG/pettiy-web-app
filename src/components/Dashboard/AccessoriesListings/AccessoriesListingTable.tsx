@@ -22,9 +22,8 @@ import { IoIosArrowDown } from "react-icons/io";
 interface IPetListingsTable {
     searchValue: string;
     selectedDate: number | null;
-    petListings: any | undefined;
-    handleChangeSelectedPetListings: (e: any) => void;
-    selectedPetListings: any;
+    handleChangeSelectedListings: (e: any) => void;
+    selectedListings: any;
 }
 
 export interface LazyTableState { 
@@ -37,12 +36,11 @@ export interface LazyTableState {
     filters?: DataTableFilterMeta; 
 }
 
-export default function ProductListingsTable ({
+export default function AccessoriesListingsTable ({
     searchValue,
     selectedDate,
-    petListings,
-    handleChangeSelectedPetListings,
-    selectedPetListings,
+    handleChangeSelectedListings,
+    selectedListings,
 }: IPetListingsTable) {
     const cookies = new Cookies();
     const httpService = new HTTPService();
@@ -233,8 +231,8 @@ export default function ProductListingsTable ({
           loading={loading} 
           totalRecords={totalRecords}
           selectionMode={rowClick ? null : 'multiple'}
-          selection={selectedPetListings!}
-          onSelectionChange={handleChangeSelectedPetListings}
+          selection={selectedListings!}
+          onSelectionChange={handleChangeSelectedListings}
           dataKey='id'
           tableStyle={{ minWidth: '80rem' }}
           paginator
@@ -248,7 +246,7 @@ export default function ProductListingsTable ({
           showSelectAll
           selectionAutoFocus={true}
           alwaysShowPaginator={true}
-          onRowClick={(e) => router.push(`/dashboard/pet-listings/${e.data.id}`)}
+          onRowClick={(e) => router.push(`/dashboard/pets/${e.data.id}`)}
           rowClassName={rowClassTemplate}
         >
           <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} />
