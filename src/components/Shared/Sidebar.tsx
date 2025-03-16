@@ -40,12 +40,8 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
     cookies.set('pettify-token', "", {
       path: '/',
     });
-    router.push("/auth/login");
+    router.push("/login");
   }
-
-  // console.log(notifications);
-  // console.log(orders);
-  // console.log(returnRequests);
 
   const expand = (index: number) => {
     if(isExpanded === index) {

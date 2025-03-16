@@ -1,8 +1,12 @@
+"use client";
+
 import { IoMdSettings } from "react-icons/io";
 import { IoMdHome } from "react-icons/io";
 import { IoMdPerson } from "react-icons/io";
 import { MdOutlinePets } from "react-icons/md";
 import { FaWallet } from "react-icons/fa6";
+
+const adminDetails = JSON.parse(localStorage.getItem("pettify-details") ?? "");
 
 export const sellerLinks: ISidebarLink[] = [
   { name: 'home', icon: <IoMdHome />, page: '/dashboard' },
@@ -29,7 +33,7 @@ export const sellerLinks: ISidebarLink[] = [
   {
     name: 'profile',
     icon: <IoMdPerson />,
-    page: '/dashboard/profile',
+    page: `/dashboard/profile/${adminDetails?.user?._id}`,
   },
   // { name: 'settings', icon: <IoMdSettings />, page: '/dashboard/settings' },
   // { name: 'notification', icon: <LuMail />, page: '/admin/dashboard/notifications' },

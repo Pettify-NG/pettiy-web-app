@@ -8,6 +8,8 @@ import { CiMoneyBill } from "react-icons/ci";
 import Pagination from "@/components/Shared/Paginatioin";
 import Button from "@/components/Global/Button";
 import PayoutTable from "./Payouts/PayoutTable";
+import useFetch from "@/hooks/useFetch";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 interface IWalletPage {
     availableBalance?: number
@@ -16,6 +18,12 @@ interface IWalletPage {
 
 const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): React.JSX.Element => {
     const card_icon_style = 'h-10 w-10 text-xl flex items-center justify-center rounded-full';
+
+    const [seller_info, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
+    const fetchUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${seller_info.user._id}/wallet`;
+
+    const { data, error, isLoading, refetch } = useFetch<any>(fetchUrl);
+    console.log(data);
 
     return (
         <>
@@ -39,7 +47,7 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
 
                         <div className='flex items-center gap-4'>
                             <p className='text-gray-700 text-2xl font-medium'>
-                                ₦{(availableBalance ?? 0).toLocaleString()}
+                                ₦{(data.balance ?? 0).toLocaleString()}
                             </p>
                         </div>
                     </div>
@@ -52,13 +60,13 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
 
                         <div className='flex items-center gap-4'>
                             <p className='text-gray-700 text-2xl font-medium'>
-                                ₦{(pendingBalance ?? 0).toLocaleString()}
+                                ₦{(data.pendingBalance ?? 0).toLocaleString()}
                             </p>
                         </div>
                     </div>
                 </section>
 
-                <button disabled={availableBalance === 0 ? true : false} className={`rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap ${availableBalance === 0 ? "bg-gray-300" : "bg-[#ED770B]"} py-[10px] px-[14px]`} >
+                <button disabled={data.balance == 0 ? true : false} className={`rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap ${data.balance == 0 ? "bg-gray-300" : "bg-[#ED770B]"} py-[10px] px-[14px]`} >
                     Withdraw funds
                 </button>
 
@@ -88,11 +96,11 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
 
                         {/* Tables */}
                         <div className="w-full my-6">
-                            <PayoutTable 
+                            {/* <PayoutTable 
                                 selectedDate={null}
                                 searchValue=""
                                 payouts={null}
-                            />
+                            /> */}
                         </div>
                     </div>
                 </section>

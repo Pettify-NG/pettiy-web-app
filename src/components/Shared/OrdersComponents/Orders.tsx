@@ -1,23 +1,13 @@
 'use client';
 
-import Cookies from 'universal-cookie';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import React, { useState, useMemo, ChangeEvent, useEffect } from 'react';
-import { LuClipboardCheck } from 'react-icons/lu';
+import React, { useState, useMemo, ChangeEvent } from 'react';
 import { CiSearch } from 'react-icons/ci';
-import { RiDeleteBin5Line, RiShoppingBasket2Line } from 'react-icons/ri';
-
-// import DatePicker from '@/components/Shared/DatePicker';
-// import HTTPService from '@/services/http';
-// import ENDPOINTS from '@/config/ENDPOINTS';
 
 import OrdersTable from './OrdersTable';
 import TextInput from '../../Global/TextInput';
 import Pagination from '../Paginatioin';
-import Button from '../../Global/Button';
 import { IOrder } from '@/interfaces/orders';
+import useFetch from '@/hooks/useFetch';
 
 export default function Orders(
   { 
@@ -35,17 +25,6 @@ export default function Orders(
 
   const [categoryNavigation, setCategoryNavigation] = useState<any>();
   const [defaultFilterOption, setDefaultFilterOption] = useState(0);
-
-  // const handleFilterOptionChange = (newIndex: number) =>
-  //   setDefaultFilterOption(newIndex);
-
-  // const [updateTo, setUpdateTo] = useState<string>("");
-//   const [cardOpen, setCardOpen] = useState<boolean>(false);
-
-//   const httpService = new HTTPService();
-//   const cookies = new Cookies();
-
-//   const router = useRouter();
 
   const handleChangeSelectedOrders = (e: any) => {
     console.log(e.value);

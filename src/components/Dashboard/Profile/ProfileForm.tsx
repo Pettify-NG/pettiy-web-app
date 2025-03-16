@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
@@ -13,24 +13,53 @@ import Button from "@/components/Global/Button";
 import ENDPOINTS from "@/config/ENDPOINTS";
 import HTTPService from "@/services/http";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { AdminType } from "@/components/Shared/Header";
+import useFetch from "@/hooks/useFetch";
+import { IoIosArrowDown } from "react-icons/io";
 
 interface IProfileImage {
     image: File
 }
 
-const ProfileForm = () => {
-    const [user, setUser] = useState<any>({});
+interface UserData {
+    firstname: string;
+    lastname: string;
+    username: string;
+    address: string;
+    email: string;
+    phoneNumber: string;
+    country: string;
+    state: string;
+    profileImage: string;
+}
+
+function CustomError({ error }: { error?: string }) {
+    if (!error) return;
+  
+    return (
+      <div className='text-xs font-light ml-1 p-2 absolute -bottom-6'>
+        <span className='text-red-600'>
+          {error}
+        </span>
+      </div>
+    );
+}
+  
+const ProfileForm = ({ user }: { user: UserData | null }) => {
+    console.log(user);
 
     const [profileImage, setProfileImage] = useState<IProfileImage>({} as IProfileImage);
 
-    const [seller_info, setSellerInfo] = useLocalStorage<AdminType>("pettify-details", {} as AdminType);
+    const [states, setStates] = useState<string[]>([]);
+
+    const [seller_info, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
+
+    const imageInputRef = useRef<HTMLInputElement | null>(null);
 
     const httpService = new HTTPService();
 
     // JWT Token gotten from the backend. Not yet implemented from the backend.
-    const cookies = new Cookies();
-    const token = cookies.get('pettify-token');
+    // const cookies = new Cookies();
+    // const token = cookies.get('pettify-token');
 
     const router = useRouter();
 
@@ -54,17 +83,21 @@ const ProfileForm = () => {
         }
     };
 
+    // const { data, error, isLoading, refetch } = useFetch<UserData>(fetchUrl);
+    // console.log(data);
+
     const formik = useFormik({
         initialValues: {
-            firstname: "",
-            lastname: "",
-            username: "",
-            address: "",
-            email: "",
-            phoneNumber: "",
-            country: "",
-            state: "",
+            firstname: user?.firstname ?? "",
+            lastname: user?.lastname ?? "",
+            username: user?.username ?? "",
+            address: user?.address ?? "",
+            email: user?.email ?? "",
+            phoneNumber: user?.phoneNumber ?? "",
+            // country: user?.country ?? "",
+            state: user?.state ?? "",
         },
+        enableReinitialize: true, // Reinitialize when `initialValues` change
         validationSchema: Yup.object({
             email: Yup.string().required().label("Email"),
             phoneNumber: Yup.string().required().label("Phone Number"),
@@ -72,7 +105,7 @@ const ProfileForm = () => {
             lastname: Yup.string().required().label("Lastname"),
             address: Yup.string().required().label("Address"),
             username: Yup.string().required().label("Username"),
-            country: Yup.string().required().label("Country"),
+            // country: Yup.string().required().label("Country"),
             state: Yup.string().required().label("State"),
         }),
         onSubmit: async (values) => {
@@ -105,7 +138,7 @@ const ProfileForm = () => {
                     firstname: values.firstname,
                     lastname: values.lastname,
                     address: values.address,
-                    country: values.country,
+                    // country: values.country,
                     state: values.state,
                     profileImage: profileImageUrl,
                 };
@@ -114,7 +147,7 @@ const ProfileForm = () => {
 
                 httpService
                     .put(
-                        `${ENDPOINTS.USER}/${seller_info._id}`, 
+                        `${ENDPOINTS.USER}/${seller_info.user._id}`, 
                         data, 
                         // `Bearer ${token}`
                     )
@@ -130,6 +163,8 @@ const ProfileForm = () => {
                             setTimeout(() => {
                             router.push('/dashboard');
                             }, 1000);
+                        } else {
+                            toast.error(apiRes.message);
                         }
                     });
 
@@ -140,11 +175,21 @@ const ProfileForm = () => {
         },
         validateOnChange: true,
     });
-
+    
     useEffect(() => {
-        const fetchUser = async () => {
-            
+        const fetchStates = async () => {
+            try {
+                const apiRes = await fetch("https://nga-states-lga.onrender.com/fetch");
+
+                const response = await apiRes.json();
+
+                setStates(response);
+            } catch(error: any) {
+                console.log(error.message);
+            }
         }
+
+        fetchStates();
     }, []);
 
     return (
@@ -158,24 +203,30 @@ const ProfileForm = () => {
             >
                 {/* Profile picture  */}
                 <div className="flex gap-2 my-6 justify-between align-center">
-                    {/* <div className=""> */}
-                        <Image
-                            src={user.profileImage ? user.profileImage : URL.createObjectURL(profileImage.image ?? null)}
-                            alt="profile picture"
-                            width={200}
-                            height={200}
-                            className='rounded-full w-full h-full object-cover'
-                        />
-                    {/* </div> */}
+                    <Image
+                        src={user?.profileImage ? user?.profileImage : profileImage?.image ? URL.createObjectURL(profileImage.image) : "/default-profile.png"}
+                        alt="profile picture"
+                        width={20}
+                        height={20}
+                        className='rounded-full w-[150px] h-[150px] object-cover'
+                    />
 
                     <div>
                         <input
                             type='file'
                             accept='.jpg,.png,.jpeg'
                             id='image'
+                            ref={imageInputRef}
                             className='pointer-events-none opacity-0'
                             onChange={addNewImage}
                         />
+
+                        <Button
+                            size='small'
+                            onClick={() => imageInputRef.current?.click()}
+                        >
+                            Add Image
+                        </Button>
                     </div>
                 </div>
 
@@ -277,7 +328,7 @@ const ProfileForm = () => {
                     />
                 </div>
 
-                {/* Country */}
+                {/* Country
                 <div className='my-6 relative'>
                     <label
                         htmlFor='country'
@@ -297,9 +348,9 @@ const ProfileForm = () => {
                             Select your country...
                         </option>
                     </select>
-                    {/* <IoIosArrowDown onClick={handleSelectProductCategoryClick} className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
-                    <CustomError error={formik.errors.categoryId} /> */}
-                </div>
+                    <IoIosArrowDown onClick={handleSelectProductCategoryClick} className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
+                    <CustomError error={formik.errors.categoryId} />
+                </div> */}
 
                 {/* State */}
                 <div className='my-6 relative'>
@@ -307,7 +358,7 @@ const ProfileForm = () => {
                         htmlFor='state'
                         className='text-sm text-neutral mb-2 block'
                     >
-                        Country
+                        State
                     </label>
                     
                     <select
@@ -320,9 +371,16 @@ const ProfileForm = () => {
                         <option value='' defaultChecked disabled>
                             Select your state of residence...
                         </option>
+                        {
+                            states.map((state, index) => 
+                                <option value={state} key={index}>
+                                    {state}
+                                </option>
+                            )
+                        }
                     </select>
-                    {/* <IoIosArrowDown onClick={handleSelectProductCategoryClick} className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
-                    <CustomError error={formik.errors.categoryId} /> */}
+                    <IoIosArrowDown className={`absolute right-4 ${formik.errors.state ? "top-10" : "bottom-4"}`} />
+                    <CustomError error={formik.errors.state} />
                 </div>
 
                 <span className="flex gap-3 w-1/2">
@@ -330,7 +388,7 @@ const ProfileForm = () => {
                         Update Profile
                     </Button>
                     
-                    <Button block variant="outlined">
+                    <Button block variant="outlined" onClick={() => router.push("/dashboard")}>
                         Discard changes
                     </Button>
                 </span>

@@ -17,7 +17,6 @@ const useFetch = <T,> (url: string, options?: RequestInit): UseFetchProps<T> => 
         setIsLoading(true);
 
         try {
-
             const response = await fetch(url, {
                 ...options,
                 headers: {
@@ -31,7 +30,7 @@ const useFetch = <T,> (url: string, options?: RequestInit): UseFetchProps<T> => 
             }
 
             const result = await response.json();
-            setData(result);
+            setData(result.data);
         } catch(error: any) {
             setError(error.message || "Something went wrong.");
         } finally {
