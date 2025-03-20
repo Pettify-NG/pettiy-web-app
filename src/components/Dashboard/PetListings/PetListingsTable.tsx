@@ -18,11 +18,12 @@ import Link from "next/link";
 import { FaEye } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 interface IPetListingsTable {
     searchValue: string;
     selectedDate: number | null;
-    petListings: any | undefined;
+    petListings?: any | undefined;
     handleChangeSelectedPetListings: (e: any) => void;
     selectedPetListings: any;
 }
@@ -40,7 +41,6 @@ export interface LazyTableState {
 export default function PetListinsTable ({
     searchValue,
     selectedDate,
-    petListings,
     handleChangeSelectedPetListings,
     selectedPetListings,
 }: IPetListingsTable) {
@@ -60,47 +60,49 @@ export default function PetListinsTable ({
        page: 0, 
     }); 
 
-     const loadLazyData = useCallback(() => { 
-          setLoading(true); 
-     
-          //imitate delay of a backend call 
-              const fetchData = () => { 
-                  const cookies = new Cookies(); 
-                  const token = cookies.get('urban-token'); 
-                  console.log(token); 
-                  const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL; 
-           
-                  fetch(`${baseUrl}/api/v1/${ENDPOINTS.CONFIRM_EMAIL_OTP}?page=${lazyState.page}&size=${lazyState.rows}`, { 
-                      headers: { 
-                          Authorization: `Bearer ${token}`, 
-                      }, 
-                      cache: 'no-store', 
-                  }).then(response => { 
-                      if (!response.ok) { 
-                          throw new Error('Network response was not ok'); 
-                      } 
-                      return response.json(); 
-                  }).then(data => { 
-                      if (data.data) { 
-                          console.log(data.meta); 
-                          setTotalRecords(data.meta.total_items); 
-                          setTotalPages(data.meta.total_pages); 
-                          console.log(data.data); 
-                          setLazyListings(data.data); 
-                          setLoading(false); 
-                      } 
-                  }).catch(error => { 
-                      toast.error(error.message); 
-                      console.error('There was a problem with the fetch operation:', error); 
-                  }); 
-              }; 
-           
-              fetchData(); 
-      }, [lazyState]);
+   const [sellerInfo, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
+
+    const loadLazyData = useCallback(() => { 
+        setLoading(true); 
     
-     useEffect(() => { 
-         loadLazyData(); 
-     }, [loadLazyData]); 
+        //imitate delay of a backend call 
+            const fetchData = () => { 
+                const cookies = new Cookies(); 
+                const token = cookies.get('urban-token'); 
+                console.log(token); 
+                const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL; 
+         
+                fetch(`${baseUrl}/api/v1/users/${sellerInfo.user._id}/pets?page=${lazyState.page}&size=${lazyState.rows}`, { 
+                    headers: { 
+                        Authorization: `Bearer ${token}`, 
+                    }, 
+                    cache: 'no-store', 
+                }).then(response => { 
+                    if (!response.ok) { 
+                        throw new Error('Network response was not ok'); 
+                    } 
+                    return response.json(); 
+                }).then(data => { 
+                    if (data.data) { 
+                        console.log(data.meta); 
+                        setTotalRecords(data.meta.total_items); 
+                        setTotalPages(data.meta.total_pages); 
+                        console.log(data.data); 
+                        setLazyListings(data.data); 
+                        setLoading(false); 
+                    } 
+                }).catch(error => { 
+                    toast.error(error.message); 
+                    console.error('There was a problem with the fetch operation:', error); 
+                }); 
+            }; 
+         
+            fetchData(); 
+    }, [lazyState]);
+    
+    useEffect(() => { 
+        loadLazyData(); 
+    }, [loadLazyData]); 
     
      const onPage = (event: DataTablePageEvent) => {  
         setlazyState(event);

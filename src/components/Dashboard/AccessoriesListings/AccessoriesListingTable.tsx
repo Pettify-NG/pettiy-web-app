@@ -9,15 +9,10 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 
-import HTTPService from "@/services/http";
 import { IListing } from "@/interfaces/listings";
-import ENDPOINTS from "@/config/ENDPOINTS";
-import { PaginatorRowsPerPageDropdownOptions } from "primereact/paginator";
 import { formatCurrency, calculatePetAge } from "@/helpers";
-import Link from "next/link";
-import { FaEye } from "react-icons/fa";
-import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 interface IPetListingsTable {
     searchValue: string;
@@ -42,10 +37,12 @@ export default function AccessoriesListingsTable ({
     handleChangeSelectedListings,
     selectedListings,
 }: IPetListingsTable) {
-    const cookies = new Cookies();
-    const httpService = new HTTPService();
+    // const cookies = new Cookies();
+    // const httpService = new HTTPService();
   
     const router = useRouter();
+
+    const [sellerInfo, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
   
     const [rowClick, setRowClick] = useState<boolean>(true);
     const [totalRecords, setTotalRecords] = useState<number>(0); 
@@ -58,7 +55,9 @@ export default function AccessoriesListingsTable ({
        page: 0, 
     }); 
 
-     const loadLazyData = useCallback(() => { 
+   const [timeFilter, setTimeFilter] = useState<string>("All-time");
+
+    const loadLazyData = useCallback(() => { 
           setLoading(true); 
      
           //imitate delay of a backend call 
@@ -68,7 +67,7 @@ export default function AccessoriesListingsTable ({
                   console.log(token); 
                   const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL; 
            
-                  fetch(`${baseUrl}/api/v1/${ENDPOINTS.CONFIRM_EMAIL_OTP}?page=${lazyState.page}&size=${lazyState.rows}`, { 
+                  fetch(`${baseUrl}/api/v1/users/${sellerInfo.user._id}/accessories?page=${lazyState.page}&size=${lazyState.rows}&type=${timeFilter}`, { 
                       headers: { 
                           Authorization: `Bearer ${token}`, 
                       }, 
@@ -94,10 +93,10 @@ export default function AccessoriesListingsTable ({
               }; 
            
               fetchData(); 
-      }, [lazyState]);
+    }, [lazyState, timeFilter, sellerInfo]);
     
      useEffect(() => { 
-         loadLazyData(); 
+        loadLazyData(); 
      }, [loadLazyData]); 
     
      const onPage = (event: DataTablePageEvent) => {  

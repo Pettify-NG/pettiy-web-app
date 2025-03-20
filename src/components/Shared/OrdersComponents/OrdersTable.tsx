@@ -1,39 +1,190 @@
 'use client';
+
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import React, { useState, useMemo } from 'react';
+import { Column, ColumnBodyOptions } from 'primereact/column';
+import { DataTable, DataTableFilterMeta, DataTablePageEvent } from 'primereact/datatable';
+import React, { useState, useMemo, useEffect, useCallback, ChangeEvent } from 'react';
 import { FaEye } from 'react-icons/fa';
-import { RxPencil2 } from 'react-icons/rx';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
+import Cookies from 'universal-cookie';
+import toast from 'react-hot-toast';
+import { classNames } from 'primereact/utils';
+import { MdKeyboardArrowRight } from "react-icons/md";
+import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
+import { 
+  PaginatorCurrentPageReportOptions, 
+  PaginatorRowsPerPageDropdownOptions, 
+  PaginatorNextPageLinkOptions, 
+  PaginatorPageLinksOptions, 
+  PaginatorPrevPageLinkOptions } 
+from 'primereact/paginator';
+import { CiSearch } from 'react-icons/ci';
+import { RiShoppingBasket2Line } from 'react-icons/ri';
+import { LuClipboardCheck } from 'react-icons/lu';
 
-import Button from '../../Global/Button';
 import { formatCurrency } from '@/helpers';
-import { OrderProductItem, IOrder } from '@/interfaces/orders';
+import { IOrder, OrderProductItem } from '@/interfaces/orders';
+import ENDPOINTS from '@/config/ENDPOINTS';
+import HTTPService from '@/services/http';
+import TextInput from '@/components/Global/TextInput';
+import Pagination from '../Paginatioin';
+import useLocalStorage from '@/hooks/useLocalStorage';
+
+interface LazyTableState {
+    first: number;
+    rows: number;
+    page?: number | undefined;
+    pageCount?: number;
+    sortField?: string;
+    sortOrder?: number;
+    filters?: DataTableFilterMeta;
+}
+
+export const paginatorTemplate = (totalRecords: number, page: number | undefined) => {
+  return {
+          layout: 'CurrentPageReport RowsPerPageDropdown PrevPageLink PageLinks NextPageLink ',
+          RowsPerPageDropdown: (options: PaginatorRowsPerPageDropdownOptions) => {
+              return (
+                  <div className="invisible">
+                  </div>
+              );
+          },
+          PageLinks: (options: PaginatorPageLinksOptions) => {
+            if ((options.view.startPage === options.page && options.view.startPage !== 0) || (options.view.endPage === options.page && options.page + 1 !== options.totalPages)) {
+                const className = classNames(options.className, { 'p-disabled': true });
+
+                return (
+                    <span className={classNames('border px-3 py-1 mx-1 rounded-sm cursor-pointer border-[#F2C94C]')} style={{ userSelect: 'none' }}>
+                        ...
+                    </span>
+                );
+            }
+          
+            return (
+                <span 
+                className={classNames(`${options.page === page ? "bg-[#F2C94C]" : "bg-white"} px-3 cursor-pointer py-1 mx-1 rounded-sm border border-[#F2C94C] `)} 
+                onClick={options.onClick}
+                >
+                    {options.page + 1}
+                </span>
+            );
+          },
+          CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
+          return (
+              <div style={{ color: 'var(--text-color)', userSelect: 'none', width: 'auto', textAlign: 'left'}} className='text-sm text-neutral cursor-pointer items-center my-auto mr-auto'>
+                  {`Showing ${options.first} - ${options.last} from ${totalRecords}`}
+              </div>
+          );
+          },
+          PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
+              return (
+                  <span 
+                      className={classNames('rounded-sm bg-[#F2C94C] p-2 mx-1 cursor-pointer')} 
+                      onClick={options.onClick}
+                  >
+                      <MdOutlineKeyboardArrowLeft color="black"/>
+                  </span>
+              );
+          },
+          NextPageLink: (options: PaginatorNextPageLinkOptions) => {
+              return (
+                  <span 
+                  className={classNames('rounded-sm p-2 mx-1 bg-[#F2C94C] cursor-pointer')} 
+                  onClick={options.onClick}
+                  >
+                      <MdKeyboardArrowRight color="black"/>
+                  </span>
+              );
+          },
+      }
+};
 
 export default function OrdersTable({
-  orders,
   page = 'orders',
-  handleChangeSelectedOrders,
-  selectedOrders,
-  selectedDate,
-  searchValue,
-  categoryNavigation,
-  setCurrentPage,
 }: {
-  orders: IOrder[] | null;
-  searchValue: string;
+  searchValue?: string;
   selectedDate?: number | null;
   page?: 'orders' | 'return-request' | 'cancelled orders' | 'recent orders';
   handleChangeSelectedOrders?: (e: any) => void;
-  selectedOrders: IOrder[];
+  selectedOrders?: IOrder[];
   categoryNavigation?: any;
   setCurrentPage?: any;
+  cancelledOrdersCount?: number;
 }) {
+  const [selectedOrders, setSelectedOrders] = useState<IOrder[]>([]);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<number | null>(null);
+
+  const [categoryNavigation, setCategoryNavigation] = useState<any>();
+  const [defaultFilterOption, setDefaultFilterOption] = useState(0);
+
+  const [cardOpen, setCardOpen] = useState<boolean>(false);
+
   const [rowClick, setRowClick] = useState<boolean>(true);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [lazyOrders, setLazyOrders] = useState<IOrder[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [lazyState, setlazyState] = useState<LazyTableState>({
+    first: 0,
+    rows: 10,
+    page: 0,
+  });
+
+  const [timeFilter, setTimeFilter] = useState<string>("All-time");
+  const [sellerInfo, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
+
+  const loadLazyData = useCallback(() => {
+      setLoading(true);
+
+      const fetchData = () => {
+          const cookies = new Cookies();
+          const token = cookies.get('pettify-token');
+          console.log(token);
+
+          const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  
+          fetch(`${baseUrl}/api/v1/users/${sellerInfo.user._id}/${ENDPOINTS.ORDERS}?page=${lazyState.page}&size=${lazyState.rows}&type=${timeFilter}`, {
+              // headers: {
+              //     Authorization: `Bearer ${token}`,
+              // },
+              cache: 'no-store',
+          }).then(response => {
+              if (!response.ok) {
+                  throw new Error('An error occured.');
+              }
+              return response.json();
+          }).then(data => {
+              if (data.data) {
+                  console.log(data.meta);
+                  setTotalRecords(data.meta.total_items);
+                  setTotalPages(data.meta.total_pages);
+                  console.log(data.data);
+                  setLazyOrders(data.data); 
+                  setLoading(false);
+              }
+          }).catch(error => {
+              toast.error(error.message);
+              console.error('There was a problem with the fetch operation:', error);
+          });
+      };
+  
+      fetchData();
+  }, [lazyState, timeFilter, sellerInfo]);
+
+  useEffect(() => {
+    loadLazyData();
+  }, []);
+
+  const onPage = (event: DataTablePageEvent) => {
+      setlazyState(event);
+      console.log(event);
+  };
+
+
 
   const dateTemplate = (order: IOrder) => {
     const { createdAt } = order;
@@ -55,17 +206,11 @@ export default function OrdersTable({
     return (
       <div className='flex items-center gap-3'>
         <Link
-          href={`/admin/orders/${order.id}`}
+          href={page === "cancelled orders" ? `/admin/orders/cancelled-orders/${order.id}` : page === "recent orders" ? `/admin/orders/${order.id}` : `/admin/${page}/${order.id}`}
           className='text-xl text-neutral'
         >
           <FaEye />
         </Link>
-        {/* <Link
-          href={`/admin/${page}/${order.id}`}
-          className='text-xl text-neutral'
-        >
-          <RxPencil2 />
-        </Link> */}
       </div>
     );
   }
@@ -100,7 +245,7 @@ export default function OrdersTable({
     }
 
     return (
-      <span className={`p-2 px-4 text-xs font-medium rounded-full ${styles}`}>
+      <span className={`p-2 px-4 text-xs font-medium rounded-full whitespace-nowrap ${styles}`}>
         {order.status}
       </span>
     );
@@ -110,21 +255,20 @@ export default function OrdersTable({
     return (
       <div className='flex items-center gap-4'>
         <Image
-          // src={order.orderProduct[0].image}
-          src={""}
+          src={order.orderProduct[0].image}
           alt='image'
           width={20}
           height={20}
           className='h-12 w-12 bg-[#1b1b1b] rounded-md'
         />
 
-        <div className='div capitalize'>
-          <p className='text-xs flex-1 font-medium'>
+        <div className='div capitalize flex-1'>
+          <p className='text-sm flex-1 font-medium'>
             {order.orderProduct[0].productName}
           </p>
           {order.orderProduct.length > 1 && (
             <p className='text-xs text-neutral'>
-              +{order.orderProduct.length} pet(s)
+              +{order.orderProduct.length} other products
             </p>
           )}
         </div>
@@ -135,137 +279,255 @@ export default function OrdersTable({
   function customerTemplate(order: IOrder) {
     return (
       <div className='flex flex-col gap-2 capitalize'>
-        <p className='text-sm flex-1 font-medium'>{order.customer.firstName + " " + order.customer.lastName}</p>
+        <p className='text-sm flex-1 font-medium'>{order.user.firstName + " " + order.user.lastName}</p>
         {/* <p className='text-xs text-neutral'>{order.receiverPhone}</p> */}
-        <p className='text-xs text-neutral'>{order.customer.email}</p>
+        <p className='text-xs text-neutral'>{order.user.email}</p>
       </div>
     );
   }
 
-  function merchantTemplate(order: IOrder) {
-    return (
-      <div className='flex flex-col gap-2 capitalize'>
-        <p className='text-sm flex-1 font-medium'>{order.merchant.firstName + " " + order.merchant.lastName}</p>
-        {/* <p className='text-xs text-neutral'>{order.receiverPhone}</p> */}
-        <p className='text-xs text-neutral'>{order.merchant.email}</p>
-      </div>
+  const getOrdersByDate = useMemo(() => {
+    if (selectedDate) {
+      return lazyOrders?.filter(
+        (order) => moment(order.createdAt).valueOf() >= selectedDate
+      );
+    }
+
+    if(categoryNavigation) {
+      return lazyOrders?.filter((item) => {
+        const itemDate = new Date(item.createdAt);
+        return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
+      });
+    } else return lazyOrders;
+
+  }, [lazyOrders, selectedDate, categoryNavigation]);
+
+  const matchedOrders = useMemo(() => {
+    if (searchValue?.trim().length === 0) return getOrdersByDate;
+
+    return getOrdersByDate?.filter(
+      (order) =>
+        order.uuid.toLowerCase().includes(searchValue) ||
+        // order.shippingId.toLowerCase().includes(searchValue) ||
+        order.orderProduct[0].productName.toLowerCase().includes(searchValue)
     );
-  }
+  }, [searchValue, getOrdersByDate]);
 
-  // const getOrdersByDate = useMemo(() => {
-  //   if (selectedDate) {
-  //     return orders?.filter(
-  //       (order) => moment(order.createdAt).valueOf() >= selectedDate
-  //     );
-  //   }
-
-  //   if(categoryNavigation) {
-  //     return orders?.filter((item) => {
-  //       const itemDate = new Date(item.createdAt);
-  //       return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
-  //     });
-  //   } else return orders;
-
-  // }, [orders, selectedDate, categoryNavigation]);
-
-  // const getOrdersByCategoryDate = useMemo(() => {
-  //   if(categoryNavigation) {
-  //     return orders?.filter((item) => {
-  //       const itemDate = new Date(item.createdAt);
-  //       return itemDate >= categoryNavigation.startDate && itemDate <= categoryNavigation.endDate;
-  //     });
-  //   } else return orders;
-
-  // }, [orders, categoryNavigation]);
-
-  // const matchedOrders = useMemo(() => {
-  //   if (searchValue?.trim().length === 0) return getOrdersByDate;
-
-  //   return getOrdersByDate?.filter(
-  //     (order) =>
-  //       order.uuid.toLowerCase().includes(searchValue) ||
-  //       order.shippingId.toLowerCase().includes(searchValue) ||
-  //       order.orderProduct[0].productName.toLowerCase().includes(searchValue)
-  //   );
-  //   // if(selectedDate) {
-      
-  //   // }
-
-  //   // if(categoryNavigation) {
-  //   //   return getOrdersByCategoryDate?.filter(
-  //   //     (order) =>
-  //   //       order.uuid.toLowerCase().includes(searchValue) ||
-  //   //       order.shippingId.toLowerCase().includes(searchValue)
-  //   //   );
-  //   // }
-    
-  // }, [searchValue, getOrdersByDate]);
-
-  const checkBoxTemplate = () => {
-    return 
+  const checkBoxTemplate = (data: IOrder, options: ColumnBodyOptions) => {
+    options.props = "border-red-500";
+    return options.column.render();
+    // options.column.props.style = "border-red-500"
   }
 
   const router = useRouter();
 
+  const rowClassTemplate = (data: IOrder) => {
+    return {
+        'cursor-pointer': data.id
+    };
+  };
+
+  const httpService = new HTTPService();
+  const cookies = new Cookies();
+
+  const handleChangeSelectedOrders = (e: any) => {
+    console.log(e.value);
+
+    setSelectedOrders(e.value);
+  };
+
+  function hasDeliveryTimeExceeded(deliveryDate: string): boolean {
+    const fortyEightHoursAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); // 48 hours ago
+    return new Date(deliveryDate) < fortyEightHoursAgo;
+  }
+
+  async function bulkUpdateOrders(orders: IOrder[], status: string) {
+      setCardOpen(prev => !prev);
+
+      // Checks if there's an order that's been delivered and whose deivery date exceeds 48 hours
+      let deliveredOrder: boolean = false;
+
+      if(status.toLowerCase() === "cancelled") {
+        const checkingOrders = orders.map((order) => {
+          if(order.status.toLowerCase() === "delivered" && hasDeliveryTimeExceeded(order.deliveryDate)) {
+            toast.error("You cannot cancel an order that has been delivered for more than 48 hours.");
+            deliveredOrder = true;
+            return;
+          }
+        }); 
+      }
+
+      if(status.toLowerCase() === "processing") {
+        const checkingOrders = orders.map((order) => {
+          if(order.status.toLowerCase() === "cancelled") {
+            toast.error("You cannot set a cancelled order to processing.");
+            deliveredOrder = true;
+            return;
+          }
+        }); 
+      }
+      
+      if(!deliveredOrder) {
+        const token = cookies.get('urban-token');
+        // console.log(token);
+  
+        toast.loading('Updating orders...');
+
+        const data = orders.map((order) => {
+          const { id } = order;
+          return { id: id, status: status }
+        }); 
+
+        const res = await httpService.patch(
+          `${ENDPOINTS.ORDERS}`,
+          data,
+          `Bearer ${token}`
+        );
+
+        toast.dismiss();
+        if (res.status === 200) {
+          console.log(res);
+          toast.success('Orders successfully updated!');
+          router.refresh();
+          loadLazyData();
+        } else toast.error('Cannot update orders at this time!');
+      }
+  }
+
+  const debouncedSearch = useMemo(() => {
+    let timer: NodeJS.Timeout;
+
+    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        setSearchValue(e.target.value);
+      }, 500);
+    };
+
+    return handleSearchChange;
+  }, []);
+
+  const handleCategoryChange = (newIndex: number, option: any) => {            
+    switch (option) {
+        case 'All time':
+            setTimeFilter("All-Time");
+            break;
+        case '12 months':
+            setTimeFilter("12-Months");
+            break;
+        case '30 days':
+            setTimeFilter("30-Day");
+            break;
+        case '7 days':
+            setTimeFilter("7-Day");
+            break;
+        case '24 hours':
+            setTimeFilter("24-Hour");
+            break;
+        default:
+            return; // return null for unknown filter options
+    }
+    setDefaultFilterOption(newIndex);
+    console.log(option);
+  }
+
   return (
-    <div className='card rounded-xl p-4 bg-white border border-gray-200'>
-      {(page.toLowerCase() === "recent orders" && orders) && (
-        <div className='flex justify-between items-center mb-3'>
-          <p className="text-black text-md font-semibold">Recent orders</p>
-        
-          <Link
-            href="/dashboard/orders"
+    <>
+      <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-4 py-4'>        
+        {/* <div className='flex items-center gap-4'>
+          {selectedOrders.length > 0 && (
+            <div className="relative">
+              <Button variant='outlined' onClick={() => setCardOpen(prev => !prev)}>
+                <LuClipboardCheck />
+                Update Status
+              </Button>
+
+              {cardOpen && 
+                <div className='absolute card z-20 rounded-xl p-4 bg-white border border-gray-200'>
+                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Cancelled")} className='text-sm cursor-pointer p-2 text-black hover:bg-[#CFA31C] flex justify-center items-center'>Cancelled</p>
+                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Processing")} className='text-sm cursor-pointer p-2 text-black hover:bg-[#CFA31C] flex justify-center items-center'>Processing</p>
+                  [Placed, Processing, Packed, Shipping, Delivered, Cancelled, Confirmed]
+                </div>
+              }
+              
+            </div>
+          )}
+        </div> */}
+      </div>
+
+      <div className='justify-between flex items-center gap-3 mb-2 w-full'>
+        {/* <div className=''>
+          <TextInput
+            placeholder='Search orders...'
+            leftIcon={<CiSearch />}
+            onChange={debouncedSearch}
+            value={searchValue}
+            // ifSearchBar="bg-white"
+          />
+        </div> */}
+
+        {/* <div >
+          <CategoryNavigation
+            categories={[
+              'All time',
+              '12 months',
+              '30 days',
+              '7 days',
+              '24 hours',
+            ]}
+            defaultOption={defaultFilterOption}
+            handleCategoryChange={handleCategoryChange}
+          />
+        </div> */}
+      </div>
+    
+      <div className='card rounded-xl p-4 bg-white border border-gray-200'>
+          <DataTable
+            value={matchedOrders ?? []}
+            lazy
+            first={lazyState.first} 
+            onPage={onPage}
+            loading={loading}
+            totalRecords={totalRecords}
+            selectionMode={rowClick ? null : 'multiple'}
+            selection={selectedOrders!}
+            scrollable={true}
+            onSelectionChange={handleChangeSelectedOrders}
+            dataKey='uuid'
+            tableStyle={{ minWidth: '80rem' }}
+            paginator
+            paginatorClassName='flex justify-between overflow-x-auto'
+            rows={10}
+            // rowsPerPageOptions={[20, 50, 100, 250]}
+            className='rounded-md text-sm'
+            sortOrder={-1}
+            sortField='createdAt'
+            showSelectAll
+            sortIcon={<IoIosArrowDown />}
+            selectionAutoFocus={true}
+            onRowClick={(e) => router.push(`/admin/orders/${e.data.id}`)}
+            rowClassName={rowClassTemplate}
           >
-            <Button className='text-black' size="small">
-              See more
-            </Button>
-          </Link>
-        </div>
-      )}
-      <DataTable
-        value={orders ?? []}
-        emptyMessage="You do not have any orders at the moment. Create a new pet listing to get started."
-        selectionMode={rowClick ? null : 'multiple'}
-        selection={selectedOrders!}
-        onSelectionChange={handleChangeSelectedOrders}
-        dataKey='uuid'
-        tableStyle={{ minWidth: '50rem' }}
-        paginator={page !== "recent orders" ? true : false}
-        rows={10}
-        rowsPerPageOptions={[20, 50, 100, 250]}
-        className='rounded-md text-sm'
-        sortOrder={-1}
-        sortField='createdAt'
-        showSelectAll
-        sortIcon={<IoIosArrowDown />}
-        selectionAutoFocus={true}
-        onRowClick={(e) => router.push(`/admin/orders/${e.data.id}`)}
-      >
-        {page !== "recent orders" && <Column selectionMode='multiple' headerStyle={{ width: '3rem' }} className='group'/>}
-        <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>
-        <Column body={productTemplate} header='Product' />
-        
-        <Column
-          // field='customer.email'
-          body={customerTemplate}
-          header='Customer'
-        />
-        <Column
-          // field='customer.email'
-          body={merchantTemplate}
-          header='Merchant'
-        />
-        <Column field='date' header='Date' body={dateTemplate} sortable />
-        <Column
-          field='totalAmount'
-          header='Price'
-          body={amountTemplate}
-          sortable
-        />
-        <Column header='Payment' field="paymentMethod" />
-        <Column field='status' header='Status' sortable body={statusTemplate} />
-        <Column field='action' header='Action' body={actionTemplate} />
-      </DataTable>
-    </div>
+            <Column selectionMode='multiple' body={checkBoxTemplate} headerStyle={{ width: '3rem' }} className='group'/>
+            <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>
+            <Column body={productTemplate} header='Product' />
+            <Column field='date' header='Date' body={dateTemplate} sortable />
+            <Column
+              field='customer.email'
+              body={customerTemplate}
+              header='Customer'
+            />
+            <Column
+              field='totalAmount'
+              header='Total'
+              body={amountTemplate}
+              sortable
+            />
+            <Column header='Payment' field="paymentMethod" />
+            <Column field='status' header='Status' sortable body={statusTemplate} />
+            <Column field='action' header='Action' body={actionTemplate} />
+          </DataTable>
+      </div>
+    </>
   );
 }

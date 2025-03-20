@@ -5,7 +5,7 @@ import PetListingPage from "@/components/Dashboard/PetListings/PetListingPage";
 export default function PetListings () {
     return (
         <div>
-            <PetListingPage petListings={null}/>
+            <PetListingPage />
         </div>
     )
 };

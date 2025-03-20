@@ -8,9 +8,7 @@ import { FaShoppingBag } from "react-icons/fa";
 import Pagination from "@/components/Shared/Paginatioin";
 import PetListingsTable from "./PetListingsTable";
 
-export default function PetListingPage ({ petListings }: {
-    petListings: any
-}) {
+export default function PetListingPage () {
 
     const [searchValue, setSearchValue] = useState<string>('');
     const [selectedDate, setSelectedDate] = useState<number | null>(null);
@@ -73,7 +71,6 @@ export default function PetListingPage ({ petListings }: {
           {/* Pet listings Table */}
           <PetListingsTable
             selectedDate={selectedDate}
-            petListings={petListings}
             searchValue={searchValue.toLowerCase()}
             handleChangeSelectedPetListings={handleChangeSelectedPetListings}
             selectedPetListings={selectedPetListings}

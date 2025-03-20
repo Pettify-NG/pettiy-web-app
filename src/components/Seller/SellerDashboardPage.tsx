@@ -1,15 +1,11 @@
 'use client';
 import React from 'react'
-import { useState, useEffect, useMemo } from 'react';
-import Link from 'next/link';
-import { FaPlus } from 'react-icons/fa';
-import Cookies from 'universal-cookie';
-import { TabPanel, TabView } from 'primereact/tabview';
+import { useState } from 'react';
 
 import StatCards from '../Shared/DashboardComponents/StatsCard';
 import OrdersTable from '../Shared/OrdersComponents/OrdersTable';
-import { DummyOrders } from '@/interfaces/orders';
 import CreateListingPopup from '../Dashboard/CreateListingPopup';
+import { IDashboardData } from '@/interfaces/dashboard';
 
 const filter_options = [
     "All orders",
@@ -19,47 +15,41 @@ const filter_options = [
 ];
 
 export default function SellerDashboardPage ({
-    // dashboardData,
-    // graph,
-    // topSellingProducts,
-    // orders,
+    dashboardData,
 }: {
-    // dashboardData?: IDashboardData | null;
-    // graph?: IGraphDetails | null,
-    // topSellingProducts?: ITopSellingProducts | undefined,
-    // orders?: IOrder[] | null;
+    dashboardData?: IDashboardData | null;
 }) {
-    const [activeIndex, setActiveIndex] = useState<number>(0);
-
     const [isPopupVisible, setPopupVisible] = useState(false);
 
     return (
         <div>
             {/* Statistic cards */}
             <StatCards 
-                dashboardData={null}
+                totalBalance={dashboardData?.wallet.balance}
+                pendingBalance={dashboardData?.wallet.pendingBalance}
+                totalOrders={dashboardData?.totalOrders}
+                totalPets={dashboardData?.totalPets}
+                totalAccessories={dashboardData?.totalAccessories}
             />
 
             {/* Add pet listing button. */}
             <div className='flex my-4 items-center justify-center w-full'>
                 <div className='flex items-center gap-[16px]' onClick={() => setPopupVisible(true)}>
-                    {/* <Link href='/dashboard/pets/create'> */}
-                        <button className='rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap bg-[#ed770b] py-[10px] px-[14px] ' >
-                            Create New Listing
-                        </button>
-                    {/* </Link> */}
+                    <button className='rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap bg-[#ed770b] py-[10px] px-[14px] ' >
+                        Create New Listing
+                    </button>
                 </div>
             </div>
 
             {/* // Orders Table - All time, last week, last month, & last year. */}
-            <section className='my-4'>
+            {/* <section className='my-4'>
                 <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} scrollable>
                     {
                         filter_options.map((time, index) => {
                             return  (
                                 <TabPanel header={time} key={index}>
                                     <OrdersTable
-                                        orders={null}
+                                        orders={dashboardData.orders}
                                         selectedOrders={[]}
                                         searchValue=''
                                         page="recent orders"
@@ -68,7 +58,7 @@ export default function SellerDashboardPage ({
                             )
                         })
                     }
-                    {/* <TabPanel header="All orders">
+                    <TabPanel header="All orders">
                         <OrdersTable
                             orders={DummyOrders}
                             selectedOrders={[]}
@@ -99,9 +89,9 @@ export default function SellerDashboardPage ({
                             searchValue=''
                             page="recent orders"
                         />
-                    </TabPanel> */}
+                    </TabPanel>
                 </TabView>
-            </section>
+            </section> */}
 
             {/* Popup */}
             {isPopupVisible && (

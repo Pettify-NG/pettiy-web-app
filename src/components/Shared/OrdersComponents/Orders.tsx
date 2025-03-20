@@ -9,22 +9,10 @@ import Pagination from '../Paginatioin';
 import { IOrder } from '@/interfaces/orders';
 import useFetch from '@/hooks/useFetch';
 
-export default function Orders(
-  { 
-    orders, 
-  }: { 
-    orders: IOrder[] | null 
-  }
-) {
+export default function Orders() {
   const [selectedOrders, setSelectedOrders] = useState<IOrder[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
-
-  // const [retrievedOrders, setRetrievedOrders] = useState<IOrder[] | null>(null);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
-  const [categoryNavigation, setCategoryNavigation] = useState<any>();
-  const [defaultFilterOption, setDefaultFilterOption] = useState(0);
 
   const handleChangeSelectedOrders = (e: any) => {
     console.log(e.value);
@@ -73,75 +61,13 @@ export default function Orders(
             value={searchValue}
           />
         </div>
-
-        {/* <DatePicker handleSelectDate={handleSelectDate} /> */}
-
-        {/* <div className='w-full'>
-          <CategoryNavigation
-            categories={[
-              'All time',
-              '12 months',
-              '30 days',
-              '7 days',
-              '24 hours',
-            ]}
-            // className="w-full"
-            defaultOption={defaultFilterOption}
-            handleCategoryChange={function (newIndex: number, option): void {
-                
-                const now = new Date();
-                let dateRange: { startDate: Date | null, endDate: Date | null } = {
-                  startDate: null,
-                  endDate: null,
-                };
-              
-                switch (option) {
-                  case 'All time':
-                    dateRange.startDate = new Date(0); // earliest possible date
-                    dateRange.endDate = now;
-                    break;
-                  case '12 months':
-                    dateRange.startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-                    dateRange.endDate = now;
-                    break;
-                  case '30 days':
-                    dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
-                    dateRange.endDate = now;
-                    break;
-                  case '7 days':
-                    dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
-                    dateRange.endDate = now;
-                    break;
-                  case '24 hours':
-                    dateRange.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() - 24);
-                    dateRange.endDate = now;
-                    break;
-                  default:
-                    return; // return null for unknown filter options
-                }
-                setCategoryNavigation(dateRange);
-                setDefaultFilterOption(newIndex);
-              // throw new Error('Function not implemented.');
-            }}
-          />
-        </div> */}
       </div>
+
       {/* Orders Table */}
-
-    {/* //   <OriginalOrdersTable
-    //     orders={orders}
-    //     handleChangeSelectedOrders={handleChangeSelectedOrders}
-    //     selectedOrders={selectedOrders}
-    //     selectedDate={selectedDate}
-    //     searchValue={searchValue.toLowerCase()}
-    //     categoryNavigation={categoryNavigation}
-    //   /> */}
-
-            <OrdersTable
-                orders={[]}
-                selectedOrders={[]}
-                searchValue=''
-            />
+      <OrdersTable
+          selectedOrders={[]}
+          searchValue=''
+      />
     </>
   );
 }

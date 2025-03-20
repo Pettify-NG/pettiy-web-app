@@ -12,7 +12,10 @@ const ENDPOINTS = {
   CREATE_LISTING: `listings/create`,
 
   // Users
-  USER: `users/`
+  USER: `users/`,
+
+  // Orders
+  ORDERS: `orders/`
 };
 
 export default ENDPOINTS;
