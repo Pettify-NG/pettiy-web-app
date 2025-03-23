@@ -40,47 +40,44 @@ export default function Login() {
       const res = await httpService.post(ENDPOINTS.SIGN_IN, values);
       console.log(res);
 
-      if (!res.status) toast.error(res.message);
-      else {
-        if(res.data.user.role === "seller") {
-          toast.success("Login successful.");
-
-          storeCookies([
-            {
-              key: 'pettify-token',
-              value: res.data.token,
-            },
-          ]);
-
-          // if(typeof window !== undefined) {
-          //   localStorage.setItem('pettify-details', JSON.stringify(res.data));
-          // }
-          setData(res.data);
-
-          push('/dashboard');
-        } 
-
-        if (res.data.user.role === "buyer") {
-            toast.error("You are not allowed to login as a seller.");
-        }
-
-        if (res.statusCode === 203) {
-          storeCookies([
-            {
-              key: 'pettify-email',
-              value: res.data.email,
-            },
-
-            {
-              key: 'pettify-secret-reference',
-              value: res.data.secretReference,
-            },
-          ]);
-
+      if (!res.success) {
+        toast.error(res.message);
+        if(res.message === "User not verified. Please check your email for the verification email.") {
           setTimeout(() => {
-            push('/auth/verify-email?role=seller');
+            push(`/verify-account/${res.data._id}`);
           }, 1000);
         }
+      }
+
+      storeCookies([
+        {
+          key: 'pettify-email',
+          value: res.data.email,
+        },
+
+        {
+          key: 'pettify-secret-reference',
+          value: res.data.secretReference,
+        },
+      ]);
+
+      if(res.data.user.role === "seller") {
+        toast.success("Login successful.");
+
+        storeCookies([
+          {
+            key: 'pettify-token',
+            value: res.data.token,
+          },
+        ]);
+
+        setData(res.data);
+
+        push('/dashboard');
+      } 
+
+      if (res.data.user.role === "buyer") {
+          toast.error("You are not allowed to login as a seller.");
       }
     },
     validateOnChange: true,
@@ -94,7 +91,7 @@ export default function Login() {
         </Link>
       </div>
 
-      <div className='flex space-between gap-6 bg-orange-300 h-full w-full px-4 lg:px-14 py-14 mt-14'>
+      <div className='flex lg:flex-row md:flex-row flex-col gap-2 lg:gap-6 space-between gap-6 bg-orange-300 lg:h-screen md:h-screen h-auto w-full px-4 lg:px-14 py-14 mt-14'>
         <div className='w-full rounded-md p-6 shadow-xl bg-white flex justify-center align-start flex-col'>
             <p className='font-bold text-3xl mb-4 text-black'>
               Log in to your account
@@ -151,11 +148,11 @@ export default function Login() {
             </form>
         </div>
 
-        <div className='w-full h-[40rem] rounded-md shadow-lg hidden lg:block'>
+        <div className='w-full lg:h-[40rem] lg:h-[400px] rounded-md shadow-lg lg:block'>
           <Image 
             src={authImage} 
             alt='Hero image' 
-            className='object-cover h-full rounded'
+            className='lg:object-cover md:object-cover lg:h-[35rem] md:h-full h-[300px] rounded'
           />
         </div>
       </div>

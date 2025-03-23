@@ -1,4 +1,5 @@
 'use client';
+
 import { useFormik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -58,15 +59,13 @@ export default function Register() {
 
       if (res.success && !res.error) {
         toast.success(
-          // API_RESPONSES.SIGN_UP[res.statusCode] ||
-          //   API_RESPONSES.SIGN_UP[res.status]
           API_RESPONSES.SIGN_UP[201]
         );
 
         localStorage.setItem('pettify-details', JSON.stringify(res.newUser));
         
         setTimeout(() => {
-          push(`/dashboard`);
+          push(`/verify-account/${res.newUser._id}`);
         }, 1000);
       }
       // else {

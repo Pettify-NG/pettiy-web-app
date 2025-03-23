@@ -6,7 +6,7 @@ import { IoMdPerson } from "react-icons/io";
 import { MdOutlinePets } from "react-icons/md";
 import { FaWallet } from "react-icons/fa6";
 
-const adminDetails = JSON.parse(localStorage.getItem("pettify-details") ?? "");
+// const adminDetails = JSON.parse(localStorage.getItem("pettify-details") ?? "");
 
 export const sellerLinks: ISidebarLink[] = [
   { name: 'home', icon: <IoMdHome />, page: '/dashboard' },
@@ -33,7 +33,7 @@ export const sellerLinks: ISidebarLink[] = [
   {
     name: 'profile',
     icon: <IoMdPerson />,
-    page: `/dashboard/profile/${adminDetails?.user?._id}`,
+    page: `/dashboard/profile`
   },
   // { name: 'settings', icon: <IoMdSettings />, page: '/dashboard/settings' },
   // { name: 'notification', icon: <LuMail />, page: '/admin/dashboard/notifications' },

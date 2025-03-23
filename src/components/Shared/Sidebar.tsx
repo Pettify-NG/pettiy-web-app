@@ -116,7 +116,7 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
                 return (
                     <Link
                       key={link.name}
-                      href={link.page}
+                      href={link.name === "profile" ? `${link.page}/${adminDetails?.user?._id}`: link.page}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -218,7 +218,8 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
                 return (
                     <Link
                       key={link.name}
-                      href={link.page}
+                      // href={link.page}
+                      href={link.name === "profile" ? `${link.page}/${adminDetails?.user?._id}`: link.page}
                       style={{
                         display: 'flex',
                         alignItems: 'center',

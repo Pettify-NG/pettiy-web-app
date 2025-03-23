@@ -3,7 +3,7 @@ import React from 'react'
 import { useState } from 'react';
 
 import StatCards from '../Shared/DashboardComponents/StatsCard';
-import OrdersTable from '../Shared/OrdersComponents/OrdersTable';
+import DashboardOrdersTable from '../Shared/OrdersComponents/DashboardOrdersTable';
 import CreateListingPopup from '../Dashboard/CreateListingPopup';
 import { IDashboardData } from '@/interfaces/dashboard';
 
@@ -19,6 +19,7 @@ export default function SellerDashboardPage ({
 }: {
     dashboardData?: IDashboardData | null;
 }) {
+    console.log(dashboardData);
     const [isPopupVisible, setPopupVisible] = useState(false);
 
     return (
@@ -40,6 +41,10 @@ export default function SellerDashboardPage ({
                     </button>
                 </div>
             </div>
+
+            <section className='my-4'>
+                <DashboardOrdersTable orders={dashboardData?.orders}/>
+            </section>
 
             {/* // Orders Table - All time, last week, last month, & last year. */}
             {/* <section className='my-4'>

@@ -80,7 +80,9 @@ export default function StatCards({
         </div>
       </Link>
 
-      <Link href="/dashboard/pets">
+      {/*  */}
+
+      <Link href="/dashboard/accessories">
         <div className='rounded-lg bg-white border border-neural p-6'>
           <span className={`${card_icon_style} bg-[#FAE1CF] text-blue-700`}>
             <BsFillPeopleFill className='fill-[#E46A11]'/>

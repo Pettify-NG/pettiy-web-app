@@ -22,7 +22,7 @@ interface IData {
     private request(
       url: string,
       method = 'GET',
-      data?: IData | undefined | null,
+      data?: IData | undefined | null | string,
       Authorization?: string | null
     ) {
       url = joinURL(this.baseURL, url);
@@ -49,7 +49,7 @@ interface IData {
       return this.request(url, method).then((res) => res.json());
     }
   
-    async post(url: string, data: IData, Authorization?: string | null) {
+    async post(url: string, data: IData | string, Authorization?: string | null) {
       const method = 'POST';
   
       return this.request(url, method, data, Authorization).then((res) =>
