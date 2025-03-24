@@ -13,9 +13,7 @@ import TextInput from "@/components/Global/TextInput";
 import Button from "@/components/Global/Button";
 import ENDPOINTS from "@/config/ENDPOINTS";
 import HTTPService from "@/services/http";
-import { TfiSave } from "react-icons/tfi";
-import { Calendar } from "primereact/calendar";
-import { FiCalendar } from "react-icons/fi";
+import { IoIosArrowDown } from "react-icons/io";
 
 interface ProductImage {
   image: File
@@ -33,6 +31,8 @@ function CustomError({ error }: { error?: string }) {
   );
 }
 
+const accessoryCategories = ["Feed", "Toy", "Gadgets", "Wearables", "Grooming/Care", "Others"];
+
 const CreateAccessoriesListingForm = () => {
   const imageInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -40,30 +40,18 @@ const CreateAccessoriesListingForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      // petBreed: "",
       description: "",
       category: "",
       price: "",
       stock: 0,
       weight: 0,
-      // petColor: "",
-      // sex: "",
-      // location: "",
-      // vaccinationStatus: "",
-      // dateOfBirth: "",
     },
     validationSchema: Yup.object({
-      // petBreed: Yup.string().required().label("Pet Breed"),
       description: Yup.string().required().label("Description"),
       category: Yup.string().required().label("Category"),
       price: Yup.string().required().label("Price"),
       stock: Yup.number().min(1).required().label("Number in stock"),
       weight: Yup.number().min(1).required().label("Product Weight"),
-      // petColor: Yup.string().required().label("Pet color"),
-      // sex: Yup.string().required().label("Sex"),
-      // location: Yup.string().required().label("Location"),
-      // vaccinationStatus: Yup.boolean().required().label("Vaccination Status"),
-      // dateOfBirth: Yup.string().required().label("Date of Birth"),
     }),
     onSubmit: async (values) => {
 
@@ -133,11 +121,19 @@ const CreateAccessoriesListingForm = () => {
                 value={formik.values.category}
             >
                 <option value='' defaultChecked disabled>
-                    e.g Dog,
+                    e.g Select a category,
                 </option>
+
+                {
+                  accessoryCategories.map((category, index) => 
+                    <option value={category} key={index}>
+                        {category}
+                    </option>
+                  )
+                }
             </select>
-            {/* <IoIosArrowDown onClick={handleSelectProductCategoryClick} className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
-            <CustomError error={formik.errors.categoryId} /> */}
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.category ? "top-10" : "bottom-4"}`} />
+            <CustomError error={formik.errors.category} />
           </div>
 
           {/* Product Description */}
@@ -161,7 +157,7 @@ const CreateAccessoriesListingForm = () => {
             <CustomError error={formik.errors.description} />
           </div>
 
-          {/* Pet Image */}
+          {/* Image(s) */}
 
           <div className='mb-6'>
             <p className='text-neutral mb-2 text-sm'>Cover Image</p>
@@ -262,7 +258,7 @@ const CreateAccessoriesListingForm = () => {
       <div className='fixed right-0 bottom-0 w-full p-4 bg-white flex items-center justify-end'>
 
           <div className='flex items-center gap-4'>
-              <Link href='/dashoard/product-listings'>
+              <Link href='/dashoard/accessories'>
                 <Button variant='outlined' color='dark'>
                   <FaX />
                   Cancel

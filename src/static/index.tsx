@@ -5,8 +5,8 @@ import { IoMdHome } from "react-icons/io";
 import { IoMdPerson } from "react-icons/io";
 import { MdOutlinePets } from "react-icons/md";
 import { FaWallet } from "react-icons/fa6";
-
-// const adminDetails = JSON.parse(localStorage.getItem("pettify-details") ?? "");
+import { FaBone } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 
 export const sellerLinks: ISidebarLink[] = [
   { name: 'home', icon: <IoMdHome />, page: '/dashboard' },
@@ -17,12 +17,12 @@ export const sellerLinks: ISidebarLink[] = [
   },
   {
     name: 'accessories listings',
-    icon: <MdOutlinePets />,
+    icon: <FaBone />,
     page: '/dashboard/accessories'
   },
   {
     name: 'orders',
-    icon: <MdOutlinePets />,
+    icon: <FaShoppingCart />,
     page: '/dashboard/orders',
   },
   {

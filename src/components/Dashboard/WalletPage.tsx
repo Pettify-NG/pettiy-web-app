@@ -10,6 +10,7 @@ import Button from "@/components/Global/Button";
 import PayoutTable from "./Payouts/PayoutTable";
 import useFetch from "@/hooks/useFetch";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { IWallet } from "@/interfaces/wallet";
 
 interface IWalletPage {
     availableBalance?: number
@@ -22,7 +23,14 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
     const [seller_info, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
     const fetchUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${seller_info.user._id}/wallet`;
 
-    const { data, error, isLoading, refetch } = useFetch<any>(fetchUrl);
+    const options = {  
+        headers: {
+            "Content": "application/json",
+            "Authorization": `Bearer ${seller_info.token}`
+        }
+    }
+
+    const { data, error, isLoading, refetch } = useFetch<IWallet>(fetchUrl, options);
     console.log(data);
 
     return (
@@ -47,7 +55,7 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
 
                         <div className='flex items-center gap-4'>
                             <p className='text-gray-700 text-2xl font-medium'>
-                                ₦{(data.balance ?? 0).toLocaleString()}
+                                ₦{(data?.balance ?? 0).toLocaleString()}
                             </p>
                         </div>
                     </div>
@@ -60,13 +68,13 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
 
                         <div className='flex items-center gap-4'>
                             <p className='text-gray-700 text-2xl font-medium'>
-                                ₦{(data.pendingBalance ?? 0).toLocaleString()}
+                                ₦{(data?.pendingBalance ?? 0).toLocaleString()}
                             </p>
                         </div>
                     </div>
                 </section>
 
-                <button disabled={data.balance == 0 ? true : false} className={`rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap ${data.balance == 0 ? "bg-gray-300" : "bg-[#ED770B]"} py-[10px] px-[14px]`} >
+                <button disabled={data?.balance == 0 ? true : false} className={`rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap ${data?.balance == 0 ? "bg-gray-300" : "bg-[#ED770B]"} py-[10px] px-[14px]`} >
                     Withdraw funds
                 </button>
 
@@ -81,10 +89,19 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
                                 </div>
 
                                 {/* Bank details */}
-                                <div className="flex flex-col gap-1">
-                                    <p>{"SUNDAY TITILAYO"}</p>
-                                    <p>{"Access Bank" + "-" + "0046789938"}</p>
-                                </div>
+                                {
+                                    data?.accountDetails?.accountHolderName ? 
+
+                                    <div className="flex flex-col gap-1">
+                                        <p>{ data?.accountDetails?.accountHolderName || "" }</p>
+                                        <p>{ data?.accountDetails?.bankName || "" + "-" + data?.accountDetails?.accountNumber || "" }</p>
+                                    </div>
+
+                                    :
+
+                                    <p>Account details not provided.</p>
+                                }
+
 
                                 <button className='rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap bg-[#ED770B] py-[10px] px-[14px] ' >
                                     Update acount details
@@ -92,7 +109,7 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
                             </div>
                         </div>
 
-                        <h2 className="text-black my-4 font-semibold text-2xl">Your payouts</h2>
+                        <h2 className="text-black my-4 font-semibold text-2xl">Your Transactions</h2>
 
                         {/* Tables */}
                         <div className="w-full my-6">
