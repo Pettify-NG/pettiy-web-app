@@ -34,19 +34,19 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => voi
     }
   };
 
-  useEffect(() => {
-    // Sync state with localStorage when the component mounts
-    if (typeof window !== "undefined") {
-      try {
-        const item = window.localStorage.getItem(key);
-        if (item) {
-          setStoredValue(JSON.parse(item));
-        }
-      } catch (error) {
-        console.error(`Error syncing localStorage key "${key}":`, error);
-      }
-    }
-  }, [key]);
+  // useEffect(() => {
+  //   // Sync state with localStorage when the component mounts
+  //   if (typeof window !== "undefined") {
+  //     try {
+  //       const item = window.localStorage.getItem(key);
+  //       if (item) {
+  //         setStoredValue(JSON.parse(item));
+  //       }
+  //     } catch (error) {
+  //       console.error(`Error syncing localStorage key "${key}":`, error);
+  //     }
+  //   }
+  // }, [key]);
 
   return [storedValue, setValue];
 }

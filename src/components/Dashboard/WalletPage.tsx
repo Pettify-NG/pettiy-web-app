@@ -23,7 +23,11 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
     const [seller_info, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
 
     const fetchUrl = useMemo(() => {
-        return `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${seller_info.user._id}/wallet`;
+        return seller_info?.user?._id ?
+        
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${seller_info.user._id}/wallet`
+        
+        : "";
     }, [seller_info]);
 
     const options = useMemo(() => ({  
