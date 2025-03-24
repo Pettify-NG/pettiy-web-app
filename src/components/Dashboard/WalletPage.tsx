@@ -33,7 +33,11 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
         }
     }), [seller_info]);
 
-    const { data, error, isLoading, refetch } = useFetch<IWallet>(fetchUrl, options);
+    const { data, error, isLoading, refetch } = useFetch<IWallet>(
+        // fetchUrl, 
+        seller_info?.user?._id ? fetchUrl : "",
+        options
+    );
     console.log(data);
 
     return (
