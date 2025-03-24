@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { FaShoppingBag } from "react-icons/fa";
 import { AiFillBank } from "react-icons/ai";
 import { CiMoneyBill } from "react-icons/ci";
@@ -21,14 +21,17 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
     const card_icon_style = 'h-10 w-10 text-xl flex items-center justify-center rounded-full';
 
     const [seller_info, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
-    const fetchUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${seller_info.user._id}/wallet`;
 
-    const options = {  
+    const fetchUrl = useMemo(() => {
+        return `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${seller_info.user._id}/wallet`;
+    }, [seller_info]);
+
+    const options = useMemo(() => ({  
         headers: {
             "Content": "application/json",
             "Authorization": `Bearer ${seller_info.token}`
         }
-    }
+    }), [seller_info]);
 
     const { data, error, isLoading, refetch } = useFetch<IWallet>(fetchUrl, options);
     console.log(data);
