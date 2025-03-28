@@ -19,7 +19,6 @@ import Button from "@/components/Global/Button";
 import ENDPOINTS from "@/config/ENDPOINTS";
 import HTTPService from "@/services/http";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { AdminType } from "@/components/Shared/Header";
 import { IoIosArrowDown } from "react-icons/io";
 
 interface ProductImage {
@@ -54,7 +53,7 @@ const CreatePetListingForm = () => {
 
   const router = useRouter();
 
-  const [seller_info, setSellerInfo] = useLocalStorage<AdminType>("pettify-details", {} as AdminType);
+  const [seller_info, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
 
   const httpService = new HTTPService();
 
@@ -162,7 +161,7 @@ const CreatePetListingForm = () => {
               color: values.petColor,
               price: values.price,
               location: values.location,
-              seller: seller_info._id ?? "",
+              seller: seller_info?.user?._id ?? "",
             };
 
             console.log('Request Body: ', data);
@@ -285,7 +284,7 @@ const CreatePetListingForm = () => {
                   onChange={formik.handleChange}
                   value={formik.values.category}
               >
-                  <option value='' className="text-gray-500" defaultChecked disabled>
+                  <option value='' className="text-gray-300" defaultChecked disabled>
                       e.g Dog
                   </option>
                   <option value="Cat">
@@ -293,6 +292,15 @@ const CreatePetListingForm = () => {
                   </option>
                   <option value="Dog">
                       Dog
+                  </option>
+                  <option value="Bunny">
+                      Bunny
+                  </option>
+                  <option value="Bird">
+                      Bird
+                  </option>
+                  <option value="Others">
+                      Others
                   </option>
               </select>
               <IoIosArrowDown className={`absolute right-4 ${formik.errors.category ? "top-10" : "bottom-4"}`} />
@@ -379,6 +387,7 @@ const CreatePetListingForm = () => {
                 <Button
                   size='small'
                   onClick={() => imageInputRef.current?.click()}
+                  className="text-white"
                 >
                   Add Image
                 </Button>
@@ -487,8 +496,8 @@ const CreatePetListingForm = () => {
                     Female
                 </option>
             </select>
-            {/* <IoIosArrowDown onClick={handleSelectProductCategoryClick} className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
-            <CustomError error={formik.errors.categoryId} /> */}
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.gender ? "top-10" : "bottom-4"}`} />
+            <CustomError error={formik.errors.gender} />
           </div>
 
           {/* Location */}
@@ -539,52 +548,59 @@ const CreatePetListingForm = () => {
 
           {/* Vaccine Card */}
 
-          <div className='mb-6'>
-              <p className='text-neutral mb-2 text-sm'>
-                Vaccine card
-              </p>
-              <div className='p-8 bg-[#F0F1F3] border border-black flex items-center justify-center flex-col border-dotted'>
-                <input
-                  type='file'
-                  accept='.jpg,.png,.jpeg'
-                  id='image'
-                  className='pointer-events-none opacity-0'
-                  ref={vaccineImageRef}
-                  onChange={addNewVaccineCardImage}
-                />
-                {!vaccineCardImage && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>}
-                
-                {
-                  vaccineCardImage && 
-                    <div className='flex items-center flex-wrap gap-2 mb-4'>
-                          <div
-                            // key={`${index}-${img.image.name}`}
-                            className='h-28 w-28 relative rounded-xl'
-                          >
-                            <Image
-                              src={vaccineCardImage !== null ? URL.createObjectURL(vaccineCardImage.image) : ""}
-                              alt={vaccineCardImage?.image.name ?? "vaccine card"}
-                              width={100}
-                              height={100}
-                              className='rounded-lg w-full h-full object-cover'
-                            />
-                            <button
-                              className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
-                              onClick={() => removeVaccineCardImage()}
+          {
+            formik.values.vaccinationStatus === "true" ? 
+          
+            <div className='mb-6'>
+                <p className='text-neutral mb-2 text-sm'>
+                  Vaccine card
+                </p>
+                <div className='p-8 bg-[#F0F1F3] border border-black flex items-center justify-center flex-col border-dotted'>
+                  <input
+                    type='file'
+                    accept='.jpg,.png,.jpeg'
+                    id='image'
+                    className='pointer-events-none opacity-0'
+                    ref={vaccineImageRef}
+                    onChange={addNewVaccineCardImage}
+                  />
+                  {!vaccineCardImage && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>}
+                  
+                  {
+                    vaccineCardImage && 
+                      <div className='flex items-center flex-wrap gap-2 mb-4'>
+                            <div
+                              // key={`${index}-${img.image.name}`}
+                              className='h-28 w-28 relative rounded-xl'
                             >
-                              <RiDeleteBin6Fill />
-                            </button>
-                          </div>
-                    </div>
-                }
-                <Button
-                  size='small'
-                  onClick={() => vaccineImageRef.current?.click()}
-                >
-                  Upload Vaccine Card
-                </Button>
-              </div>
-          </div>
+                              <Image
+                                src={vaccineCardImage !== null ? URL.createObjectURL(vaccineCardImage.image) : ""}
+                                alt={vaccineCardImage?.image.name ?? "vaccine card"}
+                                width={100}
+                                height={100}
+                                className='rounded-lg w-full h-full object-cover'
+                              />
+                              <button
+                                className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
+                                onClick={() => removeVaccineCardImage()}
+                              >
+                                <RiDeleteBin6Fill />
+                              </button>
+                            </div>
+                      </div>
+                  }
+                  <Button
+                    size='small'
+                    className="text-white" 
+                    onClick={() => vaccineImageRef.current?.click()}
+                  >
+                    Upload Vaccine Card
+                  </Button>
+                </div>
+            </div> :
+
+            null 
+          }
 
         </div>
 
@@ -599,7 +615,7 @@ const CreatePetListingForm = () => {
                 </Link>
 
                 <div className='max-w-md w-full'>
-                  <Button type='submit' block loading={formik.isSubmitting}>
+                  <Button className="text-white" type='submit' block loading={formik.isSubmitting}>
                     Add Listing
                   </Button>
                 </div>
