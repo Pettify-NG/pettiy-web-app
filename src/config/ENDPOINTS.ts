@@ -24,6 +24,9 @@ const ENDPOINTS = {
   // Pet
   PET: `pets/`,
   CREATE_PET: `pets/create`,
+
+  // Wallet
+  WALLET: `wallets/`
 };
 
 export default ENDPOINTS;

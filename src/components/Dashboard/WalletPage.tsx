@@ -11,6 +11,7 @@ import PayoutTable from "./Payouts/PayoutTable";
 import useFetch from "@/hooks/useFetch";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { IWallet } from "@/interfaces/wallet";
+import UpdateAccountDetailsPopup from "./UpdateAccountDetailsPopup";
 
 interface IWalletPage {
     availableBalance?: number
@@ -21,6 +22,8 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
     const card_icon_style = 'h-10 w-10 text-xl flex items-center justify-center rounded-full';
 
     const [seller_info, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
+
+    const [isPopupVisible, setPopupVisible] = useState(false);
 
     const fetchUrl = useMemo(() => {
         return seller_info?.user?._id ?
@@ -105,7 +108,8 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
 
                                     <div className="flex flex-col gap-1">
                                         <p>{ data?.accountDetails?.accountHolderName || "" }</p>
-                                        <p>{ data?.accountDetails?.bankName || "" + "-" + data?.accountDetails?.accountNumber || "" }</p>
+                                        <p>{ data?.accountDetails?.bankName || "" }</p>
+                                        <p>{ data?.accountDetails?.accountNumber || "" }</p>
                                     </div>
 
                                     :
@@ -114,7 +118,7 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
                                 }
 
 
-                                <button className='rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap bg-[#ED770B] py-[10px] px-[14px] ' >
+                                <button onClick={() => setPopupVisible(true)} className='rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap bg-[#ED770B] py-[10px] px-[14px] ' >
                                     Update acount details
                                 </button>
                             </div>
@@ -133,6 +137,11 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
                     </div>
                 </section>
             </div>
+
+            {/* Popup */}
+            {isPopupVisible && (
+                <UpdateAccountDetailsPopup closePopup={() => setPopupVisible(false)} walletId={data?._id ?? ""} />
+            )}
         </>
     )
 }

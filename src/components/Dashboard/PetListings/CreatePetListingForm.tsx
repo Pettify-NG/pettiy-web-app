@@ -12,6 +12,7 @@ import Cookies from "universal-cookie";
 import { Calendar } from "primereact/calendar";
 import { FiCalendar } from "react-icons/fi";
 import { TfiSave } from "react-icons/tfi";
+import { useRouter } from "next/navigation";
 
 import TextInput from "@/components/Global/TextInput";
 import Button from "@/components/Global/Button";
@@ -19,12 +20,13 @@ import ENDPOINTS from "@/config/ENDPOINTS";
 import HTTPService from "@/services/http";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { AdminType } from "@/components/Shared/Header";
+import { IoIosArrowDown } from "react-icons/io";
 
 interface ProductImage {
   image: File
 }
 
-function CustomError({ error }: { error?: string }) {
+export function CustomError({ error }: { error?: string }) {
   if (!error) return;
 
   return (
@@ -49,6 +51,8 @@ const CreatePetListingForm = () => {
   // JWT Token gotten from the backend. Not yet implemented from the backend.
   const cookies = new Cookies();
   const token = cookies.get('pettify-token');
+
+  const router = useRouter();
 
   const [seller_info, setSellerInfo] = useLocalStorage<AdminType>("pettify-details", {} as AdminType);
 
@@ -178,9 +182,9 @@ const CreatePetListingForm = () => {
                   toast.success('Pet listing created.');
                   console.log(apiRes);
 
-                  // setTimeout(() => {
-                  //   router.push('/dashboard/pets');
-                  // }, 1000);
+                  setTimeout(() => {
+                    router.push('/dashboard/pets');
+                  }, 1000);
                 }
               });
           } else console.log('Products array not provided');
@@ -291,8 +295,8 @@ const CreatePetListingForm = () => {
                       Dog
                   </option>
               </select>
-              {/* <IoIosArrowDown onClick={handleSelectProductCategoryClick} className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} /> */}
-              {/* <CustomError error={formik.errors.categoryId} /> */}
+              <IoIosArrowDown className={`absolute right-4 ${formik.errors.category ? "top-10" : "bottom-4"}`} />
+              <CustomError error={formik.errors.category} />
             </div>
 
             {/* Pet Breed */}

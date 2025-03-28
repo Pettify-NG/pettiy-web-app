@@ -1,4 +1,5 @@
 export interface IWallet {
+    _id: string
     pendingBalance: number
     balance: number
     user: string

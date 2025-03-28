@@ -41,7 +41,7 @@ export interface LazyTableState {
     filters?: DataTableFilterMeta; 
 }
 
-export default function PetListinsTable ({
+export default function PetListingsTable ({
     searchValue,
     selectedDate,
     handleChangeSelectedPetListings,
