@@ -2,8 +2,9 @@ import React from 'react';
 import Link from 'next/link';
 import { BiWallet } from 'react-icons/bi';
 import { CiMoneyBill } from 'react-icons/ci';
-import { TbCurrencyNaira } from "react-icons/tb";
-import { BsFillPeopleFill } from "react-icons/bs";
+import { FaPaw } from "react-icons/fa";
+import { FaBone } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 
 export default function StatCards({
   totalBalance,
@@ -47,9 +48,9 @@ export default function StatCards({
       <Link href="/dashboard/orders">
         <div className='rounded-lg bg-white border border-neural p-6'>
           <span className={`${card_icon_style} bg-[#FAE1CF] text-blue-700`}>
-            <BiWallet className='fill-[#E46A11]'/>
+            <FaShoppingCart className='fill-[#E46A11]'/>
           </span>
-          <p className='my-3 text-neutral text-sm'>Total orders</p>
+          <p className='my-3 text-neutral text-sm'>Total Orders</p>
 
           <div className='flex items-center gap-4'>
             <p className='text-gray-700 text-2xl font-medium'>
@@ -68,9 +69,9 @@ export default function StatCards({
       <Link href="/dashboard/pets">
         <div className='rounded-lg bg-white border border-neural p-6'>
           <span className={`${card_icon_style} bg-[#FAE1CF] text-blue-700`}>
-            <BsFillPeopleFill className='fill-[#E46A11]'/>
+            <FaPaw className='fill-[#E46A11]'/>
           </span>
-          <p className='my-3 text-neutral text-sm'>Total Pet listings</p>
+          <p className='my-3 text-neutral text-sm'>Total Pet Listings</p>
 
           <div className='flex items-center gap-4'>
             <p className='text-gray-700 text-2xl font-medium'>
@@ -85,9 +86,9 @@ export default function StatCards({
       <Link href="/dashboard/accessories">
         <div className='rounded-lg bg-white border border-neural p-6'>
           <span className={`${card_icon_style} bg-[#FAE1CF] text-blue-700`}>
-            <BsFillPeopleFill className='fill-[#E46A11]'/>
+            <FaBone className='fill-[#E46A11]'/>
           </span>
-          <p className='my-3 text-neutral text-sm'>Total Accessory listings</p>
+          <p className='my-3 text-neutral text-sm'>Total Accessory Listings</p>
 
           <div className='flex items-center gap-4'>
             <p className='text-gray-700 text-2xl font-medium'>

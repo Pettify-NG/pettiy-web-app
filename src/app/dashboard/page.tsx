@@ -4,10 +4,14 @@ import SellerDashboardPage from '@/components/Seller/SellerDashboardPage';
 import { getUserDashboard } from '@/libs/dashboard';
 import { IDashboardData } from '@/interfaces/dashboard';
 
-export default async function SellerDashboard () {
+const SellerDashboard = async () => {
 
-  const apiRes: Promise<IDashboardData | null> = getUserDashboard();
-  const response = await apiRes;
+  // const apiRes: Promise<IDashboardData | null> = getUserDashboard();
+  // const response = await apiRes;
+
+  const response: IDashboardData | undefined = await getUserDashboard();
+
+  console.log("dashd", response);
 
   return (
     <section>
@@ -17,3 +21,5 @@ export default async function SellerDashboard () {
     </section>
   );
 };
+
+export default SellerDashboard;

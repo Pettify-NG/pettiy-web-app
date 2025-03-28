@@ -1,4 +1,5 @@
 const ENDPOINTS = {
+  // Auth
   SIGN_IN: `auth/login`,
   SIGN_UP: `auth/register`,
   CONFIRM_EMAIL_OTP: `auth/confirm-email`,
@@ -7,15 +8,24 @@ const ENDPOINTS = {
   RESET_PASSWORD: `auth/reset`,
   RESEND_OTP: `auth/resend-otp`,
 
+  // Upload Images
   UPLOAD_FILE: `upload`,
-
-  CREATE_LISTING: `listings/create`,
 
   // Users
   USER: `users/`,
 
+  // Accessory
+  ACCESSORY: `accessories/`,
+  CREATE_ACCESSORY: `accessories/create`,
+
   // Orders
-  ORDERS: `orders/`
+  ORDERS: `orders/`,
+
+  // Pet
+  PET: `pets/`,
+  CREATE_PET: `pets/create`,
 };
 
 export default ENDPOINTS;
+
+  

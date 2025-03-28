@@ -57,7 +57,7 @@ export const paginatorTemplate = (totalRecords: number, page: number | undefined
                 const className = classNames(options.className, { 'p-disabled': true });
 
                 return (
-                    <span className={classNames('border px-3 py-1 mx-1 rounded-sm cursor-pointer border-[#F2C94C]')} style={{ userSelect: 'none' }}>
+                    <span className={classNames('border px-3 py-1 mx-1 rounded-sm cursor-pointer border-[#ED770B]')} style={{ userSelect: 'none' }}>
                         ...
                     </span>
                 );
@@ -65,7 +65,7 @@ export const paginatorTemplate = (totalRecords: number, page: number | undefined
           
             return (
                 <span 
-                className={classNames(`${options.page === page ? "bg-[#F2C94C]" : "bg-white"} px-3 cursor-pointer py-1 mx-1 rounded-sm border border-[#F2C94C] `)} 
+                className={classNames(`${options.page === page ? "bg-[#ED770B]" : "bg-white"} px-3 text-white cursor-pointer py-1 mx-1 rounded-sm border border-[#F2C94C] `)} 
                 onClick={options.onClick}
                 >
                     {options.page + 1}
@@ -82,20 +82,20 @@ export const paginatorTemplate = (totalRecords: number, page: number | undefined
           PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
               return (
                   <span 
-                      className={classNames('rounded-sm bg-[#F2C94C] p-2 mx-1 cursor-pointer')} 
+                      className={classNames('rounded-sm bg-[#ED770B] text-white p-2 mx-1 cursor-pointer')} 
                       onClick={options.onClick}
                   >
-                      <MdOutlineKeyboardArrowLeft color="black"/>
+                      <MdOutlineKeyboardArrowLeft color="white"/>
                   </span>
               );
           },
           NextPageLink: (options: PaginatorNextPageLinkOptions) => {
               return (
                   <span 
-                  className={classNames('rounded-sm p-2 mx-1 bg-[#F2C94C] cursor-pointer')} 
+                  className={classNames('rounded-sm p-2 mx-1 bg-[#ED770B] text-white cursor-pointer')} 
                   onClick={options.onClick}
                   >
-                      <MdKeyboardArrowRight color="black"/>
+                      <MdKeyboardArrowRight color="white"/>
                   </span>
               );
           },
@@ -147,10 +147,10 @@ export default function OrdersTable({
 
           const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   
-          fetch(`${baseUrl}/api/v1/users/${sellerInfo.user._id}/${ENDPOINTS.ORDERS}?page=${lazyState.page}&size=${lazyState.rows}&type=${timeFilter}`, {
-              // headers: {
-              //     Authorization: `Bearer ${token}`,
-              // },
+          fetch(`${baseUrl}/api/v1/users/${sellerInfo.user._id}/${ENDPOINTS.ORDERS}?page=${lazyState.page}&limit=${lazyState.rows}&type=${timeFilter}`, {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
               cache: 'no-store',
           }).then(response => {
               if (!response.ok) {
@@ -160,8 +160,8 @@ export default function OrdersTable({
           }).then(data => {
               if (data.data) {
                   console.log(data.meta);
-                  setTotalRecords(data.meta.total_items);
-                  setTotalPages(data.meta.total_pages);
+                  setTotalRecords(data.meta.totalRecords);
+                  setTotalPages(data.meta.totalPages);
                   console.log(data.data);
                   setLazyOrders(data.data); 
                   setLoading(false);
@@ -177,7 +177,7 @@ export default function OrdersTable({
 
   useEffect(() => {
     loadLazyData();
-  }, []);
+  }, [loadLazyData]);
 
   const onPage = (event: DataTablePageEvent) => {
       setlazyState(event);

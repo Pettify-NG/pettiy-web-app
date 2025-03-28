@@ -17,7 +17,7 @@ const filter_options = [
 export default function SellerDashboardPage ({
     dashboardData,
 }: {
-    dashboardData?: IDashboardData | null;
+    dashboardData?: IDashboardData | undefined;
 }) {
     console.log(dashboardData);
     const [isPopupVisible, setPopupVisible] = useState(false);

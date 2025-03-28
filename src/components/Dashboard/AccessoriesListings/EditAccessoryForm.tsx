@@ -16,7 +16,7 @@ import Button from "@/components/Global/Button";
 import ENDPOINTS from "@/config/ENDPOINTS";
 import HTTPService from "@/services/http";
 import { IoIosArrowDown } from "react-icons/io";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import IAccessory from "@/interfaces/accessory";
 
 interface ProductImage {
   image: File
@@ -36,10 +36,11 @@ function CustomError({ error }: { error?: string }) {
 
 const accessoryCategories = ["Feed", "Toy", "Gadgets", "Wearables", "Grooming/Care", "Others"];
 
-const CreateAccessoriesListingForm = () => {
+const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined }) => {
   const imageInputRef = useRef<HTMLInputElement | null>(null);
 
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>(accessory!.accessoryImages);
 
   const router = useRouter();
 
@@ -49,15 +50,13 @@ const CreateAccessoriesListingForm = () => {
 
   const httpService = new HTTPService();
 
-  const [sellerInfo, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
-
   const formik = useFormik({
     initialValues: {
-      name: "",
-      description: "",
-      category: "",
-      price: 0,
-      stock: 0,
+      name: accessory?.name ?? "",
+      description: accessory?.description ?? " ",
+      category: accessory?.category ?? " ",
+      price: accessory?.price ?? undefined,
+      stock: accessory?.quantity ?? undefined,
       // weight: "",
     },
     validationSchema: Yup.object({
@@ -109,23 +108,22 @@ const CreateAccessoriesListingForm = () => {
               console.log(error);
             });
 
-          if (product_images && product_images.length > 0) {
+          if ((product_images && product_images.length > 0) || (existingImages && existingImages.length > 0)) {
             const data = {
               name: values.name,
               description: values.description,
               category: values.category,
-              accessoryImages: product_images,
+              accessoryImages: [...product_images!, ...existingImages],
               quantity: values.stock,
               price: values.price,
-              seller: sellerInfo.user._id ?? "",
               // weight: values.weight
             };
 
             console.log('Request Body: ', data);
 
             httpService
-              .post(
-                ENDPOINTS.CREATE_ACCESSORY, 
+              .patch(
+                `${ENDPOINTS.ACCESSORY}/${accessory?._id}`, 
                 data, 
                 `Bearer ${token}`
               )
@@ -135,7 +133,7 @@ const CreateAccessoriesListingForm = () => {
                 if (apiRes.data) {
                   formik.resetForm();
 
-                  toast.success('Accessory listing created.');
+                  toast.success('Accessory listing updated.');
                   console.log(apiRes);
 
                   setTimeout(() => {
@@ -143,7 +141,7 @@ const CreateAccessoriesListingForm = () => {
                   }, 1000);
                 }
               });
-          } else console.log('Products array not provided');
+          } else console.log('Images not provided.');
         } catch (error: any) {
           console.log(error);
           toast.error(error.message);
@@ -152,6 +150,11 @@ const CreateAccessoriesListingForm = () => {
     },
     validateOnChange: true,
   });
+
+  const removeAlreadyUploadedImage = (image: string) => {
+    const updatedImages = accessory?.accessoryImages.filter(img => img !== image);
+    setExistingImages(updatedImages!);
+  }
 
   const removeImage = (index: number) => {
     const updatedImages = productImages.filter((img, i) => i !== index);
@@ -306,6 +309,32 @@ const CreateAccessoriesListingForm = () => {
                       </button>
                     </div>
                   ))}
+
+                                      {accessory && accessory.accessoryImages.length > 0 &&
+                                          existingImages?.map((img, index) => (
+                                          <div
+                                              key={index}
+                                              className='h-28 w-28 relative rounded-xl'
+                                          >
+                                          <span className='text-xs absolute top-2 left-2 text-dark bg-green-100 py-1 px-2 rounded-md'>
+                                              {index + 1}
+                                          </span>
+                  
+                                          <Image
+                                              src={img}
+                                              alt={"Image"}
+                                              width={100}
+                                              height={100}
+                                              className='rounded-lg w-full h-full object-cover'
+                                          />
+                                          <button
+                                              className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
+                                              onClick={() => removeAlreadyUploadedImage(img)}
+                                          >
+                                              <RiDeleteBin6Fill />
+                                          </button>
+                                          </div>
+                                      ))}
               </div>
               <Button
                 size='small'
@@ -386,4 +415,4 @@ const CreateAccessoriesListingForm = () => {
   )
 }
 
-export default CreateAccessoriesListingForm;
+export default EditAccessoryForm;

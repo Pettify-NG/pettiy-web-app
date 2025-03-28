@@ -12,13 +12,14 @@ import Cookies from "universal-cookie";
 import { Calendar } from "primereact/calendar";
 import { FiCalendar } from "react-icons/fi";
 import { TfiSave } from "react-icons/tfi";
+import { IoIosArrowDown } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
 import TextInput from "@/components/Global/TextInput";
 import Button from "@/components/Global/Button";
 import ENDPOINTS from "@/config/ENDPOINTS";
 import HTTPService from "@/services/http";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import { AdminType } from "@/components/Shared/Header";
+import { IPet } from "@/interfaces/pet";
 
 interface ProductImage {
   image: File
@@ -36,36 +37,39 @@ function CustomError({ error }: { error?: string }) {
   );
 }
 
-const CreatePetListingForm = () => {
+const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
+    const router = useRouter();
+
   const imageInputRef = useRef<HTMLInputElement | null>(null);
 
   const vaccineImageRef = useRef<HTMLInputElement | null>(null);
 
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>(pet!.pet_images);
+  
 
   // const [vaccineCardImage, setVaccineCardImage] = useState<File | null>(null);
   const [vaccineCardImage, setVaccineCardImage] = useState<ProductImage>();
+  const [existingVaccineImage, setExistingVaccineImage] = useState<string>(pet!.vaccine_status_image);
 
   // JWT Token gotten from the backend. Not yet implemented from the backend.
   const cookies = new Cookies();
   const token = cookies.get('pettify-token');
 
-  const [seller_info, setSellerInfo] = useLocalStorage<AdminType>("pettify-details", {} as AdminType);
-
   const httpService = new HTTPService();
 
   const formik = useFormik({
     initialValues: {
-      petBreed: "",
-      description: "",
-      category: "",
-      price: "",
-      stock: undefined,
-      petColor: "",
-      gender: "",
-      location: "",
-      vaccinationStatus: "",
-      dateOfBirth: "",
+      petBreed: pet?.breed ?? " ",
+      description: pet?.description ?? " ",
+      category: pet?.category ?? " ",
+      price: pet?.price ?? " ",
+      stock: pet?.quantity ?? undefined,
+      petColor: pet?.color ?? " ",
+      gender: pet?.gender ?? " ",
+      location: pet?.location ?? " ",
+      vaccinationStatus: pet?.vaccine_status ? "true" : "false",
+      dateOfBirth: pet?.date_of_birth ?? " ",
     },
     validationSchema: Yup.object({
       petBreed: Yup.string().required().label("Pet Breed"),
@@ -80,33 +84,33 @@ const CreatePetListingForm = () => {
       dateOfBirth: Yup.string().required().label("Date of Birth"),
     }),
     onSubmit: async (values) => {
-      if (productImages.length < 1) {
-        toast.error('Please add product images or variations.');
-      } else {
+    //   if (productImages.length < 1) {
+    //     toast.error('Please add product images or variations.');
+    //   } else {
         try {
-          const promises: Promise<Response>[] = [];
+            const promises: Promise<Response>[] = [];
 
-          productImages.forEach((image: ProductImage) => {
-            const formdata = new FormData();
-            formdata.append('file', image.image);
+            productImages.forEach((image: ProductImage) => {
+                const formdata = new FormData();
+                formdata.append('file', image.image);
 
-            const requestOptions = {
-              method: 'POST',
-              body: formdata,
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            };
+                const requestOptions = {
+                method: 'POST',
+                body: formdata,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                };
 
-            promises.push(
-              fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
-                requestOptions
-              )
-            );
-          });
+                promises.push(
+                fetch(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
+                    requestOptions
+                )
+                );
+            });
 
-          const product_images = await Promise.all(promises)
+            const product_images = await Promise.all(promises)
             .then((responses) => {
               const responseData = responses.map(async (response, index) => {
                 const fileRes = await response.json();
@@ -120,75 +124,73 @@ const CreatePetListingForm = () => {
               console.log(error);
             });
 
+            let vaccineCardUrl: string = "";
+            if(vaccineCardImage) {
+                const formdata = new FormData();
+                formdata.append('file', vaccineCardImage?.image);
 
-          let vaccineCardUrl: string = "";
-          if(vaccineCardImage) {
-            const formdata = new FormData();
-            formdata.append('file', vaccineCardImage?.image);
+                const requestOptions = {
+                    method: 'POST',
+                    body: formdata,
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                };
 
-            const requestOptions = {
-              method: 'POST',
-              body: formdata,
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            };
+                const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
+                requestOptions
+                );
 
-            const response = await fetch(
-              `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
-              requestOptions
-            );
+                const data = await response.json();
+                vaccineCardUrl = data.url;
+                console.log(data);
+            }
 
-            const data = await response.json();
-            vaccineCardUrl = data.url;
-            console.log(data);
-          }
+            if ((product_images && product_images.length > 0) || (existingImages && existingImages.length > 0)) {
+                const data = {
+                    description: values.description,
+                    gender: values.gender,
+                    vaccine_status: values.vaccinationStatus,
+                    breed: values.petBreed,
+                    category: values.category,
+                    pet_images: [...product_images!, ...existingImages],
+                    vaccine_status_image: vaccineCardUrl,
+                    quantity: values.stock,
+                    date_of_birth: values.dateOfBirth,
+                    color: values.petColor,
+                    price: values.price,
+                    location: values.location,
+                };
 
-          if (product_images && product_images.length > 0) {
-            const data = {
-              description: values.description,
-              gender: values.gender,
-              vaccine_status: values.vaccinationStatus,
-              breed: values.petBreed,
-              category: values.category,
-              pet_images: product_images,
-              vaccine_status_image: vaccineCardUrl,
-              quantity: values.stock,
-              date_of_birth: values.dateOfBirth,
-              color: values.petColor,
-              price: values.price,
-              location: values.location,
-              seller: seller_info._id ?? "",
-            };
+                console.log('Request Body: ', data);
 
-            console.log('Request Body: ', data);
+                httpService
+                .patch(
+                    `${ENDPOINTS.PET}/${pet?._id}`, 
+                    data, 
+                    `Bearer ${token}`
+                )
+                .then((apiRes) => {
+                    console.log('Response: ', apiRes);
 
-            httpService
-              .post(
-                ENDPOINTS.CREATE_PET, 
-                data, 
-                `Bearer ${token}`
-              )
-              .then((apiRes) => {
-                console.log('Response: ', apiRes);
+                    if (apiRes.data) {
+                    formik.resetForm();
 
-                if (apiRes.data) {
-                  formik.resetForm();
+                    toast.success('Pet listing updated.');
+                    console.log(apiRes);
 
-                  toast.success('Pet listing created.');
-                  console.log(apiRes);
-
-                  // setTimeout(() => {
-                  //   router.push('/dashboard/pets');
-                  // }, 1000);
-                }
-              });
-          } else console.log('Products array not provided');
+                    setTimeout(() => {
+                        router.push('/dashboard/pets');
+                    }, 1000);
+                    }
+                });
+            } else console.log('Images not provided.');
         } catch (error: any) {
           console.log(error);
           toast.error(error.message);
         }
-      }
+    //   }
     },
     validateOnChange: true,
   });
@@ -197,6 +199,11 @@ const CreatePetListingForm = () => {
     const updatedImages = productImages.filter((img, i) => i !== index);
     setProductImages(updatedImages);
   };
+
+  const removeAlreadyUploadedImage = (image: string) => {
+    const updatedImages = pet?.pet_images.filter(img => img !== image);
+    setExistingImages(updatedImages!);
+  }
 
   const addNewImage = (e: ChangeEvent<HTMLInputElement>) => {
     const imagesCopy: ProductImage[] = [...productImages];
@@ -291,8 +298,8 @@ const CreatePetListingForm = () => {
                       Dog
                   </option>
               </select>
-              {/* <IoIosArrowDown onClick={handleSelectProductCategoryClick} className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} /> */}
-              {/* <CustomError error={formik.errors.categoryId} /> */}
+              <IoIosArrowDown className={`absolute right-4 ${formik.errors.category ? "top-10" : "bottom-4"}`} />
+              <CustomError error={formik.errors.category} />
             </div>
 
             {/* Pet Breed */}
@@ -371,10 +378,37 @@ const CreatePetListingForm = () => {
                         </button>
                       </div>
                     ))}
+
+                    {pet && pet.pet_images.length > 0 &&
+                        existingImages?.map((img, index) => (
+                        <div
+                            key={index}
+                            className='h-28 w-28 relative rounded-xl'
+                        >
+                        <span className='text-xs absolute top-2 left-2 text-dark bg-green-100 py-1 px-2 rounded-md'>
+                            {index + 1}
+                        </span>
+
+                        <Image
+                            src={img}
+                            alt={"Image"}
+                            width={100}
+                            height={100}
+                            className='rounded-lg w-full h-full object-cover'
+                        />
+                        <button
+                            className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
+                            onClick={() => removeAlreadyUploadedImage(img)}
+                        >
+                            <RiDeleteBin6Fill />
+                        </button>
+                        </div>
+                    ))}
                 </div>
                 <Button
                   size='small'
                   onClick={() => imageInputRef.current?.click()}
+                  className="text-white" 
                 >
                   Add Image
                 </Button>
@@ -483,8 +517,8 @@ const CreatePetListingForm = () => {
                     Female
                 </option>
             </select>
-            {/* <IoIosArrowDown onClick={handleSelectProductCategoryClick} className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
-            <CustomError error={formik.errors.categoryId} /> */}
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.gender ? "top-10" : "bottom-4"}`} />
+            <CustomError error={formik.errors.gender} />
           </div>
 
           {/* Location */}
@@ -529,8 +563,8 @@ const CreatePetListingForm = () => {
                     No
                 </option>
             </select>
-            {/* <IoIosArrowDown onClick={handleSelectProductCategoryClick} className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
-            <CustomError error={formik.errors.categoryId} /> */}
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.vaccinationStatus ? "top-10" : "bottom-4"}`} />
+            <CustomError error={formik.errors.vaccinationStatus} />
           </div>
 
           {/* Vaccine Card */}
@@ -551,15 +585,14 @@ const CreatePetListingForm = () => {
                 {!vaccineCardImage && <p>Click below to upload an image. Your image should not exceed 1MB and should be either a .jpeg or .png</p>}
                 
                 {
-                  vaccineCardImage && 
+                  (vaccineCardImage || existingVaccineImage) && 
                     <div className='flex items-center flex-wrap gap-2 mb-4'>
                           <div
-                            // key={`${index}-${img.image.name}`}
                             className='h-28 w-28 relative rounded-xl'
                           >
                             <Image
-                              src={vaccineCardImage !== null ? URL.createObjectURL(vaccineCardImage.image) : ""}
-                              alt={vaccineCardImage?.image.name ?? "vaccine card"}
+                              src={vaccineCardImage ? URL.createObjectURL(vaccineCardImage.image) : existingVaccineImage ? existingVaccineImage : ""}
+                              alt={"vaccine card"}
                               width={100}
                               height={100}
                               className='rounded-lg w-full h-full object-cover'
@@ -576,8 +609,9 @@ const CreatePetListingForm = () => {
                 <Button
                   size='small'
                   onClick={() => vaccineImageRef.current?.click()}
+                  className="text-white" 
                 >
-                  Upload Vaccine Card
+                  Add Vaccine Card
                 </Button>
               </div>
           </div>
@@ -595,8 +629,8 @@ const CreatePetListingForm = () => {
                 </Link>
 
                 <div className='max-w-md w-full'>
-                  <Button type='submit' block loading={formik.isSubmitting}>
-                    Add Listing
+                  <Button type='submit' disabled={formik.isSubmitting} className="text-white" block loading={formik.isSubmitting}>
+                    Update Pet Listing
                   </Button>
                 </div>
             </div>
@@ -607,4 +641,4 @@ const CreatePetListingForm = () => {
   )
 }
 
-export default CreatePetListingForm;
+export default EditPetForm;

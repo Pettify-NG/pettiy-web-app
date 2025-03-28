@@ -74,7 +74,7 @@ export function formatCurrency(amount: number) {
   
     // Format the result
     if (years > 0) {
-      return `${years} year${years > 1 ? 's' : ''} ${months} month${months !== 1 ? 's' : ''}`;
+      return `${years} year${years > 1 ? 's' : ''}, ${months} month${months !== 1 ? 's' : ''}`;
     } else if (months > 0) {
       return `${months} month${months !== 1 ? 's' : ''}`;
     } else if (weeks > 0) {
