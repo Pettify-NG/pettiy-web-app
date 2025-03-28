@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 
 import PetListingPage from "@/components/Dashboard/PetListings/PetListingPage";

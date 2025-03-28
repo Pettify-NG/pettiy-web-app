@@ -100,7 +100,7 @@ export default function PetListinsTable ({
             }; 
          
             fetchData(); 
-    }, [sellerInfo.user._id, lazyState.page, lazyState.rows, timeFilter, token]);
+    }, [sellerInfo, lazyState, timeFilter, token]);
     
     useEffect(() => { 
         loadLazyData(); 
