@@ -15,6 +15,7 @@ import HTTPService from "@/services/http";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useFetch from "@/hooks/useFetch";
 import { IoIosArrowDown } from "react-icons/io";
+import { IoPersonCircleSharp } from "react-icons/io5";
 
 interface IProfileImage {
     image: File
@@ -26,7 +27,7 @@ interface UserData {
     username: string;
     address: string;
     email: string;
-    phoneNumber: string;
+    phonenumber: string;
     country: string;
     state: string;
     profileImage: string;
@@ -44,10 +45,12 @@ function CustomError({ error }: { error?: string }) {
     );
 }
   
-const ProfileForm = ({ user }: { user: UserData | null }) => {
+export default function ProfileForm({ user }: { user?: UserData | null }) {
     console.log(user);
 
     const [profileImage, setProfileImage] = useState<IProfileImage>({} as IProfileImage);
+
+    const [profileImageUrl, setProfileImageUrl] = useState<string>();
 
     const [states, setStates] = useState<string[]>([]);
 
@@ -58,8 +61,8 @@ const ProfileForm = ({ user }: { user: UserData | null }) => {
     const httpService = new HTTPService();
 
     // JWT Token gotten from the backend. Not yet implemented from the backend.
-    // const cookies = new Cookies();
-    // const token = cookies.get('pettify-token');
+    const cookies = new Cookies();
+    const token = cookies.get('pettify-token');
 
     const router = useRouter();
 
@@ -83,9 +86,6 @@ const ProfileForm = ({ user }: { user: UserData | null }) => {
         }
     };
 
-    // const { data, error, isLoading, refetch } = useFetch<UserData>(fetchUrl);
-    // console.log(data);
-
     const formik = useFormik({
         initialValues: {
             firstname: user?.firstname ?? "",
@@ -93,7 +93,7 @@ const ProfileForm = ({ user }: { user: UserData | null }) => {
             username: user?.username ?? "",
             address: user?.address ?? "",
             email: user?.email ?? "",
-            phoneNumber: user?.phoneNumber ?? "",
+            phoneNumber: user?.phonenumber ?? "",
             // country: user?.country ?? "",
             state: user?.state ?? "",
         },
@@ -110,7 +110,7 @@ const ProfileForm = ({ user }: { user: UserData | null }) => {
         }),
         onSubmit: async (values) => {
             try {
-                let profileImageUrl: string = "";
+                // let profileImageUrl: string = "";
                 if(profileImage) {
                     const formdata = new FormData();
                     formdata.append('file', profileImage?.image);
@@ -118,56 +118,82 @@ const ProfileForm = ({ user }: { user: UserData | null }) => {
                     const requestOptions = {
                         method: 'POST',
                         body: formdata,
-                        // headers: {
-                        //     Authorization: `Bearer ${token}`,
-                        // },
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
                     };
         
-                    const response = await fetch(
+                    await fetch(
                         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
                         requestOptions
-                    );
+                    ).then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Image upload failed");
+                        }
+    
+                        return response.json();
+                    }).then((result) => {
+                        const imageUrl = result.data.url;
+
+                        const data = {
+                            profileImage: imageUrl
+                        };
+
+                        const newSellerInfo = { ...seller_info, user: { ...seller_info.user, profileImage: imageUrl } }
+                        setSellerInfo(newSellerInfo);
+    
+                        httpService
+                        .put(
+                            `${ENDPOINTS.USER}${seller_info.user._id}`, 
+                            data, 
+                            `Bearer ${token}`
+                        )
+                        .then((apiRes) => {
+                            console.log('Response: ', apiRes);
         
-                    const data = await response.json();
+                            if (!apiRes.success) {
+                                toast.error("Failed to upload profile image.");
+                                return;
+                            } 
+                        });
+                    }).catch(error => { 
+                        toast.error(error.message); 
+                    });
+                };
 
-                    profileImageUrl = data.url;
-                    console.log(data);
-                }
-
-                const data = {
+                const userData = {
                     firstname: values.firstname,
                     lastname: values.lastname,
+                    username: values.username,
+                    phonenumber: values.phoneNumber,
                     address: values.address,
-                    // country: values.country,
                     state: values.state,
-                    profileImage: profileImageUrl,
                 };
-    
-                console.log('Request Body: ', data);
+
+                console.log('Request Body: ');
 
                 httpService
-                    .put(
-                        `${ENDPOINTS.USER}/${seller_info.user._id}`, 
-                        data, 
-                        // `Bearer ${token}`
-                    )
-                    .then((apiRes) => {
-                        console.log('Response: ', apiRes);
-    
-                        if (apiRes.success) {
-                            formik.resetForm();
-                            setProfileImage({} as IProfileImage);
-        
-                            toast.success('Profile updated.');
-        
-                            setTimeout(() => {
-                            router.push('/dashboard');
-                            }, 1000);
-                        } else {
-                            toast.error(apiRes.message);
-                        }
-                    });
+                .patch(
+                    `${ENDPOINTS.USER}${seller_info.user._id}`, 
+                    userData, 
+                    `Bearer ${token}`
+                )
+                .then((apiRes) => {
+                    console.log('Response: ', apiRes);
 
+                    if (apiRes.success) {
+                        formik.resetForm();
+                        setProfileImage({} as IProfileImage);
+    
+                        toast.success('Profile updated.');
+    
+                        setTimeout(() => {
+                            router.push('/dashboard');
+                        }, 1000);
+                    } else {
+                        toast.error(apiRes.message);
+                    }
+                });
             } catch (error: any) {
                 console.log(error);
                 toast.error(error.message);
@@ -192,6 +218,55 @@ const ProfileForm = ({ user }: { user: UserData | null }) => {
         fetchStates();
     }, []);
 
+    const handleUploadImage = async () => {
+        if(profileImage) {
+                const formdata = new FormData();
+                formdata.append('file', profileImage?.image);
+    
+                const requestOptions = {
+                    method: 'POST',
+                    body: formdata,
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                };
+    
+                await fetch(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/${ENDPOINTS.UPLOAD_FILE}`,
+                    requestOptions
+                ).then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Image upload failed");
+                    }
+
+                    return response.json();
+                }).then((result) => {
+                    const data = {
+                        profileImage: result.url,
+                    };
+
+                    console.log('Request Body: ', data);
+
+                    httpService
+                    .patch(
+                        `${ENDPOINTS.USER}${seller_info.user._id}`, 
+                        data, 
+                        `Bearer ${token}`
+                    )
+                    .then((apiRes) => {
+                        console.log('Response: ', apiRes);
+    
+                        if (!apiRes.success) {
+                            toast.error("Failed to upload profile image.");
+                            return;
+                        } 
+                    });
+                }).catch(error => { 
+                    toast.error(error.message); 
+                });
+        } 
+    };
+
     return (
         <>
             <h2 className="border-b-2 border-black py-4 w-full font-semibold text-xl">Profile</h2>
@@ -203,13 +278,20 @@ const ProfileForm = ({ user }: { user: UserData | null }) => {
             >
                 {/* Profile picture  */}
                 <div className="flex gap-2 my-6 justify-between align-center">
-                    <Image
-                        src={user?.profileImage ? user?.profileImage : profileImage?.image ? URL.createObjectURL(profileImage.image) : "/default-profile.png"}
-                        alt="profile picture"
-                        width={20}
-                        height={20}
-                        className='rounded-full w-[150px] h-[150px] object-cover'
-                    />
+                    {
+                        (user?.profileImage || profileImage?.image) ? 
+                            <Image
+                                src={profileImage?.image ? URL.createObjectURL(profileImage.image) : (user?.profileImage ?? "")}
+                                alt='User profile image'
+                                width={50}
+                                height={50}
+                                className='rounded-full w-[150px] h-[150px] object-cover'
+                            />
+                            : 
+                            <IoPersonCircleSharp 
+                                className={`duration-500 rounded-full border border-gray-400 w-10 h-10`}
+                            />
+                    }
 
                     <div>
                         <input
@@ -224,6 +306,7 @@ const ProfileForm = ({ user }: { user: UserData | null }) => {
                         <Button
                             size='small'
                             onClick={() => imageInputRef.current?.click()}
+                            className="text-white"
                         >
                             Add Image
                         </Button>
@@ -384,7 +467,7 @@ const ProfileForm = ({ user }: { user: UserData | null }) => {
                 </div>
 
                 <span className="flex gap-3 w-1/2">
-                    <Button block loading={formik.isSubmitting} type='submit'>
+                    <Button block loading={formik.isSubmitting} className="text-white" type='submit'>
                         Update Profile
                     </Button>
                     
@@ -395,6 +478,4 @@ const ProfileForm = ({ user }: { user: UserData | null }) => {
             </form>
         </>
     );
-}
-
-export default ProfileForm;
+};

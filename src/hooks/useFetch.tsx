@@ -36,7 +36,7 @@ const useFetch = <T,> (url: string, options?: RequestInit): UseFetchProps<T> => 
         } finally {
             setIsLoading(false);
         }
-    }, [url, options]);
+    }, [url]);
 
     useEffect(() => {
         fetchData();

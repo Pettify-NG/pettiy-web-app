@@ -189,6 +189,8 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
               adminDetails?.user?.profileImage ? 
               <Image
                 src={adminDetails?.user?.profileImage ?? <IoPersonCircleSharp />}
+                width={10}
+                height={10}
                 alt='User profile image'
                 className={`duration-500 rounded-full border border-gray-400 w-10 h-10`}
               />

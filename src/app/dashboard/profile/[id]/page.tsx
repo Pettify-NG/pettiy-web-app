@@ -1,7 +1,10 @@
-import React from "react";
+"use client";
 
-import { getUserDetails } from "@/libs/products";
+import React from "react";
+import Cookies from "universal-cookie";
+
 import ProfileForm from "@/components/Dashboard/Profile/ProfileForm";
+import useFetch from "@/hooks/useFetch";
 
 interface UserData {
     firstname: string;
@@ -9,19 +12,35 @@ interface UserData {
     username: string;
     address: string;
     email: string;
-    phoneNumber: string;
+    phonenumber: string;
     country: string;
     state: string;
     profileImage: string;
     [key: string]: string;
 }
 
-export default async function Profile ({ params }: { params: { id: string } }) {
+export default function ProfileDetails ({ params }: { params: { id: string } }) {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${params.id}`
 
-    const apiRes: Promise<UserData | null> = getUserDetails(params.id);
-    const userDetails = await apiRes;
+    const cookies = new Cookies();
+    const token = cookies.get("pettify-token");
+
+    const options = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const { data, error, isLoading, refetch } = useFetch<UserData>(fetchUrl, options);
+    console.log(data);
+
+    if (!data) {
+        return <p>Loading user details...</p>;
+    }
 
     return (
-        <ProfileForm user={userDetails} />
+        <section>
+            <ProfileForm user={data} />
+        </section>
     )
 }
