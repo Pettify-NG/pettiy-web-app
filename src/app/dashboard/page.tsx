@@ -1,25 +1,33 @@
+"use client";
+
 import React from 'react';
+import Cookies from 'universal-cookie';
 
 import SellerDashboardPage from '@/components/Seller/SellerDashboardPage';
-import { getUserDashboard } from '@/libs/dashboard';
+// import { getUserDashboard } from '@/libs/dashboard';
 import { IDashboardData } from '@/interfaces/dashboard';
+import useFetch from '@/hooks/useFetch';
 
-const SellerDashboard = async () => {
+export default function SellerDashboard() {
+  const fetchUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/dashboard`
 
-  // const apiRes: Promise<IDashboardData | null> = getUserDashboard();
-  // const response = await apiRes;
+  const cookies = new Cookies();
+  const token = cookies.get("pettify-token");
 
-  const response: IDashboardData | undefined = await getUserDashboard();
+  const options = {
+      headers: {
+          Authorization: `Bearer ${token}`
+      }
+  }
 
-  console.log("dashd", response);
+  const { data, error, isLoading, refetch } = useFetch<IDashboardData>(fetchUrl, options);
+  console.log(data);
 
   return (
     <section>
       <SellerDashboardPage
-        dashboardData={response}
+        dashboardData={data || null}
       />
     </section>
   );
 };
-
-export default SellerDashboard;

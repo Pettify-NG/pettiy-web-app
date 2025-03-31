@@ -1,9 +1,10 @@
 import { IWallet } from "./wallet"
 
 export interface IDashboardData {
-    wallet: IWallet
+    wallet?: IWallet
     orders: any[]
     totalOrders: number
     totalPets: number
     totalAccessories: number
+    totalBalance: number
 }

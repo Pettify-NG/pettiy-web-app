@@ -14,7 +14,7 @@ export default function StatCards({
   totalPets,
 }: {
   totalBalance: number | undefined,
-  pendingBalance: number | undefined,
+  pendingBalance?: number | undefined,
   totalOrders: number | undefined,
   totalPets: number | undefined,
   totalAccessories: number | undefined,

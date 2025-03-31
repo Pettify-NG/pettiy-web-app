@@ -17,7 +17,7 @@ const filter_options = [
 export default function SellerDashboardPage ({
     dashboardData,
 }: {
-    dashboardData?: IDashboardData | undefined;
+    dashboardData?: IDashboardData | null;
 }) {
     console.log(dashboardData);
     const [isPopupVisible, setPopupVisible] = useState(false);
@@ -26,8 +26,8 @@ export default function SellerDashboardPage ({
         <div>
             {/* Statistic cards */}
             <StatCards 
-                totalBalance={dashboardData?.wallet.balance}
-                pendingBalance={dashboardData?.wallet.pendingBalance}
+                totalBalance={dashboardData?.totalBalance}
+                // pendingBalance={dashboardData?.wallet.pendingBalance}
                 totalOrders={dashboardData?.totalOrders}
                 totalPets={dashboardData?.totalPets}
                 totalAccessories={dashboardData?.totalAccessories}

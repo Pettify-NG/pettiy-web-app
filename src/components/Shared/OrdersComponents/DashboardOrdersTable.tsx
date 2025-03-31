@@ -9,7 +9,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 
 import { formatCurrency } from '@/helpers';
-import { IOrder, OrderProductItem } from '@/interfaces/orders';
+import IOrder from '@/interfaces/orders';
 
 export default function DashboardOrdersTable({
   orders,
@@ -24,13 +24,7 @@ export default function DashboardOrdersTable({
   };
 
   function amountTemplate(order: IOrder) {
-    const { orderProduct } = order;
-
-    const totalAmount = orderProduct.reduce((a, b: OrderProductItem) => {
-      return a + b.amount;
-    }, 0);
-
-    return formatCurrency(totalAmount);
+    return formatCurrency(order.totalAmountForSeller);
   }
 
   function statusTemplate(order: IOrder) {
@@ -46,6 +40,9 @@ export default function DashboardOrdersTable({
         styles = 'bg-[#E8F8FD] text-[#13B2E4]';
         break;
       case 'delivered':
+        styles = 'bg-green-100 text-green-600';
+        break;
+      case 'paid':
         styles = 'bg-green-100 text-green-600';
         break;
       case 'cancelled':
@@ -69,48 +66,52 @@ export default function DashboardOrdersTable({
     );
   }
 
-  function productTemplate(order: IOrder) {
-    return (
-      <div className='flex items-center gap-4'>
-        <Image
-          src={order.orderProduct[0].image}
-          alt='image'
-          width={20}
-          height={20}
-          className='h-12 w-12 bg-[#1b1b1b] rounded-md'
-        />
+  // function productTemplate(order: IOrder) {
+  //   return (
+  //     <div className='flex items-center gap-4'>
+  //       <Image
+  //         src={order.orderProduct[0].image}
+  //         alt='image'
+  //         width={20}
+  //         height={20}
+  //         className='h-12 w-12 bg-[#1b1b1b] rounded-md'
+  //       />
 
-        <div className='div capitalize flex-1'>
-          <p className='text-sm flex-1 font-medium'>
-            {order.orderProduct[0].productName}
-          </p>
-          {order.orderProduct.length > 1 && (
-            <p className='text-xs text-neutral'>
-              +{order.orderProduct.length} other products
-            </p>
-          )}
-        </div>
-      </div>
-    );
-  }
+  //       <div className='div capitalize flex-1'>
+  //         <p className='text-sm flex-1 font-medium'>
+  //           {order.orderProduct[0].productName}
+  //         </p>
+  //         {order.orderProduct.length > 1 && (
+  //           <p className='text-xs text-neutral'>
+  //             +{order.orderProduct.length} other products
+  //           </p>
+  //         )}
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
-  function customerTemplate(order: IOrder) {
-    return (
-      <div className='flex flex-col gap-2 capitalize'>
-        <p className='text-sm flex-1 font-medium'>{order.user.firstName + " " + order.user.lastName}</p>
-        {/* <p className='text-xs text-neutral'>{order.receiverPhone}</p> */}
-        <p className='text-xs text-neutral'>{order.user.email}</p>
-      </div>
-    );
-  }
+  // function customerTemplate(order: IOrder) {
+  //   return (
+  //     <div className='flex flex-col gap-2 capitalize'>
+  //       <p className='text-sm flex-1 font-medium'>{order.user.firstName + " " + order.user.lastName}</p>
+  //       {/* <p className='text-xs text-neutral'>{order.receiverPhone}</p> */}
+  //       <p className='text-xs text-neutral'>{order.user.email}</p>
+  //     </div>
+  //   );
+  // }
 
   const router = useRouter();
 
   const rowClassTemplate = (data: IOrder) => {
     return {
-        'cursor-pointer': data.id
+        'cursor-pointer': data._id
     };
   };
+
+  const idTemplate = (data: IOrder) => {
+    return `ORDER-${data.uuid}`
+  }
 
   return (
     <>    
@@ -120,38 +121,33 @@ export default function DashboardOrdersTable({
         </div>
 
         <DataTable
-        value={orders ?? []}
-        scrollable={true}
-        dataKey='_id'
-        tableStyle={{ minWidth: '80rem' }}
-        paginator
-        paginatorClassName='flex justify-between overflow-x-auto'
-        rows={10}
-        className='rounded-md text-sm'
-        sortOrder={-1}
-        sortField='createdAt'
-        showSelectAll
-        sortIcon={<IoIosArrowDown />}
-        selectionAutoFocus={true}
-        onRowClick={(e) => router.push(`/dashboard/orders/${e.data._id}`)}
-        rowClassName={rowClassTemplate}
+          value={orders ?? []}
+          scrollable={true}
+          dataKey='uuid'
+          // tableStyle={{ minWidth: '20rem' }}
+          // paginator
+          // paginatorClassName='flex justify-between overflow-x-auto'
+          rows={10}
+          className='rounded-md text-sm'
+          sortOrder={-1}
+          sortField='createdAt'
+          showSelectAll
+          sortIcon={<IoIosArrowDown />}
+          selectionAutoFocus={true}
+          onRowClick={(e) => router.push(`/dashboard/orders/${e.data.uuid}`)}
+          rowClassName={rowClassTemplate}
         >
-        <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>
-        <Column body={productTemplate} header='Product' />
-        <Column field='date' header='Date' body={dateTemplate} sortable />
-        <Column
-            field='customer.email'
-            body={customerTemplate}
-            header='Customer'
-        />
-        <Column
-            field='totalAmount'
-            header='Total'
-            body={amountTemplate}
-            sortable
-        />
-        <Column header='Payment' field="paymentMethod" />
-        <Column field='status' header='Status' sortable body={statusTemplate} />
+          <Column field='uuid' header='Order ID' body={idTemplate} className='text-[#F2C94C]'/>
+          {/* <Column body={productTemplate} header='Products' /> */}
+          <Column
+              field='totalAmountForSeller'
+              header='Amount'
+              body={amountTemplate}
+              sortable
+          />
+          <Column field="deliveryLocation" header="Delivery Location" />
+          <Column field='status' header='Status' sortable body={statusTemplate} />
+          <Column field='createdAt' header='Date' body={dateTemplate} sortable />
         </DataTable>
       </div>
     </>

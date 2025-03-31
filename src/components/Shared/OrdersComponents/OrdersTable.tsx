@@ -21,12 +21,9 @@ import {
   PaginatorPageLinksOptions, 
   PaginatorPrevPageLinkOptions } 
 from 'primereact/paginator';
-import { CiSearch } from 'react-icons/ci';
-import { RiShoppingBasket2Line } from 'react-icons/ri';
-import { LuClipboardCheck } from 'react-icons/lu';
 
 import { formatCurrency } from '@/helpers';
-import { IOrder, OrderProductItem } from '@/interfaces/orders';
+import IOrder from '@/interfaces/orders';
 import ENDPOINTS from '@/config/ENDPOINTS';
 import HTTPService from '@/services/http';
 import TextInput from '@/components/Global/TextInput';
@@ -193,20 +190,15 @@ export default function OrdersTable({
   };
 
   function amountTemplate(order: IOrder) {
-    const { orderProduct } = order;
 
-    const totalAmount = orderProduct.reduce((a, b: OrderProductItem) => {
-      return a + b.amount;
-    }, 0);
-
-    return formatCurrency(totalAmount);
+    return formatCurrency(order.totalAmountForSeller);
   }
 
   function actionTemplate(order: IOrder) {
     return (
       <div className='flex items-center gap-3'>
         <Link
-          href={page === "cancelled orders" ? `/admin/orders/cancelled-orders/${order.id}` : page === "recent orders" ? `/admin/orders/${order.id}` : `/admin/${page}/${order.id}`}
+          href={page === "cancelled orders" ? `/dashboard/orders/cancelled-orders/${order.uuid}` : page === "recent orders" ? `/dashboard/orders/${order.uuid}` : `/dashboard/${page}/${order.uuid}`}
           className='text-xl text-neutral'
         >
           <FaEye />
@@ -251,40 +243,40 @@ export default function OrdersTable({
     );
   }
 
-  function productTemplate(order: IOrder) {
-    return (
-      <div className='flex items-center gap-4'>
-        <Image
-          src={order.orderProduct[0].image}
-          alt='image'
-          width={20}
-          height={20}
-          className='h-12 w-12 bg-[#1b1b1b] rounded-md'
-        />
+  // function productTemplate(order: IOrder) {
+  //   return (
+  //     <div className='flex items-center gap-4'>
+  //       <Image
+  //         src={order.orderProduct[0].image}
+  //         alt='image'
+  //         width={20}
+  //         height={20}
+  //         className='h-12 w-12 bg-[#1b1b1b] rounded-md'
+  //       />
 
-        <div className='div capitalize flex-1'>
-          <p className='text-sm flex-1 font-medium'>
-            {order.orderProduct[0].productName}
-          </p>
-          {order.orderProduct.length > 1 && (
-            <p className='text-xs text-neutral'>
-              +{order.orderProduct.length} other products
-            </p>
-          )}
-        </div>
-      </div>
-    );
-  }
+  //       <div className='div capitalize flex-1'>
+  //         <p className='text-sm flex-1 font-medium'>
+  //           {order.orderProduct[0].productName}
+  //         </p>
+  //         {order.orderProduct.length > 1 && (
+  //           <p className='text-xs text-neutral'>
+  //             +{order.orderProduct.length} other products
+  //           </p>
+  //         )}
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
-  function customerTemplate(order: IOrder) {
-    return (
-      <div className='flex flex-col gap-2 capitalize'>
-        <p className='text-sm flex-1 font-medium'>{order.user.firstName + " " + order.user.lastName}</p>
-        {/* <p className='text-xs text-neutral'>{order.receiverPhone}</p> */}
-        <p className='text-xs text-neutral'>{order.user.email}</p>
-      </div>
-    );
-  }
+  // function customerTemplate(order: IOrder) {
+  //   return (
+  //     <div className='flex flex-col gap-2 capitalize'>
+  //       <p className='text-sm flex-1 font-medium'>{order.user.firstName + " " + order.user.lastName}</p>
+  //       {/* <p className='text-xs text-neutral'>{order.receiverPhone}</p> */}
+  //       <p className='text-xs text-neutral'>{order.user.email}</p>
+  //     </div>
+  //   );
+  // }
 
   const getOrdersByDate = useMemo(() => {
     if (selectedDate) {
@@ -307,9 +299,9 @@ export default function OrdersTable({
 
     return getOrdersByDate?.filter(
       (order) =>
-        order.uuid.toLowerCase().includes(searchValue) ||
+        order.uuid.toLowerCase().includes(searchValue)
         // order.shippingId.toLowerCase().includes(searchValue) ||
-        order.orderProduct[0].productName.toLowerCase().includes(searchValue)
+        // order.orderProduct[0].productName.toLowerCase().includes(searchValue)
     );
   }, [searchValue, getOrdersByDate]);
 
@@ -323,7 +315,7 @@ export default function OrdersTable({
 
   const rowClassTemplate = (data: IOrder) => {
     return {
-        'cursor-pointer': data.id
+        'cursor-pointer': data.uuid
     };
   };
 
@@ -341,58 +333,58 @@ export default function OrdersTable({
     return new Date(deliveryDate) < fortyEightHoursAgo;
   }
 
-  async function bulkUpdateOrders(orders: IOrder[], status: string) {
-      setCardOpen(prev => !prev);
+  // async function bulkUpdateOrders(orders: IOrder[], status: string) {
+  //     setCardOpen(prev => !prev);
 
-      // Checks if there's an order that's been delivered and whose deivery date exceeds 48 hours
-      let deliveredOrder: boolean = false;
+  //     // Checks if there's an order that's been delivered and whose deivery date exceeds 48 hours
+  //     let deliveredOrder: boolean = false;
 
-      if(status.toLowerCase() === "cancelled") {
-        const checkingOrders = orders.map((order) => {
-          if(order.status.toLowerCase() === "delivered" && hasDeliveryTimeExceeded(order.deliveryDate)) {
-            toast.error("You cannot cancel an order that has been delivered for more than 48 hours.");
-            deliveredOrder = true;
-            return;
-          }
-        }); 
-      }
+  //     if(status.toLowerCase() === "cancelled") {
+  //       const checkingOrders = orders.map((order) => {
+  //         if(order.status.toLowerCase() === "delivered" && hasDeliveryTimeExceeded(order.deliveryDate)) {
+  //           toast.error("You cannot cancel an order that has been delivered for more than 48 hours.");
+  //           deliveredOrder = true;
+  //           return;
+  //         }
+  //       }); 
+  //     }
 
-      if(status.toLowerCase() === "processing") {
-        const checkingOrders = orders.map((order) => {
-          if(order.status.toLowerCase() === "cancelled") {
-            toast.error("You cannot set a cancelled order to processing.");
-            deliveredOrder = true;
-            return;
-          }
-        }); 
-      }
+  //     if(status.toLowerCase() === "processing") {
+  //       const checkingOrders = orders.map((order) => {
+  //         if(order.status.toLowerCase() === "cancelled") {
+  //           toast.error("You cannot set a cancelled order to processing.");
+  //           deliveredOrder = true;
+  //           return;
+  //         }
+  //       }); 
+  //     }
       
-      if(!deliveredOrder) {
-        const token = cookies.get('urban-token');
-        // console.log(token);
+  //     if(!deliveredOrder) {
+  //       const token = cookies.get('urban-token');
+  //       // console.log(token);
   
-        toast.loading('Updating orders...');
+  //       toast.loading('Updating orders...');
 
-        const data = orders.map((order) => {
-          const { id } = order;
-          return { id: id, status: status }
-        }); 
+  //       const data = orders.map((order) => {
+  //         const { id } = order;
+  //         return { id: id, status: status }
+  //       }); 
 
-        const res = await httpService.patch(
-          `${ENDPOINTS.ORDERS}`,
-          data,
-          `Bearer ${token}`
-        );
+  //       const res = await httpService.patch(
+  //         `${ENDPOINTS.ORDERS}`,
+  //         data,
+  //         `Bearer ${token}`
+  //       );
 
-        toast.dismiss();
-        if (res.status === 200) {
-          console.log(res);
-          toast.success('Orders successfully updated!');
-          router.refresh();
-          loadLazyData();
-        } else toast.error('Cannot update orders at this time!');
-      }
-  }
+  //       toast.dismiss();
+  //       if (res.status === 200) {
+  //         console.log(res);
+  //         toast.success('Orders successfully updated!');
+  //         router.refresh();
+  //         loadLazyData();
+  //       } else toast.error('Cannot update orders at this time!');
+  //     }
+  // }
 
   const debouncedSearch = useMemo(() => {
     let timer: NodeJS.Timeout;
@@ -494,7 +486,7 @@ export default function OrdersTable({
             scrollable={true}
             onSelectionChange={handleChangeSelectedOrders}
             dataKey='uuid'
-            tableStyle={{ minWidth: '80rem' }}
+            // tableStyle={{ minWidth: '80rem' }}
             paginator
             paginatorClassName='flex justify-between overflow-x-auto'
             rows={10}
@@ -505,25 +497,25 @@ export default function OrdersTable({
             showSelectAll
             sortIcon={<IoIosArrowDown />}
             selectionAutoFocus={true}
-            onRowClick={(e) => router.push(`/admin/orders/${e.data.id}`)}
+            onRowClick={(e) => router.push(`/admin/orders/${e.data.uuid}`)}
             rowClassName={rowClassTemplate}
           >
-            <Column selectionMode='multiple' body={checkBoxTemplate} headerStyle={{ width: '3rem' }} className='group'/>
+            {/* <Column selectionMode='multiple' body={checkBoxTemplate} headerStyle={{ width: '3rem' }} className='group'/> */}
             <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>
-            <Column body={productTemplate} header='Product' />
+            {/* <Column body={productTemplate} header='Product' /> */}
             <Column field='date' header='Date' body={dateTemplate} sortable />
-            <Column
+            {/* <Column
               field='customer.email'
               body={customerTemplate}
               header='Customer'
-            />
+            /> */}
             <Column
-              field='totalAmount'
+              field='totalAmountForSeller'
               header='Total'
               body={amountTemplate}
               sortable
             />
-            <Column header='Payment' field="paymentMethod" />
+            {/* <Column header='Payment' field="paymentMethod" /> */}
             <Column field='status' header='Status' sortable body={statusTemplate} />
             <Column field='action' header='Action' body={actionTemplate} />
           </DataTable>
