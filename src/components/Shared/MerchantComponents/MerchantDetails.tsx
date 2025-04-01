@@ -11,7 +11,8 @@ import moment from "moment";
 import { ICustomer } from "@/interfaces/customers";
 import logo from "../../../../public/Pettify.png"
 import { IUsers, IUser } from '@/interfaces/users';
-import { OrderProductItem, IOrder } from "@/interfaces/orders";
+// import { OrderProductItem, IOrder } from "@/interfaces/orders";
+import IOrder from "@/interfaces/orders";
 import { FaEye } from "react-icons/fa";
 import { formatCurrency } from "@/helpers";
 import { CiMoneyBill } from "react-icons/ci";
@@ -36,21 +37,21 @@ const MerchantDetails = ({ customer, transactionHistory }: ICustomerDetails) => 
         return moment(createdAt).format('MMM Do YYYY');
     };
     
-    function amountTemplate(order: IOrder) {
-      const { orderProduct } = order;
+    // function amountTemplate(order: IOrder) {
+    //   const { orderProduct } = order;
 
-      const totalAmount = orderProduct.reduce((a, b: OrderProductItem) => {
-          return a + b.amount;
-      }, 0);
+    //   const totalAmount = orderProduct.reduce((a, b: OrderProductItem) => {
+    //       return a + b.amount;
+    //   }, 0);
 
-      return formatCurrency(totalAmount);
-    }
+    //   return formatCurrency(totalAmount);
+    // }
     
     function actionTemplate(order: IOrder) {
         return (
             <div className='flex items-center gap-3'>
                 <Link
-                    href={`/admin/orders/${order.id}`}
+                    href={`/admin/orders/${order.uuid}`}
                     className='text-xl text-neutral'
                 >
                     <FaEye />
@@ -104,7 +105,7 @@ const MerchantDetails = ({ customer, transactionHistory }: ICustomerDetails) => 
                     className='h-12 w-12 bg-[#1b1b1b] rounded-md'
                 />
 
-                <div className='div capitalize'>
+                {/* <div className='div capitalize'>
                     <p className='text-xs flex-1 font-medium'>
                     {order.orderProduct[0].productName}
                     </p>
@@ -113,30 +114,30 @@ const MerchantDetails = ({ customer, transactionHistory }: ICustomerDetails) => 
                         +{order.orderProduct.length} pet(s)
                     </p>
                     )}
-                </div>
+                </div> */}
             </div>
         );
     }
 
-    function customerTemplate(order: IOrder) {
-        return (
-            <div className='flex flex-col gap-2 capitalize'>
-                <p className='text-sm flex-1 font-medium'>{order.customer.firstName + " " + order.customer.lastName}</p>
-                {/* <p className='text-xs text-neutral'>{order.receiverPhone}</p> */}
-                <p className='text-xs text-neutral'>{order.customer.email}</p>
-            </div>
-        );
-    }
+    // function customerTemplate(order: IOrder) {
+    //     return (
+    //         <div className='flex flex-col gap-2 capitalize'>
+    //             <p className='text-sm flex-1 font-medium'>{order.customer.firstName + " " + order.customer.lastName}</p>
+    //             {/* <p className='text-xs text-neutral'>{order.receiverPhone}</p> */}
+    //             <p className='text-xs text-neutral'>{order.customer.email}</p>
+    //         </div>
+    //     );
+    // }
 
-    function merchantTemplate(order: IOrder) {
-        return (
-            <div className='flex flex-col gap-2 capitalize'>
-                <p className='text-sm flex-1 font-medium'>{order.merchant.firstName + " " + order.merchant.lastName}</p>
-                {/* <p className='text-xs text-neutral'>{order.receiverPhone}</p> */}
-                <p className='text-xs text-neutral'>{order.merchant.email}</p>
-            </div>
-        );
-    }
+    // function merchantTemplate(order: IOrder) {
+    //     return (
+    //         <div className='flex flex-col gap-2 capitalize'>
+    //             <p className='text-sm flex-1 font-medium'>{order.merchant.firstName + " " + order.merchant.lastName}</p>
+    //             {/* <p className='text-xs text-neutral'>{order.receiverPhone}</p> */}
+    //             <p className='text-xs text-neutral'>{order.merchant.email}</p>
+    //         </div>
+    //     );
+    // }
 
     return (
         <div>
@@ -267,23 +268,24 @@ const MerchantDetails = ({ customer, transactionHistory }: ICustomerDetails) => 
                         <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>
                         <Column body={productTemplate} header='Product' />
                         
-                        <Column
+                        {/* <Column
                         // field='customer.email'
                         body={customerTemplate}
                         header='Customer'
-                        />
-                        <Column
+                        /> */}
+
+                        {/* <Column
                         // field='customer.email'
                         body={merchantTemplate}
                         header='Merchant'
-                        />
+                        /> */}
                         <Column field='date' header='Date' body={dateTemplate} sortable />
-                        <Column
+                        {/* <Column
                         field='totalAmount'
                         header='Price'
                         body={amountTemplate}
                         sortable
-                        />
+                        /> */}
                         <Column header='Payment' field="paymentMethod" />
                         <Column field='status' header='Status' sortable body={statusTemplate} />
                         <Column field='action' header='Action' body={actionTemplate} />

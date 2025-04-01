@@ -396,30 +396,34 @@ const CreatePetListingForm = () => {
 
             {/* Pet Date of Birth */}
 
-            <div className='mb-6'>
-              <label
-                htmlFor='dateOfBirth'
-                className='text-sm text-neutral mb-2 block'
-              >
-                Pet Date of Birth
-              </label>
+            {
+              formik.values.category.toLowerCase() === "cat" || formik.values.category.toLowerCase() === "dog" ?
 
-              {/* <DatePicker handleSelectDate={handleSelectDate} /> */}
-              <Calendar
-                id='dateOfBirth'
-                value={new Date(formik.values.dateOfBirth)}
-                onChange={formik.handleChange}
-                // showTime
-                hourFormat='24'
-                placeholder='Select Date'
-                className='pl-[16px] text-[12px] bg-transparent h-[40px] w-full'
-                icon={<FiCalendar className='text-black h-[20px] w-[20px]'/>}
-                showButtonBar
-                showIcon
-                iconPos='left'
-                hideOnDateTimeSelect={true}
-              />
-            </div>
+              <div className='mb-6'>
+                <label
+                  htmlFor='dateOfBirth'
+                  className='text-sm text-neutral mb-2 block'
+                >
+                  Pet Date of Birth
+                </label>
+
+                {/* <DatePicker handleSelectDate={handleSelectDate} /> */}
+                <Calendar
+                  id='dateOfBirth'
+                  value={new Date(formik.values.dateOfBirth)}
+                  onChange={formik.handleChange}
+                  // showTime
+                  hourFormat='24'
+                  placeholder='Select Date'
+                  className='pl-[16px] text-[12px] bg-transparent h-[40px] w-full'
+                  icon={<FiCalendar className='text-black h-[20px] w-[20px]'/>}
+                  showButtonBar
+                  showIcon
+                  iconPos='left'
+                  hideOnDateTimeSelect={true}
+                />
+              </div> : null
+            }
 
             {/* Price */}
 

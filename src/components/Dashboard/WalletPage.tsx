@@ -95,9 +95,9 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
                 <section>
                     <div className='w-full gap-8 mb-8 py-4'>
                         <div className="border-gray-500 border rounded p-6 my-6">
-                            <p>Set up your payment details to enable you receive your earnings.</p>
+                            <p>Set up your payment details to receive your earnings.</p>
 
-                            <div className="rounded p-3 flex justify-between items-center mt-3">
+                            <div className="rounded p-3 flex lg:flex-row md:flex-row flex-col gap-3 lg:gap-0 md:gap-0 justify-between items-center mt-3">
                                 <div className="flex justify-center items-center p-2 bg-gray-300 rounded">
                                     <AiFillBank />
                                 </div>

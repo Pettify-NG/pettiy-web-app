@@ -29,6 +29,8 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
 
     const jwt_secret_key = process.env.NEXT_PUBLIC_JWT_SECRET_KEY;
 
+    const [accountName, setAccountName] = useState<string>("");
+
     const [banks, setBanks] = useState<any>([]);
     useEffect(() => {
         const fetchBanks = async () => {
@@ -43,7 +45,7 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
         };
         
         fetchBanks();
-    }, []);
+    }, [jwt_secret_key]);
 
     const verifyAccount = async (accountNumber: string, bankCode: string) => {
         const response = await fetch(`https://api.paystack.co/bank/resolve?account_number=${accountNumber}&bank_code=${bankCode}`, {
@@ -66,6 +68,35 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
         }
     };
 
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const handleVerify = async (e: React.MouseEvent<HTMLButtonElement>, accountNumber: string, bankId: string) => {
+         e.preventDefault();
+         
+        const bank = banks?.filter((bank: any) => bank.id === Number(bankId));
+
+        setLoading(true);
+        const result = await verifyAccount(accountNumber, bank[0].code);
+
+        if (result.isValid) {
+            console.log('Account verified:', result.accountName);
+            setLoading(false);
+
+            setAccountName(result.accountName);
+            // formik.setField("accountHolderName", result.accountName);
+            // if(result.accountName.toLowerCase() !== values.accountHolderName.toLowerCase()) {
+            //     toast.error("Account Holder name you entered does not match the name associated with account number.");
+            //     return;
+            // }
+        } else {
+            console.error('Account verification failed:', result.error);
+            setLoading(false);
+
+            toast.error(result.error);
+            return;
+        }
+    }
+
     const formik = useFormik({
         initialValues: {
             accountHolderName: "",
@@ -80,26 +111,28 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
         onSubmit: async (values) => {
             try {
                 const bank = banks?.filter((bank: any) => bank.id === Number(values.bankId));
-                console.log(bank);
-                const result = await verifyAccount(values.accountNumber, bank[0].code);
+                // console.log(bank);
+                // const result = await verifyAccount(values.accountNumber, bank[0].code);
 
-                if (result.isValid) {
-                    console.log('Account verified:', result.accountName);
-                    if(result.accountName.toLowerCase() !== values.accountHolderName.toLowerCase()) {
-                        toast.error("Account Holder name you entered does not match the name associated with account number.");
-                        return;
-                    }
-                } else {
-                    console.error('Account verification failed:', result.error);
-                    toast.error(result.error);
-                    return;
-                }
+                // if (result.isValid) {
+                //     console.log('Account verified:', result.accountName);
+                //     setAccountName(result.accountName);
+                //     // formik.setField("accountHolderName", result.accountName);
+                //     // if(result.accountName.toLowerCase() !== values.accountHolderName.toLowerCase()) {
+                //     //     toast.error("Account Holder name you entered does not match the name associated with account number.");
+                //     //     return;
+                //     // }
+                // } else {
+                //     console.error('Account verification failed:', result.error);
+                //     toast.error(result.error);
+                //     return;
+                // }
 
                 const data = {
                     accountDetails: {
                         bankName: bank[0].name,
                         accountNumber: values.accountNumber,
-                        accountHolderName: values.accountHolderName,
+                        accountHolderName: accountName,
                     }
                 };
 
@@ -193,17 +226,28 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
                 />
             </div>
 
+            <Button
+                // type="submit"
+                onClick={(e) => handleVerify(e, formik.values.accountNumber, formik.values.bankId)}
+                disabled={loading}
+                loading={loading}
+                variant="fill"
+                className="bg-orange-500 text-white"
+            >
+                Verify account
+            </Button>
+
             <div className='mb-6'>
                 <label htmlFor='accountHolderName' className='text-sm text-neutral mb-2 block'>
-                    Account Holder Name
+                    {accountName}
                 </label>
-                <TextInput
+                {/* <TextInput
                     placeholder='Enter account holder name...'
                     id='accountHolderName'
                     onChange={formik.handleChange}
                     value={formik.values.accountHolderName}
                     error={formik.errors.accountHolderName}
-                />
+                /> */}
             </div>
 
             <div className="flex justify-end space-x-2">
@@ -217,7 +261,7 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
 
                 <Button
                     type="submit"
-                    disabled={formik.isSubmitting}
+                    disabled={formik.isSubmitting || accountName === ""}
                     loading={formik.isSubmitting}
                     variant="fill"
                     className="bg-orange-500 text-white"
