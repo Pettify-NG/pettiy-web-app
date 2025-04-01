@@ -99,12 +99,12 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
 
     const formik = useFormik({
         initialValues: {
-            accountHolderName: "",
+            // accountHolderName: "",
             accountNumber: "",
             bankId: "",
         },
         validationSchema: Yup.object({
-            accountHolderName: Yup.string().required().label("Account Holder Name"),
+            // accountHolderName: Yup.string().required().label("Account Holder Name"),
             accountNumber: Yup.string().required().label("Account Number"),
             bankId: Yup.string().required().label("Bank"),
         }),
