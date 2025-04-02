@@ -110,6 +110,7 @@ export default function DashboardOrdersTable({
   };
 
   const idTemplate = (data: IOrder) => {
+    console.log(data);
     return `ORDER-${data.uuid}`
   }
 
@@ -145,7 +146,7 @@ export default function DashboardOrdersTable({
               body={amountTemplate}
               sortable
           />
-          <Column field="deliveryLocation" header="Delivery Location" />
+          <Column field="selectedLocation" header="Delivery Location" />
           <Column field='status' header='Status' sortable body={statusTemplate} />
           <Column field='createdAt' header='Date' body={dateTemplate} sortable />
         </DataTable>

@@ -112,8 +112,12 @@ export default function PetListingsTable ({
      }; 
 
     const ageTemplate = (listing: IPet) => {
-        const age = calculatePetAge(listing.date_of_birth);
-        return age;
+      if(!listing.date_of_birth) {
+        return "N/A";
+      }
+
+      const age = calculatePetAge(listing.date_of_birth);
+      return age;
     }
   
     function amountTemplate(listing: IPet) {

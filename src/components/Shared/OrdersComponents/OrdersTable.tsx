@@ -489,6 +489,7 @@ export default function OrdersTable({
             // tableStyle={{ minWidth: '80rem' }}
             paginator
             paginatorClassName='flex justify-between overflow-x-auto'
+            paginatorTemplate={paginatorTemplate(totalRecords, lazyState.page)}
             rows={10}
             // rowsPerPageOptions={[20, 50, 100, 250]}
             className='rounded-md text-sm'
@@ -511,7 +512,7 @@ export default function OrdersTable({
             /> */}
             <Column
               field='totalAmountForSeller'
-              header='Total'
+              header='Total Amount'
               body={amountTemplate}
               sortable
             />

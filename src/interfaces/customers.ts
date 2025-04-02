@@ -1,4 +1,3 @@
-import { IOrder } from "./orders"
 
 export interface ICustomer {
     id: number
