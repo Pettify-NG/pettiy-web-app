@@ -4,9 +4,9 @@ import React from 'react';
 import Cookies from 'universal-cookie';
 
 import SellerDashboardPage from '@/components/Seller/SellerDashboardPage';
-// import { getUserDashboard } from '@/libs/dashboard';
 import { IDashboardData } from '@/interfaces/dashboard';
 import useFetch from '@/hooks/useFetch';
+import LoadingScreen from '@/components/Global/LoadingScreen';
 
 export default function SellerDashboard() {
   const fetchUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/dashboard`
@@ -21,7 +21,10 @@ export default function SellerDashboard() {
   }
 
   const { data, error, isLoading, refetch } = useFetch<IDashboardData>(fetchUrl, options);
-  console.log(data);
+
+  if(isLoading) {
+    return <LoadingScreen />
+  }
 
   return (
     <section>

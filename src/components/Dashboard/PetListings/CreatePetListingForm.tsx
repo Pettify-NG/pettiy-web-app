@@ -80,11 +80,11 @@ const CreatePetListingForm = () => {
       gender: Yup.string().required().label("Gender"),
       location: Yup.string().required().label("Location"),
       vaccinationStatus: Yup.boolean().required().label("Vaccination Status"),
-      dateOfBirth: Yup.string().required().label("Date of Birth"),
+      dateOfBirth: Yup.string().label("Date of Birth"),
     }),
     onSubmit: async (values) => {
       if (productImages.length < 1) {
-        toast.error('Please add product images or variations.');
+        toast.error('Please add pet images.');
       } else {
         try {
           const promises: Promise<Response>[] = [];
@@ -186,7 +186,7 @@ const CreatePetListingForm = () => {
                   }, 1000);
                 }
               });
-          } else console.log('Products array not provided');
+          } else console.log('Products images not provided');
         } catch (error: any) {
           console.log(error);
           toast.error(error.message);
@@ -284,7 +284,7 @@ const CreatePetListingForm = () => {
                   onChange={formik.handleChange}
                   value={formik.values.category}
               >
-                  <option value='' className="text-gray-300" defaultChecked disabled>
+                  <option value='' className="text-gray-200" defaultChecked disabled>
                       e.g Dog
                   </option>
                   <option value="Cat">
@@ -447,10 +447,10 @@ const CreatePetListingForm = () => {
 
           <div className='mb-6'>
             <label htmlFor='stock' className='text-sm text-neutral mb-2 block'>
-              Number in Stock
+              Quantity
             </label>
             <TextInput
-              placeholder='How many do you have in stock? e.g 5'
+              placeholder='How many do you have in stock? e.g. 5'
               id='stock'
               onChange={formik.handleChange}
               value={formik.values.stock}
@@ -546,8 +546,8 @@ const CreatePetListingForm = () => {
                     No
                 </option>
             </select>
-            {/* <IoIosArrowDown onClick={handleSelectProductCategoryClick} className={`absolute right-4 ${formik.errors.categoryId ? "top-10" : "bottom-4"}`} />
-            <CustomError error={formik.errors.categoryId} /> */}
+            <IoIosArrowDown className={`absolute right-4 ${formik.errors.vaccinationStatus ? "top-10" : "bottom-4"}`} />
+            <CustomError error={formik.errors.vaccinationStatus} />
           </div>
 
           {/* Vaccine Card */}

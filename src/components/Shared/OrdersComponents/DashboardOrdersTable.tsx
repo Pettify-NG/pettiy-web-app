@@ -125,9 +125,6 @@ export default function DashboardOrdersTable({
           value={orders ?? []}
           scrollable={true}
           dataKey='uuid'
-          // tableStyle={{ minWidth: '20rem' }}
-          // paginator
-          // paginatorClassName='flex justify-between overflow-x-auto'
           rows={10}
           className='rounded-md text-sm'
           sortOrder={-1}

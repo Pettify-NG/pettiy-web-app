@@ -128,7 +128,7 @@ export default function OrdersTable({
   const [lazyState, setlazyState] = useState<LazyTableState>({
     first: 0,
     rows: 10,
-    page: 0,
+    page: 1,
   });
 
   const [timeFilter, setTimeFilter] = useState<string>("All-time");
@@ -213,13 +213,16 @@ export default function OrdersTable({
     let styles = '';
 
     switch (status.toLowerCase()) {
-      case 'processing':
+      case 'pending':
         styles = 'bg-orange-100 text-orange-600';
         break;
       case 'shipped':
         styles = 'bg-[#E8F8FD] text-[#13B2E4]';
         break;
       case 'delivered':
+        styles = 'bg-green-100 text-green-600';
+        break;
+      case 'paid':
         styles = 'bg-green-100 text-green-600';
         break;
       case 'cancelled':
@@ -318,6 +321,10 @@ export default function OrdersTable({
         'cursor-pointer': data.uuid
     };
   };
+
+  const idTemplate = (data: IOrder) => {
+    return `ORDER-${data.uuid}`
+  }
 
   const httpService = new HTTPService();
   const cookies = new Cookies();
@@ -502,7 +509,7 @@ export default function OrdersTable({
             rowClassName={rowClassTemplate}
           >
             {/* <Column selectionMode='multiple' body={checkBoxTemplate} headerStyle={{ width: '3rem' }} className='group'/> */}
-            <Column field='uuid' header='Order ID' className='text-[#F2C94C]'/>
+            <Column field='uuid' body={idTemplate} header='Order ID' className='text-[#F2C94C]'/>
             {/* <Column body={productTemplate} header='Product' /> */}
             <Column field='date' header='Date' body={dateTemplate} sortable />
             {/* <Column
