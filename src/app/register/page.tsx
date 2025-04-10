@@ -259,9 +259,9 @@ export default function Register() {
                 </Link>
               </div>
 
-              <div className='text-xs text-black font-semibold my-4'>
+              <div className='text-xs text-center text-black font-normal my-4'>
                 <span>
-                  {`By clicking create account, I acknowledge that I have read and do hereby accept the terms and conditions in the Pettify's`} <a href="#" className='text-underline'>Terms of service</a>
+                  {`By clicking create account, I acknowledge that I have read and do hereby accept the terms and conditions in the Pettify's`} <a href="https://docs.google.com/document/d/1BtkwJgZ5a2j8O9ZsXF8rHzp4pq27h4hRKX7KGl7v2Jg/edit?tab=t.0#heading=h.p59hquhxqchk" className='hover:text-underline text-black font-semibold'>Terms of service</a> and <a href=" https://docs.google.com/document/d/1q6iWboCW7ACP-Bzv6jniATrtZbsUP7UoksqfSmiM3OU/edit?tab=t.0#heading=h.nsm3wv9h0zcc" className='hover:text-underline text-black font-semibold'>Privacy Policy.</a>
                 </span>
               </div>
             </form>

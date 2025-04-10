@@ -12,8 +12,8 @@ import Image from 'next/image';
 import { IoPersonCircleSharp } from "react-icons/io5";
 
 // Rest of your imports from custom components...
-import logoIcon from '../../../public/Pettify 1.png';
-import logo from '../../../public/Pettify.png';
+import logoIcon from '../../../public/pettify-logo.jpg';
+import logo from '../../../public/pettify-logo.jpg';
 import { ISidebarLink, sellerLinks } from '@/static';
 import useLocalStorage from '@/hooks/useLocalStorage';
 

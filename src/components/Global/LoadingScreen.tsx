@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import ClipLoader from 'react-spinners/ClipLoader';
+import ClipLoader from "react-spinners/ClipLoader";
 
 const LoadingScreen = () => (
     <div className="flex justify-center items-center h-screen">

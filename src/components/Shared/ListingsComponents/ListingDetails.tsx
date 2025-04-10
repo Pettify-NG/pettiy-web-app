@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 import { IListing } from '@/interfaces/listings';
 import Button from '../../Global/Button';
-import logoIcon from '../../../../Pettify 1.png';
+import logoIcon from '../../../../public/pettify-logo.jpg';
 import logo from "../../../../public/Pettify.png"
 
 const ListingStatus = ({ status }: { status: string | undefined }) => {
