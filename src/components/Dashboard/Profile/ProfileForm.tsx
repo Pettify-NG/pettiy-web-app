@@ -285,6 +285,7 @@ export default function ProfileForm({ user }: { user?: UserData | null }) {
                                 alt='User profile image'
                                 width={50}
                                 height={50}
+                                quality={100}
                                 className='rounded-full w-[150px] h-[150px] object-cover'
                             />
                             : 

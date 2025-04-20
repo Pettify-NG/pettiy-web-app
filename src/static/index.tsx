@@ -7,6 +7,7 @@ import { MdOutlinePets } from "react-icons/md";
 import { FaWallet } from "react-icons/fa6";
 import { FaBone } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
+import { IoIosNotifications } from "react-icons/io";
 
 export const sellerLinks: ISidebarLink[] = [
   { name: 'home', icon: <IoMdHome />, page: '/dashboard' },
@@ -35,6 +36,11 @@ export const sellerLinks: ISidebarLink[] = [
     icon: <IoMdPerson />,
     page: `/dashboard/profile`
   },
+  {
+    name: "notifications",
+    icon: <IoIosNotifications />,
+    page: `/dashboard/notifications`
+  }
   // { name: 'settings', icon: <IoMdSettings />, page: '/dashboard/settings' },
   // { name: 'notification', icon: <LuMail />, page: '/admin/dashboard/notifications' },
 ];

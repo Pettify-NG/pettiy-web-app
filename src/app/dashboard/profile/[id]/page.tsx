@@ -5,6 +5,7 @@ import Cookies from "universal-cookie";
 
 import ProfileForm from "@/components/Dashboard/Profile/ProfileForm";
 import useFetch from "@/hooks/useFetch";
+import LoadingScreen from "@/components/Global/LoadingScreen";
 
 interface UserData {
     firstname: string;
@@ -34,8 +35,8 @@ export default function ProfileDetails ({ params }: { params: { id: string } }) 
     const { data, error, isLoading, refetch } = useFetch<UserData>(fetchUrl, options);
     console.log(data);
 
-    if (!data) {
-        return <p>Loading user details...</p>;
+    if(!data) {
+        return <LoadingScreen />
     }
 
     return (
