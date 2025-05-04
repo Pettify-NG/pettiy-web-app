@@ -69,7 +69,7 @@ export default function PayoutTable ({
               console.log(token); 
               const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL; 
        
-              fetch(`${baseUrl}/api/v1/${ENDPOINTS.CONFIRM_EMAIL_OTP}?page=${lazyState.page}&limit=${lazyState.rows}`, { 
+              fetch(`${baseUrl}/api/v1/${ENDPOINTS.CONFIRM_EMAIL_OTP}?page=${(lazyState.page ?? 0) + 1}&limit=${lazyState.rows}`, { 
                   headers: { 
                       Authorization: `Bearer ${token}`, 
                   }, 

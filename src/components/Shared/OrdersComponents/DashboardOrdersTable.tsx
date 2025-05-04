@@ -61,7 +61,8 @@ export default function DashboardOrdersTable({
 
     return (
       <span className={`p-2 px-4 text-xs font-medium rounded-full whitespace-nowrap ${styles}`}>
-        {order.status}
+        {/* {order.status} */}
+        {String(order.status).charAt(0).toUpperCase() + String(order.status).slice(1)}
       </span>
     );
   }

@@ -90,7 +90,7 @@ export default function NotificationsTable() {
   
             const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     
-            fetch(`${baseUrl}/api/v1/${ENDPOINTS.NOTIFICATIONS}?page=${lazyState.page}&limit=${lazyState.rows}`, {
+            fetch(`${baseUrl}/api/v1/${ENDPOINTS.NOTIFICATIONS}?page=${(lazyState.page ?? 0) + 1}&limit=${lazyState.rows}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -144,7 +144,7 @@ export default function NotificationsTable() {
         return (
             <div>
                 <p className='whitespace-nowrap'>{moment(notif.createdAt).format('MMM Do YYYY')}</p>
-                <p>{moment(notif.createdAt).format('h:mm a')}</p>
+                <p>{moment(notif.createdAt).format('h:mm A')}</p>
             </div>
         )
     }
@@ -168,8 +168,6 @@ export default function NotificationsTable() {
         paginatorClassName='flex justify-between'
         sortIcon={<IoIosArrowDown />}
       >
-        {/* <Column field='metadataType' align='center' header='Notification Type'></Column> */}
-        <Column field='title' align='center' header='Type'></Column>
         <Column
           field='createdAt'
           header='Date'
@@ -177,18 +175,19 @@ export default function NotificationsTable() {
           body={dateTemplate}
           align='center'
         ></Column>
+        <Column field='title' align='center' header='Title'></Column>
         <Column
-          field='body'
+          field='message'
           header='Message'
           className='text-gray-500'
           align='center'
         ></Column>
-        <Column
+        {/* <Column
           field='action' 
           header='Action'
           body={actionTemplate}
           align='center'
-        ></Column>
+        ></Column> */}
       </DataTable>
     </div>
   );

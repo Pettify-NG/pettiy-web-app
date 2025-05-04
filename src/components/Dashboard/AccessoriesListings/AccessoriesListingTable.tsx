@@ -75,7 +75,7 @@ export default function AccessoriesListingsTable ({
               const fetchData = () => { 
                   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL; 
            
-                  fetch(`${baseUrl}/api/v1/users/${sellerInfo.user._id}/accessories?page=${lazyState.page}&limit=${lazyState.rows}&type=${timeFilter}`, { 
+                  fetch(`${baseUrl}/api/v1/users/${sellerInfo.user._id}/accessories?page=${(lazyState.page ?? 0) + 1}&limit=${lazyState.rows}&type=${timeFilter}`, { 
                     headers: {
                       "Authorization": `Bearer ${token}`,
                     },

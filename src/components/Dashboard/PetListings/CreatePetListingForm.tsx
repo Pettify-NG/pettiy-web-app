@@ -296,9 +296,9 @@ const CreatePetListingForm = () => {
                   <option value="Bunny">
                       Bunny
                   </option>
-                  <option value="Bird">
+                  {/* <option value="Bird">
                       Bird
-                  </option>
+                  </option> */}
                   <option value="Others">
                       Others
                   </option>

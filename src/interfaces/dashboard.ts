@@ -7,4 +7,5 @@ export interface IDashboardData {
     totalPets: number
     totalAccessories: number
     totalBalance: number
+    pendingWalletBalance?: number
 }

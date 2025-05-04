@@ -1,5 +1,5 @@
 export interface OrderItem {
-  product: string;
+  product: any;
   quantity: number;
   price: number;
   totalPrice: number;

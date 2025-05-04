@@ -7,7 +7,7 @@ export default function Notifications() {
     return (
         <section className="py-4">
             <div>
-                <p className='text-xl font-medium text-gray-700'>Orders</p>
+                <p className='text-xl font-medium text-gray-700'>Notifications</p>
                 <Pagination /> 
             </div>
 

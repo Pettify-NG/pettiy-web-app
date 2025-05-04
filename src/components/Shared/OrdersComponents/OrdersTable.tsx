@@ -62,7 +62,7 @@ export const paginatorTemplate = (totalRecords: number, page: number | undefined
           
             return (
                 <span 
-                className={classNames(`${options.page === page ? "bg-[#ED770B]" : "bg-white"} px-3 text-white cursor-pointer py-1 mx-1 rounded-sm border border-[#F2C94C] `)} 
+                className={classNames(`${options.page === page ? "bg-[#ED770B] text-white" : "bg-white text-[#ED770B]"} px-3 cursor-pointer py-1 mx-1 rounded-sm border border-[#F2C94C] `)} 
                 onClick={options.onClick}
                 >
                     {options.page + 1}
@@ -128,7 +128,7 @@ export default function OrdersTable({
   const [lazyState, setlazyState] = useState<LazyTableState>({
     first: 0,
     rows: 10,
-    page: 1,
+    page: 0,
   });
 
   const [timeFilter, setTimeFilter] = useState<string>("All-time");
@@ -144,7 +144,7 @@ export default function OrdersTable({
 
           const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   
-          fetch(`${baseUrl}/api/v1/users/${sellerInfo.user._id}/${ENDPOINTS.ORDERS}?page=${lazyState.page}&limit=${lazyState.rows}&type=${timeFilter}`, {
+          fetch(`${baseUrl}/api/v1/users/${sellerInfo.user._id}/${ENDPOINTS.ORDERS}?page=${(lazyState.page ?? 0) + 1}&limit=${lazyState.rows}&type=${timeFilter}`, {
               headers: {
                   Authorization: `Bearer ${token}`,
               },
@@ -241,35 +241,36 @@ export default function OrdersTable({
 
     return (
       <span className={`p-2 px-4 text-xs font-medium rounded-full whitespace-nowrap ${styles}`}>
-        {order.status}
+        {String(order.status).charAt(0).toUpperCase() + String(order.status).slice(1)}
       </span>
     );
   }
 
-  // function productTemplate(order: IOrder) {
-  //   return (
-  //     <div className='flex items-center gap-4'>
-  //       <Image
-  //         src={order.orderProduct[0].image}
-  //         alt='image'
-  //         width={20}
-  //         height={20}
-  //         className='h-12 w-12 bg-[#1b1b1b] rounded-md'
-  //       />
+  function productTemplate(order: IOrder) {
+    const firstProduct = order.subOrders[0].items[0];
+    return (
+      <div className='flex items-center gap-4'>
+        <Image
+          src={firstProduct.type === "pet" ? (firstProduct.product?.pet_images[0] ?? "") : (firstProduct.product?.accessoryImages[0] ?? "")}
+          alt='image'
+          width={20}
+          height={20}
+          className='h-12 w-12 bg-[#1b1b1b] rounded-md'
+        />
 
-  //       <div className='div capitalize flex-1'>
-  //         <p className='text-sm flex-1 font-medium'>
-  //           {order.orderProduct[0].productName}
-  //         </p>
-  //         {order.orderProduct.length > 1 && (
-  //           <p className='text-xs text-neutral'>
-  //             +{order.orderProduct.length} other products
-  //           </p>
-  //         )}
-  //       </div>
-  //     </div>
-  //   );
-  // }
+        <div className='div capitalize flex-1'>
+          <p className='text-sm flex-1 font-medium'>
+            {firstProduct.type === "pet" ? firstProduct.product?.breed : firstProduct.product?.name}
+          </p>
+          {order.subOrders[0].items.length > 1 && (
+            <p className='text-xs text-neutral'>
+              +{order.subOrders[0].items.length} other products
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   // function customerTemplate(order: IOrder) {
   //   return (
@@ -510,7 +511,7 @@ export default function OrdersTable({
           >
             {/* <Column selectionMode='multiple' body={checkBoxTemplate} headerStyle={{ width: '3rem' }} className='group'/> */}
             <Column field='uuid' body={idTemplate} header='Order ID' className='text-[#F2C94C]'/>
-            {/* <Column body={productTemplate} header='Product' /> */}
+            <Column body={productTemplate} header='Product' />
             <Column field='date' header='Date' body={dateTemplate} sortable />
             {/* <Column
               field='customer.email'
