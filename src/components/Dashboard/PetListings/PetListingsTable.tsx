@@ -100,7 +100,7 @@ export default function PetListingsTable ({
             }; 
          
             fetchData(); 
-    }, [sellerInfo.user._id, lazyState, token]);
+    }, [sellerInfo, lazyState, token]);
     
     useEffect(() => { 
         loadLazyData(); 
