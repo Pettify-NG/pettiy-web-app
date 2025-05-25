@@ -13,6 +13,10 @@ export interface IPet {
     pet_images: string[]
     createdAt: string
     vaccine_status: boolean
-    location: string
+    location: {
+        state: string
+        lga: string
+        address: string
+    }
     vaccine_status_image: string
 }

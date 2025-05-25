@@ -3,7 +3,7 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { FaX } from "react-icons/fa6";
 import { RiDeleteBin6Fill } from "react-icons/ri";
@@ -17,6 +17,7 @@ import ENDPOINTS from "@/config/ENDPOINTS";
 import HTTPService from "@/services/http";
 import { IoIosArrowDown } from "react-icons/io";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import nigeriaLocations from "@/data/lgas.json"
 
 interface ProductImage {
   image: File
@@ -58,6 +59,9 @@ const CreateAccessoriesListingForm = () => {
       category: "",
       price: 0,
       stock: 0,
+      state: "", 
+      lga: "",
+      address: "",
       // weight: "",
     },
     validationSchema: Yup.object({
@@ -65,6 +69,9 @@ const CreateAccessoriesListingForm = () => {
       description: Yup.string().required().label("Description"),
       category: Yup.string().required().label("Category"),
       price: Yup.string().required().label("Price"),
+      state: Yup.string().required().label("State"),
+      lga: Yup.string().required().label("LGA"),
+      address: Yup.string().required().label("Address"),
       stock: Yup.number().min(1).required().label("Number in stock"),
       // weight: Yup.number().min(1).required().label("Product Weight"),
     }),
@@ -118,6 +125,11 @@ const CreateAccessoriesListingForm = () => {
               quantity: values.stock,
               price: values.price,
               seller: sellerInfo.user._id ?? "",
+              location: {
+                state: values.state,
+                lga: values.lga,
+                address: values.address
+              }
               // weight: values.weight
             };
 
@@ -350,7 +362,7 @@ const CreateAccessoriesListingForm = () => {
 
           <div className='mb-6'>
             <label htmlFor='stock' className='text-sm text-neutral mb-2 block'>
-              No, Of Stock
+              Quantity
             </label>
             <TextInput
               placeholder='How many do you have in stock? e.g 5'
@@ -361,6 +373,87 @@ const CreateAccessoriesListingForm = () => {
             />
           </div>
 
+          {/* Location */}
+
+          <label htmlFor='name' className='text-lg text-neutral mb-2 block'>
+            Location
+          </label>
+
+          <div className="my-6 w-full">
+            <div className="flex mb-6 items-center gap-3 w-full">
+                {/* State */}
+
+                <div className='relative w-full'>
+                  <label
+                      htmlFor='state'
+                      className='text-sm text-neutral mb-2 block'
+                  >
+                      State
+                  </label>
+
+                  <select
+                      name='state'
+                      id='state'
+                      className='text-black bg-[#F0F1F3] font-medium'
+                      onChange={formik.handleChange}
+                      value={formik.values.state}
+                  >
+                      <option value="" defaultChecked disabled>-- Select a State --</option>
+                      {Object.keys(nigeriaLocations).map((state) => (
+                        <option key={state} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                  </select>
+                  <IoIosArrowDown className={`absolute right-4 ${formik.errors.state ? "top-10" : "bottom-4"}`} />
+                  <CustomError error={formik.errors.state} />
+                </div>
+
+                {/* LGA */}
+      
+                <div className='relative w-full'>
+                  <label
+                      htmlFor='lga'
+                      className='text-sm text-neutral mb-2 block'
+                  >
+                      LGA
+                  </label>
+
+                  <select
+                      name='lga'
+                      id='lga'
+                      className='text-black bg-[#F0F1F3] font-medium'
+                      onChange={formik.handleChange}
+                      value={formik.values.lga}
+                      disabled={!formik.values.state}
+                  >
+                      <option value="" defaultChecked disabled>-- Select a LGA --</option>
+                      {(nigeriaLocations[formik.values.state as keyof typeof nigeriaLocations] || []).map((state: string, index: number) => (
+                        <option key={index} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                  </select>
+                  <IoIosArrowDown className={`absolute right-4 ${formik.errors.lga ? "top-10" : "bottom-4"}`} />
+                  <CustomError error={formik.errors.lga} />
+                </div>
+            </div>
+
+            {/* Address */}
+
+            <div className='mb-6'>
+                <label htmlFor='address' className='text-sm text-neutral mb-2 block'>
+                  Address
+                </label>
+                <TextInput
+                  placeholder='Enter address...'
+                  id='address'
+                  onChange={formik.handleChange}
+                  value={formik.values.address}
+                  error={formik.errors.address}
+                />
+            </div>
+          </div>
         </div>
       </div>
 

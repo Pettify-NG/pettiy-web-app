@@ -40,8 +40,8 @@ export const sellerLinks: ISidebarLink[] = [
     name: "notifications",
     icon: <IoIosNotifications />,
     page: `/dashboard/notifications`
-  }
-  // { name: 'settings', icon: <IoMdSettings />, page: '/dashboard/settings' },
+  },
+  { name: 'settings', icon: <IoMdSettings />, page: '/dashboard/settings' },
   // { name: 'notification', icon: <LuMail />, page: '/admin/dashboard/notifications' },
 ];
 

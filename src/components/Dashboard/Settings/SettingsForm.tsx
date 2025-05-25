@@ -3,13 +3,22 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
+import Cookies from "universal-cookie";
 
 import ENDPOINTS from "@/config/ENDPOINTS";
 import HTTPService from "@/services/http";
 import TextInput from "@/components/Global/TextInput";
 import Button from "@/components/Global/Button";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const SettingsForm = () => {
+    const httpService = new HTTPService();
+
+    const cookies = new Cookies();
+    const token = cookies.get("pettify-token");
+
+    const [seller_info, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
+
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -24,7 +33,36 @@ const SettingsForm = () => {
             newPassword: Yup.string().required().label("New Password"),
         }),
         onSubmit: async (values) => {
+            try {
+                // const userData = {
+                //     firstname: values.firstname,
+                //     lastname: values.lastname,
+                //     username: values.username,
+                //     phonenumber: values.phoneNumber,
+                //     address: values.address,
+                //     state: values.state,
+                // };
 
+                console.log('Request Body: ');
+
+                httpService
+                .patch(
+                    `${ENDPOINTS.USER}${seller_info.user._id}`, 
+                    // userData,
+                    {},
+                    `Bearer ${token}`
+                )
+                .then((apiRes) => {
+                    if (apiRes.success) {    
+                        toast.success('Settings updated.');
+                    } else {
+                        toast.error(apiRes.message);
+                    }
+                });
+            } catch (error: any) {
+                console.log(error);
+                toast.error(error.message);
+            }
         },
         validateOnChange: true,
     });

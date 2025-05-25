@@ -7,4 +7,9 @@ export default interface IAccessory {
     name: string
     _id: string
     category: string
+    location: {
+        state: string
+        lga: string
+        address: string
+    }
 }
