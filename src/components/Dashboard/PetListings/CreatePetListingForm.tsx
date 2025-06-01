@@ -72,7 +72,7 @@ const CreatePetListingForm = () => {
       dateOfBirth: "",
       state: "",
       lga: "",
-      address: "",
+      // address: "",
     },
     validationSchema: Yup.object({
       petBreed: Yup.string().required().label("Pet Breed"),
@@ -85,7 +85,7 @@ const CreatePetListingForm = () => {
       // location: Yup.string().required().label("Location"),
       state: Yup.string().required().label("State"),
       lga: Yup.string().required().label("LGA"),
-      address: Yup.string().required().label("Address"),
+      // address: Yup.string().required().label("Address"),
       vaccinationStatus: Yup.boolean().required().label("Vaccination Status"),
       dateOfBirth: Yup.string().label("Date of Birth"),
     }),
@@ -171,7 +171,7 @@ const CreatePetListingForm = () => {
               location: {
                 states: values.state,
                 lga: values.lga,
-                address: values.address
+                // address: values.address
               }
             };
 
@@ -582,7 +582,7 @@ const CreatePetListingForm = () => {
             </div>
 
             {/* Address */}
-
+{/* 
             <div className='mb-6'>
                 <label htmlFor='address' className='text-sm text-neutral mb-2 block'>
                   Address
@@ -594,7 +594,7 @@ const CreatePetListingForm = () => {
                   value={formik.values.address}
                   error={formik.errors.address}
                 />
-            </div>
+            </div> */}
           </div>
 
           {/* Vaccination Status */}

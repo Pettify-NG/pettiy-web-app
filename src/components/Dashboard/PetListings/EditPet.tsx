@@ -73,7 +73,7 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
       dateOfBirth: pet?.date_of_birth ?? " ",
       state: pet?.location?.state ?? "",
       lga: pet?.location.lga ?? "",
-      address: pet?.location?.address ?? ""
+      // address: pet?.location?.address ?? ""
     },
     validationSchema: Yup.object({
       petBreed: Yup.string().required().label("Pet Breed"),
@@ -88,7 +88,7 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
       dateOfBirth: Yup.string().required().label("Date of Birth"),
       state: Yup.string().required().label("State"),
       lga: Yup.string().required().label("LGA"),
-      address: Yup.string().required().label("Address"),
+      // address: Yup.string().required().label("Address"),
     }),
     onSubmit: async (values) => {
     //   if (productImages.length < 1) {
@@ -170,7 +170,7 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
                     location: {
                       state: values.state,
                       lga: values.lga,
-                      address: values.address,
+                      // address: values.address,
                     },
                 };
 
@@ -597,21 +597,7 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
                             <CustomError error={formik.errors.lga} />
                           </div>
                       </div>
-          
-                      {/* Address */}
-          
-                      <div className='mb-6'>
-                          <label htmlFor='address' className='text-sm text-neutral mb-2 block'>
-                            Address
-                          </label>
-                          <TextInput
-                            placeholder='Enter address...'
-                            id='address'
-                            onChange={formik.handleChange}
-                            value={formik.values.address}
-                            error={formik.errors.address}
-                          />
-                      </div>
+
                     </div>
 
           {/* Vaccination Status */}

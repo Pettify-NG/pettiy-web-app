@@ -60,7 +60,7 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
       stock: accessory?.quantity ?? undefined,
       state: accessory?.location?.state ?? "",
       lga: accessory?.location.lga ?? "",
-      address: accessory?.location?.address ?? ""
+      // address: accessory?.location?.address ?? ""
       // weight: "",
     },
     validationSchema: Yup.object({
@@ -71,7 +71,7 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
       stock: Yup.number().min(1).required().label("Number in stock"),
       state: Yup.string().required().label("State"),
       lga: Yup.string().required().label("LGA"),
-      address: Yup.string().required().label("Address"),
+      // address: Yup.string().required().label("Address"),
       // weight: Yup.number().min(1).required().label("Product Weight"),
     }),
     onSubmit: async (values) => {
@@ -126,7 +126,7 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
               location: {
                 state: values.state,
                 lga: values.lga,
-                address: values.address
+                // address: values.address
               }
               // weight: values.weight
             };
@@ -470,7 +470,7 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
           
                       {/* Address */}
           
-                      <div className='mb-6'>
+                      {/* <div className='mb-6'>
                           <label htmlFor='address' className='text-sm text-neutral mb-2 block'>
                             Address
                           </label>
@@ -481,7 +481,7 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
                             value={formik.values.address}
                             error={formik.errors.address}
                           />
-                      </div>
+                      </div> */}
                     </div>
 
         </div>

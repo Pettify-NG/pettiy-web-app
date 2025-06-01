@@ -61,7 +61,7 @@ const CreateAccessoriesListingForm = () => {
       stock: 0,
       state: "", 
       lga: "",
-      address: "",
+      // address: "",
       // weight: "",
     },
     validationSchema: Yup.object({
@@ -71,7 +71,7 @@ const CreateAccessoriesListingForm = () => {
       price: Yup.string().required().label("Price"),
       state: Yup.string().required().label("State"),
       lga: Yup.string().required().label("LGA"),
-      address: Yup.string().required().label("Address"),
+      // address: Yup.string().required().label("Address"),
       stock: Yup.number().min(1).required().label("Number in stock"),
       // weight: Yup.number().min(1).required().label("Product Weight"),
     }),
@@ -128,7 +128,7 @@ const CreateAccessoriesListingForm = () => {
               location: {
                 state: values.state,
                 lga: values.lga,
-                address: values.address
+                // address: values.address
               }
               // weight: values.weight
             };
@@ -441,7 +441,7 @@ const CreateAccessoriesListingForm = () => {
 
             {/* Address */}
 
-            <div className='mb-6'>
+            {/* <div className='mb-6'>
                 <label htmlFor='address' className='text-sm text-neutral mb-2 block'>
                   Address
                 </label>
@@ -452,7 +452,7 @@ const CreateAccessoriesListingForm = () => {
                   value={formik.values.address}
                   error={formik.errors.address}
                 />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
