@@ -2,11 +2,8 @@
 "use client";
 
 import React from 'react'
-import Image from 'next/image';
-import { useState } from 'react';
-import { MdKeyboardArrowRight } from "react-icons/md";
-import { MdKeyboardArrowLeft } from "react-icons/md";
-import clsx from 'clsx';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 
 import IAccessory from '@/interfaces/accessory';
 
@@ -14,70 +11,19 @@ const AccessoryDetails = ({
     accessoryDetails
 }: {
     accessoryDetails: IAccessory | null
-}) => {
-    console.log(accessoryDetails);
-    const [currentImageCount, setCurrentImageCount] = useState<number>(0);
-
-    const changeImage = (action: string) => {
-        if(action.toLowerCase() === "next") {
-            const newImageCount = currentImageCount + 1;
-            setCurrentImageCount(newImageCount >= accessoryDetails!.accessoryImages.length ? 0 : newImageCount);
-        }
-
-        if(action.toLowerCase() === "previous") {
-            const newImageCount = currentImageCount - 1;
-            setCurrentImageCount(newImageCount < 0 ? accessoryDetails!.accessoryImages.length - 1 : newImageCount);
-        }
-    }
-
-    const scrollToSection = (elementId: string) => {
-        document.getElementById(elementId ?? "")?.scrollIntoView({ behavior: 'smooth' });
-    };
-      
+}) => {      
     return (
         <div>
-            <section className='w-full flex lg:flex-row md:flex-row flex-col lg:gap-0 md:gap-0 gap-3 justify-between'>
+            <section className='w-full flex lg:flex-row md:flex-row flex-col lg:gap-4 md:gap-0 gap-3 justify-between'>
                 {/* Image Carousel */}
-                <div className='relative lg:w-1/2 w-full mb-3'>
-                    <div className='w-full h-[200px]'>
-                        <img
-                            src={accessoryDetails?.accessoryImages[currentImageCount] || ''}
-                            alt="product image"
-                            // width="200"
-                            // height="200"
-                            className="mx-auto w-auto h-[250px] rounded transition-500 transition-all"
-                            style={{
-                                // objectFit: 'cover',
-                                overflow: 'hidden',
-                                // aspectRatio: "3/2",
-                            }}
-                        />
-
-                        <div className="absolute top-0 justify-between h-full hidden md:flex w-[100%] lg:w-[100%] xl:w-[100%] items-center z-10">
-                            {accessoryDetails?.accessoryImages !== undefined && accessoryDetails.accessoryImages.length > 1 && 
-                                <MdKeyboardArrowLeft 
-                                    // width={50}
-                                    // height={50}
-                                    size={50}
-                                    className='cursor-pointer'
-                                    color='black'
-                                    onClick={() => changeImage("previous")}
-                                />
-                            }
-                            
-                            {accessoryDetails?.accessoryImages !== undefined && accessoryDetails.accessoryImages.length > 1 && 
-                                <MdKeyboardArrowRight 
-                                    // width={100}
-                                    // height={100}
-                                    size={50}
-                                    color='black'
-                                    className='cursor-pointer'
-                                    onClick={() => changeImage("next")}
-                                />
-                            }
-                            
-                        </div>
-                    </div>
+                <div className="relative lg:w-1/2 w-full mb-3 h-[300px]">
+                    <Carousel showThumbs={true} className='h-full'>
+                        {accessoryDetails?.accessoryImages.map((image: string, index: number) => (
+                            <div key={index}>
+                                <img src={image} alt={`pet image ${index + 1}`} />
+                            </div>
+                        ))}
+                    </Carousel>
                 </div>
 
                 {/* Product details */}
@@ -87,49 +33,34 @@ const AccessoryDetails = ({
                         <h2 className='font-semibold text-black text-2xl mb-3'>{accessoryDetails?.name}</h2>
 
                         {/* Brand name */}
-                        <div className='flex gap-1 mb-3'>
-                            <p className='font-semibold text-black text-md'>Brand:</p>
-                            <p className='text-black text-md'>{accessoryDetails?.name}</p>
+                        <div className='gap-1 mb-3'>
+                            <p className='font-semibold text-black text-sm'>Brand:</p>
+                            <p className='text-black text-lg'>{accessoryDetails?.name}</p>
                         </div>
 
-                        <div className='flex gap-1 mb-3'>
-                            <p className='font-semibold text-black text-lg'>Price:</p>
+                        <div className='gap-1 mb-3'>
+                            <p className='font-semibold text-black text-sm'>Price:</p>
                             <p className='text-black text-lg mb-3'>${accessoryDetails?.price}</p>
                         </div>
                     </div>
 
                     <div className='mt-4 mb-8'>
                         {/* Quantity */}
-                        <div className='flex gap-1'>
-                            <p className='text-black text-md font-semibold'>Quantity:</p>
-                            <p className='text-black text-md'>{accessoryDetails?.quantity}</p>
+                        <div className='gap-1'>
+                            <p className='text-black text-sm font-semibold'>Quantity:</p>
+                            <p className='text-black text-lg'>{accessoryDetails?.quantity}</p>
                         </div>
                     </div>
 
                     <div className=''>
                         {/* Description */}
-                        <div className='flex gap-1 border-b-2 border-gray-300'>
-                            <p className='text-black text-md font-semibold'>Description:</p>
-                            <p className='w-full text-md text-black mb-3 text-left  pb-4'>{accessoryDetails?.description}</p>
+                        <div className='gap-1'>
+                            <p className='text-black text-sm font-semibold'>Description:</p>
+                            <p className='w-full text-md text-black mb-3 text-left pb-4'>{accessoryDetails?.description}</p>
                         </div>
                     </div>
                 </div>
             </section>
-
-            <div className='flex flex-start h-14 my-2 gap-2'>
-                {accessoryDetails?.accessoryImages.map((image: string, index: number) => (
-                    <Image
-                        width={80}
-                        height={50}
-                        className={`rounded border cursor-pointer border-gray-300 ${currentImageCount === index ? "opacity-100" : "opacity-20"}`}
-                        alt="product image"
-                        src={image || ''}
-                        key={index}
-                        onClick={() => setCurrentImageCount(index)}
-                    />
-                ))}
-            </div>
-
 
             {/* Shipping details: Weight, Height, Length, & Width */}
             {/* <section>
