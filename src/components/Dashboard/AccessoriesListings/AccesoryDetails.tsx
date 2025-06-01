@@ -44,6 +44,11 @@ const AccessoryDetails = ({
                         </div>
                     </div>
 
+                    <div className='gap-1 mb-3 items-center'>
+                        <p className='font-semibold text-black text-sm'>Location:</p>
+                        <p className='text-black text-lg mb-3'>{accessoryDetails?.location?.state + ", " + accessoryDetails?.location?.lga}</p>
+                    </div>
+
                     <div className='mt-4 mb-8'>
                         {/* Quantity */}
                         <div className='gap-1'>
