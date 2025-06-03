@@ -26,8 +26,6 @@ import { formatCurrency } from '@/helpers';
 import IOrder from '@/interfaces/orders';
 import ENDPOINTS from '@/config/ENDPOINTS';
 import HTTPService from '@/services/http';
-import TextInput from '@/components/Global/TextInput';
-import Pagination from '../Paginatioin';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
 interface LazyTableState {
@@ -156,16 +154,15 @@ export default function OrdersTable({
               return response.json();
           }).then(data => {
               if (data.data) {
-                  console.log(data.meta);
                   setTotalRecords(data.meta.totalRecords);
                   setTotalPages(data.meta.totalPages);
-                  console.log(data.data);
                   setLazyOrders(data.data); 
                   setLoading(false);
               }
           }).catch(error => {
               toast.error(error.message);
-              console.error('There was a problem with the fetch operation:', error);
+
+              // console.error('There was a problem with the fetch operation:', error);
           });
       };
   
@@ -177,11 +174,8 @@ export default function OrdersTable({
   }, [loadLazyData]);
 
   const onPage = (event: DataTablePageEvent) => {
-      setlazyState(event);
-      console.log(event);
+    setlazyState(event);
   };
-
-
 
   const dateTemplate = (order: IOrder) => {
     const { createdAt } = order;
@@ -190,15 +184,14 @@ export default function OrdersTable({
   };
 
   function amountTemplate(order: IOrder) {
-
-    return formatCurrency(order.totalAmountForSeller);
+    return formatCurrency(order.totalAmount);
   }
 
   function actionTemplate(order: IOrder) {
     return (
       <div className='flex items-center gap-3'>
         <Link
-          href={page === "cancelled orders" ? `/dashboard/orders/cancelled-orders/${order.uuid}` : page === "recent orders" ? `/dashboard/orders/${order.uuid}` : `/dashboard/${page}/${order.uuid}`}
+          href={page === "cancelled orders" ? `/dashboard/orders/cancelled-orders/${order._id}` : page === "recent orders" ? `/dashboard/orders/${order._id}` : `/dashboard/${page}/${order._id}`}
           className='text-xl text-neutral'
         >
           <FaEye />
@@ -247,11 +240,11 @@ export default function OrdersTable({
   }
 
   function productTemplate(order: IOrder) {
-    const firstProduct = order.subOrders[0].items[0];
+    const firstProduct = order.products[0];
     return (
       <div className='flex items-center gap-4'>
         <Image
-          src={firstProduct.type === "pet" ? (firstProduct.product?.pet_images[0] ?? "") : (firstProduct.product?.accessoryImages[0] ?? "")}
+          src={firstProduct.productType === "pet" ? (firstProduct.product?.pet_images[0] ?? "") : (firstProduct.product?.accessoryImages[0] ?? "")}
           alt='image'
           width={20}
           height={20}
@@ -260,27 +253,17 @@ export default function OrdersTable({
 
         <div className='div capitalize flex-1'>
           <p className='text-sm flex-1 font-medium'>
-            {firstProduct.type === "pet" ? firstProduct.product?.breed : firstProduct.product?.name}
+            {firstProduct.productType === "pet" ? firstProduct.product?.breed : firstProduct.product?.name}
           </p>
-          {order.subOrders[0].items.length > 1 && (
+          {order.products.length > 1 && (
             <p className='text-xs text-neutral'>
-              +{order.subOrders[0].items.length} other products
+              +{order.products.length} other products
             </p>
           )}
         </div>
       </div>
     );
   }
-
-  // function customerTemplate(order: IOrder) {
-  //   return (
-  //     <div className='flex flex-col gap-2 capitalize'>
-  //       <p className='text-sm flex-1 font-medium'>{order.user.firstName + " " + order.user.lastName}</p>
-  //       {/* <p className='text-xs text-neutral'>{order.receiverPhone}</p> */}
-  //       <p className='text-xs text-neutral'>{order.user.email}</p>
-  //     </div>
-  //   );
-  // }
 
   const getOrdersByDate = useMemo(() => {
     if (selectedDate) {
@@ -341,59 +324,6 @@ export default function OrdersTable({
     return new Date(deliveryDate) < fortyEightHoursAgo;
   }
 
-  // async function bulkUpdateOrders(orders: IOrder[], status: string) {
-  //     setCardOpen(prev => !prev);
-
-  //     // Checks if there's an order that's been delivered and whose deivery date exceeds 48 hours
-  //     let deliveredOrder: boolean = false;
-
-  //     if(status.toLowerCase() === "cancelled") {
-  //       const checkingOrders = orders.map((order) => {
-  //         if(order.status.toLowerCase() === "delivered" && hasDeliveryTimeExceeded(order.deliveryDate)) {
-  //           toast.error("You cannot cancel an order that has been delivered for more than 48 hours.");
-  //           deliveredOrder = true;
-  //           return;
-  //         }
-  //       }); 
-  //     }
-
-  //     if(status.toLowerCase() === "processing") {
-  //       const checkingOrders = orders.map((order) => {
-  //         if(order.status.toLowerCase() === "cancelled") {
-  //           toast.error("You cannot set a cancelled order to processing.");
-  //           deliveredOrder = true;
-  //           return;
-  //         }
-  //       }); 
-  //     }
-      
-  //     if(!deliveredOrder) {
-  //       const token = cookies.get('urban-token');
-  //       // console.log(token);
-  
-  //       toast.loading('Updating orders...');
-
-  //       const data = orders.map((order) => {
-  //         const { id } = order;
-  //         return { id: id, status: status }
-  //       }); 
-
-  //       const res = await httpService.patch(
-  //         `${ENDPOINTS.ORDERS}`,
-  //         data,
-  //         `Bearer ${token}`
-  //       );
-
-  //       toast.dismiss();
-  //       if (res.status === 200) {
-  //         console.log(res);
-  //         toast.success('Orders successfully updated!');
-  //         router.refresh();
-  //         loadLazyData();
-  //       } else toast.error('Cannot update orders at this time!');
-  //     }
-  // }
-
   const debouncedSearch = useMemo(() => {
     let timer: NodeJS.Timeout;
 
@@ -433,28 +363,6 @@ export default function OrdersTable({
 
   return (
     <>
-      <div className='flex flex-col w-full justify-between sm:flex-row lg:items-center gap-8 mb-4 py-4'>        
-        {/* <div className='flex items-center gap-4'>
-          {selectedOrders.length > 0 && (
-            <div className="relative">
-              <Button variant='outlined' onClick={() => setCardOpen(prev => !prev)}>
-                <LuClipboardCheck />
-                Update Status
-              </Button>
-
-              {cardOpen && 
-                <div className='absolute card z-20 rounded-xl p-4 bg-white border border-gray-200'>
-                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Cancelled")} className='text-sm cursor-pointer p-2 text-black hover:bg-[#CFA31C] flex justify-center items-center'>Cancelled</p>
-                  <p onClick={() => bulkUpdateOrders(selectedOrders, "Processing")} className='text-sm cursor-pointer p-2 text-black hover:bg-[#CFA31C] flex justify-center items-center'>Processing</p>
-                  [Placed, Processing, Packed, Shipping, Delivered, Cancelled, Confirmed]
-                </div>
-              }
-              
-            </div>
-          )}
-        </div> */}
-      </div>
-
       <div className='justify-between flex items-center gap-3 mb-2 w-full'>
         {/* <div className=''>
           <TextInput
@@ -493,39 +401,32 @@ export default function OrdersTable({
             selection={selectedOrders!}
             scrollable={true}
             onSelectionChange={handleChangeSelectedOrders}
-            dataKey='uuid'
+            dataKey='_id'
             // tableStyle={{ minWidth: '80rem' }}
             paginator
             paginatorClassName='flex justify-between overflow-x-auto'
             paginatorTemplate={paginatorTemplate(totalRecords, lazyState.page)}
             rows={10}
-            // rowsPerPageOptions={[20, 50, 100, 250]}
             className='rounded-md text-sm'
             sortOrder={-1}
             sortField='createdAt'
             showSelectAll
             sortIcon={<IoIosArrowDown />}
             selectionAutoFocus={true}
-            onRowClick={(e) => router.push(`/admin/orders/${e.data.uuid}`)}
+            onRowClick={(e) => router.push(`/dashboard/orders/${e.data._id}`)}
             rowClassName={rowClassTemplate}
           >
             {/* <Column selectionMode='multiple' body={checkBoxTemplate} headerStyle={{ width: '3rem' }} className='group'/> */}
             <Column field='uuid' body={idTemplate} header='Order ID' className='text-[#F2C94C]'/>
             <Column body={productTemplate} header='Product' />
-            <Column field='date' header='Date' body={dateTemplate} sortable />
-            {/* <Column
-              field='customer.email'
-              body={customerTemplate}
-              header='Customer'
-            /> */}
             <Column
-              field='totalAmountForSeller'
+              field='totalAmount'
               header='Total Amount'
               body={amountTemplate}
               sortable
             />
-            {/* <Column header='Payment' field="paymentMethod" /> */}
             <Column field='status' header='Status' sortable body={statusTemplate} />
+            <Column field='date' header='Date' body={dateTemplate} sortable />
             <Column field='action' header='Action' body={actionTemplate} />
           </DataTable>
       </div>

@@ -25,20 +25,21 @@ export default function OrderDetailsPage() {
       if (params.id) {
         try {
           setLoading(true);
-          const token = cookies.get('urban-token');
+          const token = cookies.get('pettify-token');
 
-          const baseUrl = process.env.NEXT_PUBLIC_ADMIN_API_BASE_URL;
+          const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
           const apiRes = await fetch(
-            `${baseUrl}/api/v1/${ENDPOINTS.ORDERS}/${params.id}`,
+            `${baseUrl}/api/v1/${ENDPOINTS.ORDERS}${params.id}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
 
-              next: {
-                revalidate: 10,
-              },
+              cache: "no-store"
+              // next: {
+              //   revalidate: 10,
+              // },
             }
           );
 

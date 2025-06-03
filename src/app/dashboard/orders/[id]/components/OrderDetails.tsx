@@ -80,7 +80,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
   }
 
   const cookies = new Cookies();
-  const token = cookies.get('urban-token');
+  const token = cookies.get('pettify-token');
 
   const httpService = new HTTPService();
 
@@ -221,7 +221,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
   return (
     <div>
       {/* Grid 1 */}
-      <div className='grid md:grid-cols-2 xl:grid-cols-3 gap-4 mb-8'>
+      <div className='grid md:grid-cols-2 xl:grid-cols-2 gap-4 mb-8'>
         {/* Order Details */}
         <div className='py-4 px-2 sm:p-4 border border-gray-200 bg-white rounded-xl'>
           <p className='text-lg font-medium text-gray-700 mb-8 flex items-center justify-between'>
@@ -244,6 +244,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
             <p>{moment(order?.createdAt).format('MMM Do YYYY, h:mm a')}</p>
           </div>
           {/*  */}
+
           {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
               <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
@@ -256,6 +257,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
             <p>{order?.paymentMethod}</p>
           </div> */}
           {/*  */}
+
           <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
             <div className='flex items-center gap-2'>
               <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
@@ -285,8 +287,8 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               </div>
             </div>
             <p>
-              {order?.buyerName}
-              {/* {order?.buyer.firstname + " " + order?.buyer.lastname} */}
+              {/* {order?.buyerName} */}
+              {order?.buyer.firstname + " " + order?.buyer.lastname}
             </p>
           </div>
 
@@ -318,63 +320,6 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
           </div>
         </div>
         
-        {/* Document */}
-        <div className='py-4 px-2 sm:p-4 border border-gray-200 bg-white rounded-xl'>
-          <p className='text-lg font-medium text-gray-700 mb-8'>Document</p>
-
-          {/*  */}
-          <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
-            <div className='flex items-center gap-2'>
-              <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
-                <TbFileInvoice />
-              </div>
-              <div className='flex-1'>
-                <p>Invoice</p>
-              </div>
-            </div>
-            <p>{order?.uuid}</p>
-          </div>
-
-          {/*  */}
-          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
-            <div className='flex items-center gap-2'>
-              <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
-                <LuTruck />
-              </div>
-              <div className='flex-1'>
-                <p>Shipping</p>
-              </div>
-            </div>
-            <p>{order?.shippingId}</p>
-          </div> */}
-
-          {/*  */}
-          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
-            <div className='flex items-center gap-2'>
-              <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
-                <LuTruck />
-                <FaLocationDot />
-              </div>
-              <div className='flex-1'>
-                <p>Postal/Zip Code</p>
-              </div>
-            </div>
-            <p>{order?.shippingAddress?.zipCode ?? ""}</p>
-          </div> */}
-
-          {/*  */}
-          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
-            <div className='flex items-center gap-2'>
-              <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
-                <HiOutlineBadgeCheck />
-              </div>
-              <div className='flex-1'>
-                <p>Rewards</p>
-              </div>
-            </div>
-            <p>40000 Points</p>
-          </div> */}
-        </div>
       </div>
 
       {/* Grid 2 */}
@@ -382,7 +327,6 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
         <div className='col-span-1 xl:col-span-4 w-full'>
           <div className='p-4 sm:p-6 border border-gray-200 bg-white rounded-xl w-full'>
             <p className='text-lg font-medium text-gray-700 mb-8'>Order List</p>
-
             <OrderDetailsTable
               orderList={order?.products as IProductItem[]}
             />
@@ -493,7 +437,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                   </p>
                 </div>
               </div>
-              {/* Order Delivered */}
+              {/* Order Delivered/Picked */}
               <div className='flex items-center gap-2 my-8 z-10 relative'>
                 <div
                   className={clsx(
@@ -505,7 +449,7 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
                   <IoCheckmark />
                 </div>
                 <div className='flex-1'>
-                  <p className='text-gray-600'>Delivered</p>
+                  <p className='text-gray-600'>Picked/Delivered</p>
 
                   <p className='text-neutral text-xs font-light'>
                     {order?.status.toLowerCase() === 'delivered' ? (
@@ -520,13 +464,13 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
               </div>
             </div>
 
-            {
+            {/* {
               order?.status.toLowerCase() !== 'delivered' && order?.status.toLowerCase() !== 'cancelled' && order?.status.toLowerCase() !== 'refunded' && 
               <div className='flex items-center gap-2 flex-wrap'>
-                <Button onClick={activateModal}>Update Status</Button>
+                <Button onClick={activateModal} className='text-white'>Update Status</Button>
                 <Button variant='outlined' onClick={() => setCancelOrderModal(true)}>Cancel Order</Button>
               </div>
-            }
+            } */}
 
             {/* Update Status Modal */}
             <Modal
@@ -672,3 +616,62 @@ export default function OrderDetails({ order }: { order: IOrder | null }) {
     </div>
   );
 }
+
+
+        // Document
+        // <div className='py-4 px-2 sm:p-4 border border-gray-200 bg-white rounded-xl'>
+        //   <p className='text-lg font-medium text-gray-700 mb-8'>Document</p>
+
+          {/*  */}
+          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
+            <div className='flex items-center gap-2'>
+              <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
+                <TbFileInvoice />
+              </div>
+              <div className='flex-1'>
+                <p>Invoice</p>
+              </div>
+            </div>
+            <p>{order?.uuid}</p>
+          </div> */}
+
+          {/*  */}
+          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
+            <div className='flex items-center gap-2'>
+              <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
+                <LuTruck />
+              </div>
+              <div className='flex-1'>
+                <p>Shipping</p>
+              </div>
+            </div>
+            <p>{order?.shippingId}</p>
+          </div> */}
+
+          {/*  */}
+          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
+            <div className='flex items-center gap-2'>
+              <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
+                <LuTruck />
+                <FaLocationDot />
+              </div>
+              <div className='flex-1'>
+                <p>Postal/Zip Code</p>
+              </div>
+            </div>
+            <p>{order?.shippingAddress?.zipCode ?? ""}</p>
+          </div> */}
+
+          {/*  */}
+          {/* <div className='text-gray-600 flex items-center justify-between gap-8 mt-2 text-sm'>
+            <div className='flex items-center gap-2'>
+              <div className='h-12 w-12 bg-gray-200 border-4 border-gray-100 rounded-full flex items-center justify-center text-xl'>
+                <HiOutlineBadgeCheck />
+              </div>
+              <div className='flex-1'>
+                <p>Rewards</p>
+              </div>
+            </div>
+            <p>40000 Points</p>
+          </div> */}
+        // </div>

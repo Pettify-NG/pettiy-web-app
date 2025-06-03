@@ -24,7 +24,7 @@ export default function DashboardOrdersTable({
   };
 
   function amountTemplate(order: IOrder) {
-    return formatCurrency(order.totalAmountForSeller);
+    return formatCurrency(order.totalAmount);
   }
 
   function statusTemplate(order: IOrder) {
@@ -38,6 +38,9 @@ export default function DashboardOrdersTable({
         break;
       case 'shipped':
         styles = 'bg-[#E8F8FD] text-[#13B2E4]';
+        break;
+      case 'picked':
+        styles = 'bg-green-100 text-green-600';
         break;
       case 'delivered':
         styles = 'bg-green-100 text-green-600';
@@ -61,7 +64,6 @@ export default function DashboardOrdersTable({
 
     return (
       <span className={`p-2 px-4 text-xs font-medium rounded-full whitespace-nowrap ${styles}`}>
-        {/* {order.status} */}
         {String(order.status).charAt(0).toUpperCase() + String(order.status).slice(1)}
       </span>
     );
@@ -131,22 +133,21 @@ export default function DashboardOrdersTable({
           sortOrder={-1}
           sortField='createdAt'
           showSelectAll
-          sortIcon={<IoIosArrowDown />}
+          // sortIcon={<IoIosArrowDown />}
           selectionAutoFocus={true}
-          onRowClick={(e) => router.push(`/dashboard/orders/${e.data.uuid}`)}
+          onRowClick={(e) => router.push(`/dashboard/orders/${e.data._id}`)}
           rowClassName={rowClassTemplate}
         >
           <Column field='uuid' header='Order ID' body={idTemplate} className='text-[#F2C94C]'/>
           {/* <Column body={productTemplate} header='Products' /> */}
           <Column
-              field='totalAmountForSeller'
+              field='totalAmount'
               header='Amount'
               body={amountTemplate}
-              sortable
           />
-          <Column field="selectedLocation" header="Delivery Location" />
-          <Column field='status' header='Status' sortable body={statusTemplate} />
-          <Column field='createdAt' header='Date' body={dateTemplate} sortable />
+          {/* <Column field="selectedLocation" header="Delivery Location" /> */}
+          <Column field='status' header='Status' body={statusTemplate} />
+          <Column field='createdAt' header='Date' body={dateTemplate} />
         </DataTable>
       </div>
     </>

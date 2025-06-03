@@ -13,7 +13,7 @@ import INotification, { INotifications } from '@/interfaces/notifications';
 import HTTPService from '@/services/http';
 import ENDPOINTS from '@/config/ENDPOINTS';
 // import { NotificationContext } from '@/context/NotificationContext';
-import { paginatorTemplate } from '@/components/Shared/OrdersComponents/OrdersTable';
+import { paginatorTemplate } from '@/components/Dashboard/OrdersComponents/OrdersTable';
 
 interface LazyTableState { 
     first: number; 

@@ -3,7 +3,7 @@ import React from 'react'
 import { useState } from 'react';
 
 import StatCards from '../Shared/DashboardComponents/StatsCard';
-import DashboardOrdersTable from '../Shared/OrdersComponents/DashboardOrdersTable';
+import DashboardOrdersTable from '../Dashboard/OrdersComponents/DashboardOrdersTable';
 import CreateListingPopup from '../Dashboard/CreateListingPopup';
 import { IDashboardData } from '@/interfaces/dashboard';
 

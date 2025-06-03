@@ -5,10 +5,8 @@ import { CiSearch } from 'react-icons/ci';
 
 import OrdersTable from './OrdersTable';
 import TextInput from '../../Global/TextInput';
-import Pagination from '../Paginatioin';
-// import { IOrder } from '@/interfaces/orders';
+import Pagination from '../../Shared/Paginatioin';
 import IOrder from '@/interfaces/orders';
-import useFetch from '@/hooks/useFetch';
 
 export default function Orders() {
   const [selectedOrders, setSelectedOrders] = useState<IOrder[]>([]);
@@ -65,10 +63,7 @@ export default function Orders() {
       </div>
 
       {/* Orders Table */}
-      <OrdersTable
-          selectedOrders={[]}
-          searchValue=''
-      />
+      <OrdersTable />
     </>
   );
 }

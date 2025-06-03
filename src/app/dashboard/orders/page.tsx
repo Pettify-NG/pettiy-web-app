@@ -1,6 +1,6 @@
 import React from "react";
 
-import Orders from "@/components/Shared/OrdersComponents/Orders";
+import Orders from "@/components/Dashboard/OrdersComponents/Orders";
 
 export default function Order () {
     return (

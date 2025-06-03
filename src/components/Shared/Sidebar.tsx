@@ -12,8 +12,8 @@ import Image from 'next/image';
 import { IoPersonCircleSharp } from "react-icons/io5";
 
 // Rest of your imports from custom components...
-import logoIcon from '../../../public/pettify-logo.jpg';
-import logo from '../../../public/pettify-logo.jpg';
+import logoIcon from '../../../public/pettify-logo.png';
+import logo from '../../../public/pettify-logo.png';
 import { ISidebarLink, sellerLinks } from '@/static';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
@@ -172,19 +172,18 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
         }`}
       >
         {/* Button for toggling sidebar */}
-        <div className='flex items-center justify-center py-[15px] px-[20px]'>
+        <div className='flex items-center justify-center h-[50px] mx-auto w-1/2'>
           <Image
               onClick={toggleSidebar}
-              src={isOpen? logo : logoIcon}
+              src={isOpen ? logo : logoIcon}
               alt='Urban Overstock Logo'
               className={`duration-500 ${isOpen ? 'w-2/3' : 'w-1/2'}`}
             />
         </div>
 
         {/* User profile */}
-        <div className='border border-gray-800 p-4 rounded mb-6'>
+        <div className='border border-gray-800 p-4 rounded mb-4'>
           <div className={`flex ${isOpen ? "justify-between" : "justify-center"} items-center`}>
-
             {
               adminDetails?.user?.profileImage ? 
               <Image
@@ -207,8 +206,8 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
               /> */}
 
               <div className={`flex flex-col gap-2 ${isOpen ? '' : 'hidden'}`}>
-                  <p>{(adminDetails?.user?.firstname || "") + " " + (adminDetails?.user?.lastname || "")}</p>
-                  <p className='text-[#F2C94C] '>{adminDetails?.user?.username}</p>
+                  <p className='text-sm'>{(adminDetails?.user?.firstname || "") + " " + (adminDetails?.user?.lastname || "")}</p>
+                  <p className='text-[#F2C94C] text-sm'>{adminDetails?.user?.username}</p>
               </div>
           </div>
         </div>
@@ -273,7 +272,7 @@ export default function Sidebar({ isOpen, toggleSidebar, setSidebarOpen, notific
           }
 
           {/* Logout */}
-          <div className='cursor-pointer mt-[20px] rounded p-2 flex items-center bg-[#ED770B] hover:bg-white'>
+          <div className='cursor-pointer mt-[10px] rounded p-2 flex items-center bg-[#ED770B] hover:bg-white'>
               <div
                 onClick={() => logOut()}
                 className={`uo-tool-tip py-4 flex gap-4 w-full h-10 items-center duration-500 text-white rounded-md font-medium white hover:text-neutral hover:bg-gray-50

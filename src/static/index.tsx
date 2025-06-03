@@ -12,12 +12,12 @@ import { IoIosNotifications } from "react-icons/io";
 export const sellerLinks: ISidebarLink[] = [
   { name: 'home', icon: <IoMdHome />, page: '/dashboard' },
   {
-    name: 'pet listings',
+    name: 'pets',
     icon: <MdOutlinePets />,
     page: '/dashboard/pets',
   },
   {
-    name: 'accessories listings',
+    name: 'accessories',
     icon: <FaBone />,
     page: '/dashboard/accessories'
   },

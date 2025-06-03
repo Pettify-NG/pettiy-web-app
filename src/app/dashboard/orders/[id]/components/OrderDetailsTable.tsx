@@ -14,15 +14,16 @@ export default function OrdersTable({
 }: {
   orderList: IProductItem[];
 }) {
+  console.log(orderList);
   function quantityTemplate(item: IProductItem) {
-    return `{item.quantity}`;
+    return item.quantity;
   }
 
   function amountTemplate(item: IProductItem) {
     return formatCurrency(item.price);
   }
   function totalTemplate(item: IProductItem) {
-    return formatCurrency(item.totalPrice);
+    return formatCurrency(item.totalPrice ?? (item.quantity * item.price));
   }
 
   function productTemplate(item: IProductItem) {
@@ -31,19 +32,19 @@ export default function OrdersTable({
     return (
       <div className='flex items-center gap-4'>
         <Image
-          src={item.product.productType === "pet" ? item.product.pet_images[0] : item.product.accessoryImages[0]}
+          src={item?.productType === "pet" ? item?.product?.pet_images?.[0] ?? "" : item?.product?.accessoryImages?.[0] ?? ""}
           alt={"Product Image"}
           width={20}
           height={20}
           className='h-12 w-12 bg-[#1b1b1b] rounded-md'
         />
         <div className='flex flex-col gap-1'>
-          <p className='text-sm flex-1 font-medium'>{(item.product.productType === "pet" ? item.product.breed : item.product.name) ?? ""}</p>
+          <p className='text-sm flex-1 font-medium'>{(item.productType === "pet" ? item.product.breed : item.product.name) ?? ""}</p>
           {/* <div className='text-xs flex gap-1 items-center '>
             <div style={{ backgroundColor: item.color }} className={`h-4 w-4 rounded`}></div>
             <p className='text-xs text-neutral'>{item.color}</p>
           </div> */}
-          <p className='text-sm'>Size: {item.product.category ?? ""}</p>
+          <p className='text-sm'>{item?.product?.category ?? ""}</p>
         </div>
       </div>
     );
@@ -52,7 +53,7 @@ export default function OrdersTable({
   const subTotal = useMemo(() => {
     if (orderList) {
       const total = orderList.reduce((a, b: IProductItem) => {
-        return a + b.totalPrice;
+        return a + (b.totalPrice ?? (b.price * b.quantity));
       }, 0);
 
       return total;
@@ -73,25 +74,25 @@ export default function OrdersTable({
         <Column
           body={productTemplate}
           header='Product'
-          style={{ width: '20%' }}
+          // style={{ width: '20%' }}
           className='border-b border-b-gray-100'
         />
         <Column
           body={quantityTemplate}
           header='QTY'
-          style={{ width: '20%' }}
+          // style={{ width: '20%' }}
           className='border-b border-b-gray-100'
         />
         <Column
           header='Price'
           body={amountTemplate}
-          style={{ width: '20%' }}
+          // style={{ width: '20%' }}
           className='border-b border-b-gray-100'
         />
         <Column
           header='Total'
           body={totalTemplate}
-          style={{ width: '20%' }}
+          // style={{ width: '20%' }}
           className='border-b border-b-gray-100'
         />
       </DataTable>
@@ -119,7 +120,7 @@ export default function OrdersTable({
           <div className=''></div>
           <div className=''></div>
           <p className='px-4'>Grand Total</p>
-          <p className='px-4'>{formatCurrency(subTotal + 5)}</p>
+          <p className='px-4'>{formatCurrency(subTotal)}</p>
         </div>
       </div>
     </div>

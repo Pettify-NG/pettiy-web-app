@@ -17,7 +17,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { IListing } from "@/interfaces/listings";
 import { formatCurrency, calculatePetAge } from "@/helpers";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { paginatorTemplate } from "@/components/Shared/OrdersComponents/OrdersTable";
+import { paginatorTemplate } from "@/components/Dashboard/OrdersComponents/OrdersTable";
 import HTTPService from "@/services/http";
 import Modal from "@/components/Global/Modal";
 import ENDPOINTS from "@/config/ENDPOINTS";
