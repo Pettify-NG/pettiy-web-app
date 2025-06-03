@@ -14,6 +14,18 @@ import Button from "@/components/Global/Button";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import nigeriaLocations from "@/data/lgas.json";
 
+export interface PickupLocation {
+  state: string;
+  lga: string;
+  address: string;
+  nearestLandmark: string;
+}
+
+export interface ILocation {
+  pickupLocation: PickupLocation;
+  contactPhoneNumber: string;
+}
+
 function CustomError({ error }: { error?: string | string[] | FormikErrors<any> | FormikErrors<any>[] | undefined }) {
     if (!error) return;
 
@@ -36,8 +48,8 @@ function CustomError({ error }: { error?: string | string[] | FormikErrors<any> 
     );
 }
 
-const SettingsForm = (pickupLocation: any ) => {
-    console.log(pickupLocation);
+const SettingsForm = ( { pickupLocation, contactPhoneNumber }: ILocation ) => {
+    // console.log(pickupLocation);
 
     const httpService = new HTTPService();
 
@@ -48,11 +60,11 @@ const SettingsForm = (pickupLocation: any ) => {
 
     const formik = useFormik({
         initialValues: {
-            state: pickupLocation?.pickupLocation?.state ?? "",
-            lga: pickupLocation?.pickupLocation?.lga ?? "",
-            address: pickupLocation?.pickupLocation?.address ?? "",
-            nearestLandmark: pickupLocation?.pickupLocation?.nearestLandmark ?? "",
-            contactPhoneNumber: pickupLocation?.contactPhoneNumber ?? "",
+            state: pickupLocation?.state ?? "",
+            lga: pickupLocation?.lga ?? "",
+            address: pickupLocation?.address ?? "",
+            nearestLandmark: pickupLocation?.nearestLandmark ?? "",
+            contactPhoneNumber: contactPhoneNumber ?? "",
         },
         validationSchema: Yup.object({
             state: Yup.string().required().label("State"),
