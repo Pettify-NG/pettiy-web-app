@@ -33,7 +33,6 @@ export default function ProfileDetails ({ params }: { params: { id: string } }) 
     }
 
     const { data, error, isLoading, refetch } = useFetch<UserData>(fetchUrl, options);
-    console.log(data);
 
     if(!data) {
         return <LoadingScreen />

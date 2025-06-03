@@ -46,7 +46,6 @@ function CustomError({ error }: { error?: string }) {
 }
   
 export default function ProfileForm({ user }: { user?: UserData | null }) {
-    console.log(user);
 
     const [profileImage, setProfileImage] = useState<IProfileImage>({} as IProfileImage);
 

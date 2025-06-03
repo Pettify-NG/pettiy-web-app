@@ -320,33 +320,34 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
                         <RiDeleteBin6Fill />
                       </button>
                     </div>
-                  ))}
+                  ))
+                }
 
-                                      {accessory && accessory.accessoryImages.length > 0 &&
-                                          existingImages?.map((img, index) => (
-                                          <div
-                                              key={index}
-                                              className='h-28 w-28 relative rounded-xl'
-                                          >
-                                          <span className='text-xs absolute top-2 left-2 text-dark bg-green-100 py-1 px-2 rounded-md'>
-                                              {index + 1}
-                                          </span>
-                  
-                                          <Image
-                                              src={img}
-                                              alt={"Image"}
-                                              width={100}
-                                              height={100}
-                                              className='rounded-lg w-full h-full object-cover'
-                                          />
-                                          <button
-                                              className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
-                                              onClick={() => removeAlreadyUploadedImage(img)}
-                                          >
-                                              <RiDeleteBin6Fill />
-                                          </button>
-                                          </div>
-                                      ))}
+                {accessory && accessory.accessoryImages.length > 0 &&
+                    existingImages?.map((img, index) => (
+                    <div
+                        key={index}
+                        className='h-28 w-28 relative rounded-xl'
+                    >
+                    <span className='text-xs absolute top-2 left-2 text-dark bg-green-100 py-1 px-2 rounded-md'>
+                        {index + 1}
+                    </span>
+
+                    <Image
+                        src={img}
+                        alt={"Image"}
+                        width={100}
+                        height={100}
+                        className='rounded-lg w-full h-full object-cover'
+                    />
+                    <button
+                        className='absolute bottom-4 right-4 text-dark rounded-md p-1 bg-green-100'
+                        onClick={() => removeAlreadyUploadedImage(img)}
+                    >
+                        <RiDeleteBin6Fill />
+                    </button>
+                    </div>
+                ))}
               </div>
               <Button
                 size='small'
@@ -373,7 +374,6 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
           </div> */}
 
           {/* Price */}
-
           <div className='mb-6'>
               <label htmlFor='name' className='text-sm text-neutral mb-2 block'>
                 Price (Naira)
@@ -388,7 +388,6 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
           </div>
 
           {/* No. Of Stock */}
-
           <div className='mb-6'>
             <label htmlFor='stock' className='text-sm text-neutral mb-2 block'>
               Quantity
@@ -402,88 +401,86 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
             />
           </div>
 
-                    {/* Location */}
-          
-                    <label htmlFor='name' className='text-lg text-neutral mb-2 block'>
-                      Location
-                    </label>
-          
-                    <div className="my-6 w-full">
-                      <div className="flex mb-6 items-center gap-3 w-full">
-                          {/* State */}
-          
-                          <div className='relative w-full'>
-                            <label
-                                htmlFor='state'
-                                className='text-sm text-neutral mb-2 block'
-                            >
-                                State
-                            </label>
-          
-                            <select
-                                name='state'
-                                id='state'
-                                className='text-black bg-[#F0F1F3] font-medium'
-                                onChange={formik.handleChange}
-                                value={formik.values.state}
-                            >
-                                <option value="" defaultChecked disabled>-- Select a State --</option>
-                                {Object.keys(nigeriaLocations).map((state) => (
-                                  <option key={state} value={state}>
-                                    {state}
-                                  </option>
-                                ))}
-                            </select>
-                            <IoIosArrowDown className={`absolute right-4 ${formik.errors.state ? "top-10" : "bottom-4"}`} />
-                            <CustomError error={formik.errors.state} />
-                          </div>
-          
-                          {/* LGA */}
-                
-                          <div className='relative w-full'>
-                            <label
-                                htmlFor='lga'
-                                className='text-sm text-neutral mb-2 block'
-                            >
-                                LGA
-                            </label>
-          
-                            <select
-                                name='lga'
-                                id='lga'
-                                className='text-black bg-[#F0F1F3] font-medium'
-                                onChange={formik.handleChange}
-                                value={formik.values.lga}
-                                disabled={!formik.values.state}
-                            >
-                                <option value="" defaultChecked disabled>-- Select a LGA --</option>
-                                {(nigeriaLocations[formik.values.state as keyof typeof nigeriaLocations] || []).map((state: string, index: number) => (
-                                  <option key={index} value={state}>
-                                    {state}
-                                  </option>
-                                ))}
-                            </select>
-                            <IoIosArrowDown className={`absolute right-4 ${formik.errors.lga ? "top-10" : "bottom-4"}`} />
-                            <CustomError error={formik.errors.lga} />
-                          </div>
-                      </div>
-          
-                      {/* Address */}
-          
-                      {/* <div className='mb-6'>
-                          <label htmlFor='address' className='text-sm text-neutral mb-2 block'>
-                            Address
-                          </label>
-                          <TextInput
-                            placeholder='Enter address...'
-                            id='address'
-                            onChange={formik.handleChange}
-                            value={formik.values.address}
-                            error={formik.errors.address}
-                          />
-                      </div> */}
-                    </div>
+          {/* Location */}
+          <label htmlFor='name' className='text-lg text-neutral mb-2 block'>
+            Location
+          </label>
 
+          <div className="my-6 w-full">
+            <div className="flex mb-6 items-center gap-3 w-full">
+                {/* State */}
+
+                <div className='relative w-full'>
+                  <label
+                      htmlFor='state'
+                      className='text-sm text-neutral mb-2 block'
+                  >
+                      State
+                  </label>
+
+                  <select
+                      name='state'
+                      id='state'
+                      className='text-black bg-[#F0F1F3] font-medium'
+                      onChange={formik.handleChange}
+                      value={formik.values.state}
+                  >
+                      <option value="" defaultChecked disabled>-- Select a State --</option>
+                      {Object.keys(nigeriaLocations).map((state) => (
+                        <option key={state} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                  </select>
+                  <IoIosArrowDown className={`absolute right-4 ${formik.errors.state ? "top-10" : "bottom-4"}`} />
+                  <CustomError error={formik.errors.state} />
+                </div>
+
+                {/* LGA */}
+      
+                <div className='relative w-full'>
+                  <label
+                      htmlFor='lga'
+                      className='text-sm text-neutral mb-2 block'
+                  >
+                      LGA
+                  </label>
+
+                  <select
+                      name='lga'
+                      id='lga'
+                      className='text-black bg-[#F0F1F3] font-medium'
+                      onChange={formik.handleChange}
+                      value={formik.values.lga}
+                      disabled={!formik.values.state}
+                  >
+                      <option value="" defaultChecked disabled>-- Select a LGA --</option>
+                      {(nigeriaLocations[formik.values.state as keyof typeof nigeriaLocations] || []).map((state: string, index: number) => (
+                        <option key={index} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                  </select>
+                  <IoIosArrowDown className={`absolute right-4 ${formik.errors.lga ? "top-10" : "bottom-4"}`} />
+                  <CustomError error={formik.errors.lga} />
+                </div>
+            </div>
+
+            {/* Address */}
+
+            {/* <div className='mb-6'>
+                <label htmlFor='address' className='text-sm text-neutral mb-2 block'>
+                  Address
+                </label>
+                <TextInput
+                  placeholder='Enter address...'
+                  id='address'
+                  onChange={formik.handleChange}
+                  value={formik.values.address}
+                  error={formik.errors.address}
+                />
+            </div> */}
+          </div>
         </div>
       </div>
 

@@ -1,10 +1,11 @@
 'use client';
 import { clsx } from 'clsx/lite';
 import { ChangeEvent, useState } from 'react';
+import { FormikErrors } from 'formik';
 
 type InputType = React.InputHTMLAttributes<HTMLInputElement> & {
   id?: string;
-  error?: boolean | string;
+  error?: boolean | string | string[] | FormikErrors<any> | FormikErrors<any>[] | undefined;
   hint?: string;
   format?: boolean;
   rightIcon?: React.ReactNode;
@@ -46,6 +47,14 @@ export default function TextInput(props: InputType) {
     rounded ? 'rounded-full' : 'rounded-lg',
     className
   );
+
+      // Handle different types of `error`
+    const errorMessage =
+        typeof error === "string"
+        ? error
+        : Array.isArray(error)
+        ? error.join(", ")
+        : undefined; // Handle FormikErrors<any> if needed
 
   const [fValue, setFValue] = useState<string>(value ?? "");
 
@@ -119,7 +128,7 @@ export default function TextInput(props: InputType) {
       </div>
       {(error || hint) && (
         <div className='text-xs font-light mt-1 ml-1 p-2'>
-          {error && <span className='text-red-600'>{error}</span>}
+          {error && <span className='text-red-600'>{errorMessage}</span>}
           {hint && <span className='text-dark-200'>{hint}</span>}
         </div>
       )}

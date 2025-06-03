@@ -4,14 +4,41 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
 import Cookies from "universal-cookie";
+import { IoIosArrowDown } from "react-icons/io";
+import { FormikErrors } from "formik";
 
 import ENDPOINTS from "@/config/ENDPOINTS";
 import HTTPService from "@/services/http";
 import TextInput from "@/components/Global/TextInput";
 import Button from "@/components/Global/Button";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import nigeriaLocations from "@/data/lgas.json";
 
-const SettingsForm = () => {
+function CustomError({ error }: { error?: string | string[] | FormikErrors<any> | FormikErrors<any>[] | undefined }) {
+    if (!error) return;
+
+    // Handle different types of `error`
+    const errorMessage =
+        typeof error === "string"
+        ? error
+        : Array.isArray(error)
+        ? error.join(", ")
+        : undefined; // Handle FormikErrors<any> if needed
+
+    if (!errorMessage) return null;
+
+    return (
+        <div className='text-xs font-light ml-1 p-2 absolute -bottom-6'>
+            <span className='text-red-600'>
+                {errorMessage === "Category must be greater than or equal to 1" ? "Category field is required!": errorMessage}
+            </span>
+        </div>
+    );
+}
+
+const SettingsForm = (pickupLocation: any ) => {
+    console.log(pickupLocation);
+
     const httpService = new HTTPService();
 
     const cookies = new Cookies();
@@ -21,35 +48,35 @@ const SettingsForm = () => {
 
     const formik = useFormik({
         initialValues: {
-            email: "",
-            phoneNumber: "",
-            currentPassword: "",
-            newPassword: "",
+            state: pickupLocation?.pickupLocation?.state ?? "",
+            lga: pickupLocation?.pickupLocation?.lga ?? "",
+            address: pickupLocation?.pickupLocation?.address ?? "",
+            nearestLandmark: pickupLocation?.pickupLocation?.nearestLandmark ?? "",
+            contactPhoneNumber: pickupLocation?.contactPhoneNumber ?? "",
         },
         validationSchema: Yup.object({
-            email: Yup.string().required().label("Email"),
-            phoneNumber: Yup.string().required().label("Phone Number"),
-            currentPassword: Yup.string().required().label("Current Password"),
-            newPassword: Yup.string().required().label("New Password"),
+            state: Yup.string().required().label("State"),
+            lga: Yup.string().required().label("lga"),
+            address: Yup.string().required().label("Address"),
+            nearestLandmark: Yup.string().required().label("Nearest Landmark"),
+            contactPhoneNumber: Yup.string().required().label("Contact Phone Number"),
         }),
         onSubmit: async (values) => {
             try {
-                // const userData = {
-                //     firstname: values.firstname,
-                //     lastname: values.lastname,
-                //     username: values.username,
-                //     phonenumber: values.phoneNumber,
-                //     address: values.address,
-                //     state: values.state,
-                // };
-
-                console.log('Request Body: ');
+                const pickupLocation = {
+                    state: values.state,
+                    lga: values.lga,
+                    nearestLandmark: values.nearestLandmark,
+                    address: values.address,
+                };
 
                 httpService
                 .patch(
                     `${ENDPOINTS.USER}${seller_info.user._id}`, 
-                    // userData,
-                    {},
+                    {
+                        pickupLocation: pickupLocation,
+                        contactPhoneNumber: values.contactPhoneNumber,
+                    },
                     `Bearer ${token}`
                 )
                 .then((apiRes) => {
@@ -73,66 +100,182 @@ const SettingsForm = () => {
 
             <form
                 action=''
-                className='w-full max-w-md'
+                className='w-full max-w-md mt-10'
                 onSubmit={formik.handleSubmit}
             >
-                {/* Email address */}
-                <div className='my-6'>
-                    <label htmlFor='email' className='text-black text-lg font-semibold'>
-                        Email
-                    </label>
-                    <p className="my-4">Used to sign in, for email receipts, updates  and notifications</p>
+                <label htmlFor='name' className='text-lg text-black mb-2 block'>
+                    Pickup Location
+                </label>
+        
+                <div className="my-6 w-full">
+                    <div className="flex mb-6 items-center gap-3 w-full">
+                        {/* State */}
+                        <div className='relative w-full'>
+                            <label
+                                htmlFor='state'
+                                className='text-sm text-neutral mb-2 block'
+                            >
+                                State
+                            </label>
+        
+                            <select
+                                name='state'
+                                id='state'
+                                className='text-black bg-[#F0F1F3] font-medium'
+                                onChange={formik.handleChange}
+                                value={formik.values.state}
+                            >
+                                <option value="" defaultChecked disabled>-- Select a State --</option>
+                                {Object.keys(nigeriaLocations).map((state) => (
+                                <option key={state} value={state}>
+                                    {state}
+                                </option>
+                                ))}
+                            </select>
+                            <IoIosArrowDown className={`absolute right-4 ${formik.errors.state ? "top-10" : "bottom-4"}`} />
+                            <CustomError error={formik.errors.state} />
+                        </div>
+        
+                        {/* LGA */}
+                        <div className='relative w-full'>
+                            <label
+                                htmlFor='lga'
+                                className='text-sm text-neutral mb-2 block'
+                            >
+                                LGA
+                            </label>
+        
+                            <select
+                                name='lga'
+                                id='lga'
+                                className='text-black bg-[#F0F1F3] font-medium'
+                                onChange={formik.handleChange}
+                                value={formik.values.lga}
+                                disabled={!formik.values.state}
+                            >
+                                <option value="" defaultChecked disabled>-- Select a LGA --</option>
+                                {(nigeriaLocations[formik.values.state as keyof typeof nigeriaLocations] || []).map((state: string, index: number) => (
+                                <option key={index} value={state}>
+                                    {state}
+                                </option>
+                                ))}
+                            </select>
+                            <IoIosArrowDown className={`absolute right-4 ${formik.errors.lga ? "top-10" : "bottom-4"}`} />
+                            <CustomError error={formik.errors.lga} />
+                        </div>
+                    </div>
+        
+                    {/* Address */}
+                    <div className='mb-6'>
+                        <label htmlFor='address' className='text-sm text-neutral mb-2 block'>
+                            Address
+                        </label>
+                        <textarea
+                            name='address'
+                            id='address'
+                            placeholder='Enter pickup address...'
+                            onChange={formik.handleChange}
+                            value={formik.values.address}
+                            className='bg-[#F0F1F3] text-black font-medium'
+                        ></textarea>
+
+                        <CustomError error={formik.errors.address} />
+                    </div>
+
+                    {/* Nearest Landmark */}
+                    <div className='mb-6'>
+                        <label htmlFor='address' className='text-sm text-neutral mb-2 block'>
+                            Landmark
+                        </label>
+
+                        <textarea
+                            name='nearestLandmark'
+                            id='nearestLandmark'
+                            placeholder='Describe the nearest landmark(s) to your house address...'
+                            onChange={formik.handleChange}
+                            value={formik.values.nearestLandmark}
+                            className='bg-[#F0F1F3] text-black font-medium'
+                        ></textarea>
+
+                        <CustomError error={formik.errors.nearestLandmark} />
+                    </div>
+                </div>
+
+                <label htmlFor='name' className='text-lg text-black mb-2 block'>
+                    Contact Phone Number
+                </label>
+
+                {/* Contact Phone Number */}
+                <div className='mb-6'>
                     <TextInput
+                        placeholder='Enter contact phone number...'
+                        id='contactPhoneNumber'
                         onChange={formik.handleChange}
-                        placeholder='Enter your email'
-                        type='text'
-                        id='email'
-                        value={formik.values.email}
-                        error={formik.errors.email}
+                        value={formik.values.contactPhoneNumber}
+                        error={formik.errors.contactPhoneNumber}
                     />
                 </div>
 
-                {/* Phone Number */}
-                <div className='my-6'>
-                    <label htmlFor='phoneNumber' className='mb-3 text-black text-lg font-semibold'>
-                        Phone number
-                    </label>
-                    <TextInput
-                        onChange={formik.handleChange}
-                        placeholder='Enter your phone number'
-                        type='text'
-                        id='phoneNumber'
-                        value={formik.values.phoneNumber}
-                        error={formik.errors.phoneNumber}
-                    />
-                </div>
+                {/* <label htmlFor='name' className='text-lg text-neutral mb-2 block'>
+                    Delivery Prices
+                </label>
 
-                {/* Password */}
-                <div className='my-6 flex flex-col gap-3'>
-                    <label htmlFor='' className='mb-3 text-black text-lg font-semibold'>
-                        Password
-                    </label>
+                <div className="my-6 w-full">
+                    <div className='mb-6'>
+                        <label htmlFor='name' className='text-sm text-neutral mb-2 block'>
+                            Island 1
+                        </label>
+                        <TextInput
+                            placeholder='Enter delivery price of island one...'
+                            id='price'
+                            onChange={formik.handleChange}
+                            value={formik.values.islandOne}
+                            error={formik.errors.islandOne}
+                        />
+                    </div>
 
-                    <TextInput
-                        onChange={formik.handleChange}
-                        placeholder='Enter current password'
-                        type='text'
-                        id='currentPassword'
-                        value={formik.values.currentPassword}
-                        error={formik.errors.currentPassword}
-                    />
+                    <div className='mb-6'>
+                        <label htmlFor='name' className='text-sm text-neutral mb-2 block'>
+                            Island 1
+                        </label>
+                        <TextInput
+                            placeholder='Enter delivery price of island two...'
+                            id='price'
+                            onChange={formik.handleChange}
+                            value={formik.values.islandTwo}
+                            error={formik.errors.islandTwo}
+                        />
+                    </div>
 
-                    <TextInput
-                        onChange={formik.handleChange}
-                        placeholder='Enter new password'
-                        type='text'
-                        id='newPassword'
-                        value={formik.values.newPassword}
-                        error={formik.errors.newPassword}
-                    />
-                </div>
+                    <div className='mb-6'>
+                        <label htmlFor='name' className='text-sm text-neutral mb-2 block'>
+                            Island 3
+                        </label>
+                        <TextInput
+                            placeholder='Enter delivery price of island three...'
+                            id='price'
+                            onChange={formik.handleChange}
+                            value={formik.values.islandThree}
+                            error={formik.errors.islandThree}
+                        />
+                    </div>
 
-                <Button block loading={formik.isSubmitting} type='submit'>
+                    <div className='mb-6'>
+                        <label htmlFor='name' className='text-sm text-neutral mb-2 block'>
+                            Mainland 1
+                        </label>
+                        <TextInput
+                            placeholder='Enter delivery price of mainland one...'
+                            id='price'
+                            onChange={formik.handleChange}
+                            value={formik.values.mainlandOne}
+                            error={formik.errors.mainlandOne}
+                        />
+                    </div>
+
+                </div> */}
+
+                <Button block className="text-white" loading={formik.isSubmitting} type='submit'>
                     Submit
                 </Button>
             </form>
