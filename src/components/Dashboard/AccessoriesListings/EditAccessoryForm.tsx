@@ -59,9 +59,7 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
       price: accessory?.price ?? undefined,
       stock: accessory?.quantity ?? undefined,
       state: accessory?.location?.state ?? "",
-      lga: accessory?.location.lga ?? "",
-      // address: accessory?.location?.address ?? ""
-      // weight: "",
+      lga: accessory?.location?.lga ?? "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required().label("Name"),
@@ -71,14 +69,13 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
       stock: Yup.number().min(1).required().label("Number in stock"),
       state: Yup.string().required().label("State"),
       lga: Yup.string().required().label("LGA"),
-      // address: Yup.string().required().label("Address"),
-      // weight: Yup.number().min(1).required().label("Product Weight"),
     }),
     onSubmit: async (values) => {
-      if (productImages.length < 1) {
-        toast.error('Please add product images or variations.');
-      } else {
+      // if (productImages.length < 1) {
+      //   toast.error('Please add product images or variations.');
+      // } else {
         try {
+          toast.loading("Submitting...")
           const promises: Promise<Response>[] = [];
 
           productImages.forEach((image: ProductImage) => {
@@ -126,9 +123,7 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
               location: {
                 state: values.state,
                 lga: values.lga,
-                // address: values.address
               }
-              // weight: values.weight
             };
 
             console.log('Request Body: ', data);
@@ -145,6 +140,7 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
                 if (apiRes.data) {
                   formik.resetForm();
 
+                  toast.dismiss();
                   toast.success('Accessory listing updated.');
                   console.log(apiRes);
 
@@ -153,12 +149,16 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
                   }, 1000);
                 }
               });
-          } else console.log('Images not provided.');
+          } else {
+            toast.dismiss();
+            toast.error("Images not provided.");
+          }
         } catch (error: any) {
+          toast.dismiss();
           console.log(error);
           toast.error(error.message);
         }
-      }
+      // }
     },
     validateOnChange: true,
   });
@@ -495,7 +495,7 @@ const EditAccessoryForm = ({ accessory }: { accessory: IAccessory | undefined })
               </Link>
 
               <div className='max-w-md w-full'>
-                <Button type='submit' disabled={formik.isSubmitting} block loading={formik.isSubmitting}>
+                <Button type='submit' className="text-white" disabled={formik.isSubmitting} block loading={formik.isSubmitting}>
                   Add Listing
                 </Button>
               </div>

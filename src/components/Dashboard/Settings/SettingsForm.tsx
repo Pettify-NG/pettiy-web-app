@@ -19,6 +19,7 @@ export interface PickupLocation {
   lga: string;
   address: string;
   nearestLandmark: string;
+  nearestBusStop: string;
 }
 
 export interface ILocation {
@@ -65,12 +66,14 @@ const SettingsForm = ( { pickupLocation, contactPhoneNumber }: ILocation ) => {
             address: pickupLocation?.address ?? "",
             nearestLandmark: pickupLocation?.nearestLandmark ?? "",
             contactPhoneNumber: contactPhoneNumber ?? "",
+            nearestBusStop: pickupLocation?.nearestBusStop ?? "",
         },
         validationSchema: Yup.object({
             state: Yup.string().required().label("State"),
             lga: Yup.string().required().label("lga"),
             address: Yup.string().required().label("Address"),
             nearestLandmark: Yup.string().required().label("Nearest Landmark"),
+            nearestBusStop: Yup.string().required().label("Nearest Bust Stop"),
             contactPhoneNumber: Yup.string().required().label("Contact Phone Number"),
         }),
         onSubmit: async (values) => {
@@ -79,6 +82,7 @@ const SettingsForm = ( { pickupLocation, contactPhoneNumber }: ILocation ) => {
                     state: values.state,
                     lga: values.lga,
                     nearestLandmark: values.nearestLandmark,
+                    nearestBusStop: values.nearestBusStop,
                     address: values.address,
                 };
 
@@ -180,7 +184,7 @@ const SettingsForm = ( { pickupLocation, contactPhoneNumber }: ILocation ) => {
                     {/* Address */}
                     <div className='mb-6'>
                         <label htmlFor='address' className='text-sm text-neutral mb-2 block'>
-                            Address
+                            Full Address
                         </label>
                         <textarea
                             name='address'
@@ -192,6 +196,24 @@ const SettingsForm = ( { pickupLocation, contactPhoneNumber }: ILocation ) => {
                         ></textarea>
 
                         <CustomError error={formik.errors.address} />
+                    </div>
+
+                    {/* Nearest Bus Stop */}
+                    <div className='mb-6'>
+                        <label htmlFor='address' className='text-sm text-neutral mb-2 block'>
+                            Bus Stop
+                        </label>
+
+                        <textarea
+                            name='nearestBusStop'
+                            id='nearestBusStop'
+                            placeholder='Enter the nearest bus stop to your house address...'
+                            onChange={formik.handleChange}
+                            value={formik.values.nearestBusStop}
+                            className='bg-[#F0F1F3] text-black font-medium'
+                        ></textarea>
+
+                        <CustomError error={formik.errors.nearestBusStop} />
                     </div>
 
                     {/* Nearest Landmark */}
@@ -214,7 +236,7 @@ const SettingsForm = ( { pickupLocation, contactPhoneNumber }: ILocation ) => {
                 </div>
 
                 <label htmlFor='name' className='text-lg text-black mb-2 block'>
-                    Contact Phone Number
+                    Pick-Up Contact Phone Number
                 </label>
 
                 {/* Contact Phone Number */}

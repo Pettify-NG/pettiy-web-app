@@ -73,7 +73,6 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
       dateOfBirth: pet?.date_of_birth ?? " ",
       state: pet?.location?.state ?? "",
       lga: pet?.location.lga ?? "",
-      // address: pet?.location?.address ?? ""
     },
     validationSchema: Yup.object({
       petBreed: Yup.string().required().label("Pet Breed"),
@@ -88,7 +87,6 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
       dateOfBirth: Yup.string().required().label("Date of Birth"),
       state: Yup.string().required().label("State"),
       lga: Yup.string().required().label("LGA"),
-      // address: Yup.string().required().label("Address"),
     }),
     onSubmit: async (values) => {
     //   if (productImages.length < 1) {
@@ -299,7 +297,7 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
                   onChange={formik.handleChange}
                   value={formik.values.category}
               >
-                  <option value='' className="text-gray-500" defaultChecked disabled>
+                  <option value='' className="text-gray-200" defaultChecked disabled>
                       e.g Dog
                   </option>
                   <option value="Cat">
@@ -307,6 +305,12 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
                   </option>
                   <option value="Dog">
                       Dog
+                  </option>
+                  <option value="Bunny">
+                      Bunny
+                  </option>
+                  <option value="Others">
+                      Others
                   </option>
               </select>
               <IoIosArrowDown className={`absolute right-4 ${formik.errors.category ? "top-10" : "bottom-4"}`} />
@@ -490,7 +494,7 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
 
           <div className='mb-6'>
             <label htmlFor='petColor' className='text-sm text-neutral mb-2 block'>
-                    Pet Color
+              Pet Color
             </label>
             <TextInput
               placeholder='What color is the pet? e.g Brown, White'

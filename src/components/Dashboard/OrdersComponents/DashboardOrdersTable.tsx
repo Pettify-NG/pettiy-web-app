@@ -113,8 +113,34 @@ export default function DashboardOrdersTable({
   };
 
   const idTemplate = (data: IOrder) => {
-    console.log(data);
     return `ORDER-${data.uuid}`
+  }
+
+  function productTemplate(order: IOrder) {
+    const firstProduct = order.products[0];
+    
+    return (
+      <div className='flex items-center gap-4'>
+        <Image
+          src={firstProduct.productType === "pet" ? (firstProduct.product?.pet_images[0] ?? "") : (firstProduct.product?.accessoryImages[0] ?? "")}
+          alt='image'
+          width={20}
+          height={20}
+          className='h-12 w-12 bg-[#1b1b1b] rounded-md'
+        />
+
+        <div className='div capitalize flex-1'>
+          <p className='text-sm flex-1 font-medium'>
+            {firstProduct.productType === "pet" ? firstProduct.product?.breed : firstProduct.product?.name}
+          </p>
+          {order.products.length > 1 && (
+            <p className='text-xs text-neutral'>
+              +{order.products.length} other products
+            </p>
+          )}
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -133,13 +159,12 @@ export default function DashboardOrdersTable({
           sortOrder={-1}
           sortField='createdAt'
           showSelectAll
-          // sortIcon={<IoIosArrowDown />}
           selectionAutoFocus={true}
           onRowClick={(e) => router.push(`/dashboard/orders/${e.data._id}`)}
           rowClassName={rowClassTemplate}
         >
           <Column field='uuid' header='Order ID' body={idTemplate} className='text-[#F2C94C]'/>
-          {/* <Column body={productTemplate} header='Products' /> */}
+          <Column body={productTemplate} header='Product(s)' />
           <Column
               field='totalAmount'
               header='Amount'
