@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import Cookies from "universal-cookie";
 import { IoIosArrowDown } from "react-icons/io";
 import { FormikErrors } from "formik";
+import { useState } from "react";
 
 import ENDPOINTS from "@/config/ENDPOINTS";
 import HTTPService from "@/services/http";
@@ -50,7 +51,7 @@ function CustomError({ error }: { error?: string | string[] | FormikErrors<any> 
 }
 
 const SettingsForm = ( { pickupLocation, contactPhoneNumber }: ILocation ) => {
-    // console.log(pickupLocation);
+    const [checkedState, setCheckedState] = useState<boolean>(false);
 
     const httpService = new HTTPService();
 
@@ -116,11 +117,17 @@ const SettingsForm = ( { pickupLocation, contactPhoneNumber }: ILocation ) => {
 
             <form
                 action=''
-                className='w-full max-w-md mt-10'
+                className='w-full  mt-10'
                 onSubmit={formik.handleSubmit}
             >
+                <div className="text-black text-sm w-full mb-6">
+                    <p className="font-semibold">Important Notice:</p>
+                    <p>Please set up your preferred delivery options for buyers.</p>
+                    <p>Pettify currently offers delivery services within <strong>Lagos</strong> and selected locations only.</p> 
+                </div>
+
                 <label htmlFor='name' className='text-lg text-black mb-2 block'>
-                    Pickup Location
+                    Pick-Up Location
                 </label>
         
                 <div className="my-6 w-full">
@@ -309,7 +316,42 @@ const SettingsForm = ( { pickupLocation, contactPhoneNumber }: ILocation ) => {
 
                 </div> */}
 
-                <Button block className="text-white" loading={formik.isSubmitting} type='submit'>
+                <div className="flex flex-col gap-6 text-gray-600 mb-8 mt-6">
+                    <p> <strong>Note:</strong> Full pick-up details will only be shared with the buyer after payment confirmation.</p>
+                    
+                    <div>
+                        <h4 className="font-semibold text-lg">Home Delivery</h4>
+                        <p>For buyers who request home delivery, Pettify logistics team will come pick up the pet or accessories.</p>
+                        <p className="font-semibold italic mt-4">In order to ensure pet’s safety and health, we require you as a vendor to: </p>
+                        <ul className="list-disc pl-5 space-y-2">
+                            <li>Prepare the pet securely for pickup.</li>
+                            <li>Ensure the pet is placed inside a pet carrier/cage for safe transportation. (We advise you factor the cost of the pet carrier in the pricing of your pet)</li>
+                            <li>On no account should a live pet be handed over directly to the rider without proper containment.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 className="font-semibold text-lg">Outside Lagos Deliveries</h4>
+                        <p>
+                            For deliveries outside Lagos, you (the vendor) will coordinate and arrange delivery directly with the buyer. 
+                            Pettify will not manage logistics outside the supported regions at this time. Once payment is confirmed, name and phone number of the customer will be shared with you for smooth communication on delivery charges. 
+                            Once the buyer confirms payment of the Pet or accessories, payment will be made to your wallet for withdrawal.
+                        </p>
+                    </div>
+
+                    <label className="flex">
+                        <input
+                            type="checkbox"
+                            checked={checkedState}
+                            onChange={() => setCheckedState((prev: boolean) => prev = !prev)}
+                            className="mr-2 w-[24px] h-[24px]"
+                        />
+                        <p className="text-sm font-semibold italic">By submitting this form, you agree to Pettify’s safety and delivery guidelines.</p>
+                    </label>
+                </div>
+
+
+                <Button block disabled={!checkedState} className="text-white" loading={formik.isSubmitting} type='submit'>
                     Submit
                 </Button>
             </form>

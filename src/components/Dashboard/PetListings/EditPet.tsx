@@ -68,7 +68,6 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
       stock: pet?.quantity ?? undefined,
       petColor: pet?.color ?? " ",
       gender: pet?.gender ?? " ",
-      location: pet?.location ?? " ",
       vaccinationStatus: pet?.vaccine_status ? "true" : "false",
       dateOfBirth: pet?.date_of_birth ?? " ",
       state: pet?.location?.state ?? "",
@@ -82,7 +81,6 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
       stock: Yup.number().min(1).required().label("Number in stock"),
       petColor: Yup.string().required().label("Pet color"),
       gender: Yup.string().required().label("Gender"),
-      location: Yup.string().required().label("Location"),
       vaccinationStatus: Yup.boolean().required().label("Vaccination Status"),
       dateOfBirth: Yup.string().required().label("Date of Birth"),
       state: Yup.string().required().label("State"),
@@ -93,6 +91,7 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
     //     toast.error('Please add product images or variations.');
     //   } else {
         try {
+            toast.loading("Submitting...");
             const promises: Promise<Response>[] = [];
 
             productImages.forEach((image: ProductImage) => {
@@ -168,7 +167,6 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
                     location: {
                       state: values.state,
                       lga: values.lga,
-                      // address: values.address,
                     },
                 };
 
@@ -181,22 +179,25 @@ const EditPetForm = ({ pet }: { pet?: IPet | undefined }) => {
                     `Bearer ${token}`
                 )
                 .then((apiRes) => {
-                    console.log('Response: ', apiRes);
-
                     if (apiRes.data) {
-                    formik.resetForm();
+                      formik.resetForm();
 
-                    toast.success('Pet listing updated.');
-                    console.log(apiRes);
+                      toast.dismiss();
+                      toast.success('Pet listing updated.');
 
-                    setTimeout(() => {
-                        router.push('/dashboard/pets');
-                    }, 1000);
+                      setTimeout(() => {
+                          router.push('/dashboard/pets');
+                      }, 1000);
                     }
                 });
-            } else console.log('Images not provided.');
+            } else { 
+              toast.dismiss();
+              toast.error("Images not provided.");
+              console.log('Images not provided.') 
+            };
         } catch (error: any) {
           console.log(error);
+          toast.dismiss();
           toast.error(error.message);
         }
     //   }

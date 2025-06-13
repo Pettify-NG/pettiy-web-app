@@ -87,15 +87,14 @@ export default function PetListingsTable ({
                     } 
                     return response.json(); 
                 }).then(data => { 
-                        console.log(data.meta); 
                         setTotalRecords(data.meta.totalRecords); 
                         setTotalPages(data.meta.totalPages); 
-                        console.log(data.data); 
                         setLazyListings(data.data); 
+
                         setLoading(false); 
                 }).catch(error => { 
                     toast.error(error.message); 
-                    console.error('There was a problem with the fetch operation:', error); 
+  //                   console.error('There was a problem with the fetch operation:', error); 
                 }); 
             }; 
          
@@ -137,7 +136,6 @@ export default function PetListingsTable ({
   
         toast.dismiss();
         if (res.success) {
-          console.log(res);
           toast.success('Pet deleted.');
 
           setDeleteModal(false);
