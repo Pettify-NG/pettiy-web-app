@@ -1,8 +1,9 @@
-import { IWallet } from "./wallet"
+import { IWallet } from "./wallet";
+import IOrder from "./orders";
 
 export interface IDashboardData {
     wallet?: IWallet
-    orders: any[]
+    orders: IOrder[]
     totalOrders: number
     totalPets: number
     totalAccessories: number

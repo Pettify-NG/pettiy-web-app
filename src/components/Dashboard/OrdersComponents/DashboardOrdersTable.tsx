@@ -122,7 +122,7 @@ export default function DashboardOrdersTable({
     return (
       <div className='flex items-center gap-4'>
         <Image
-          src={firstProduct.productType === "pet" ? (firstProduct.product?.pet_images[0] ?? "") : (firstProduct.product?.accessoryImages[0] ?? "")}
+          src={firstProduct?.productType === "pet" ? (firstProduct?.product?.pet_images?.[0] ?? "") : (firstProduct?.product?.accessoryImages?.[0] ?? "")}
           alt='image'
           width={20}
           height={20}
@@ -131,7 +131,7 @@ export default function DashboardOrdersTable({
 
         <div className='div capitalize flex-1'>
           <p className='text-sm flex-1 font-medium'>
-            {firstProduct.productType === "pet" ? firstProduct.product?.breed : firstProduct.product?.name}
+            {firstProduct?.productType === "pet" ? firstProduct?.product?.breed : firstProduct?.product?.name}
           </p>
           {order.products.length > 1 && (
             <p className='text-xs text-neutral'>
