@@ -8,6 +8,7 @@ export default interface IOrder {
   buyer: IUser;
   seller: IUser;
   totalAmount: number;
+  totalPriceAll: number;
   status: "pending" | "paid" | "failed";
   deliveryStatus: string;
   paymentStatus: string;

@@ -24,7 +24,11 @@ export default function DashboardOrdersTable({
   };
 
   function amountTemplate(order: IOrder) {
-    return formatCurrency(order.totalAmount);
+    const total = order.totalPriceAll || order.products.reduce((acc: number, curr: any) => {
+      return acc + curr.totalPrice;
+    }, 0);
+
+    return formatCurrency(total);
   }
 
   function statusTemplate(order: IOrder) {
@@ -166,7 +170,7 @@ export default function DashboardOrdersTable({
           <Column field='uuid' header='Order ID' body={idTemplate} className='text-[#F2C94C]'/>
           <Column body={productTemplate} header='Product(s)' />
           <Column
-              field='totalAmount'
+              // field='totalAmount'
               header='Amount'
               body={amountTemplate}
           />
