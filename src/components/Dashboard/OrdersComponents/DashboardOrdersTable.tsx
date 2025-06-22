@@ -31,12 +31,12 @@ export default function DashboardOrdersTable({
     return formatCurrency(total);
   }
 
-  function statusTemplate(order: IOrder) {
-    const { status } = order;
+  function statusTemplate(type: string, order: IOrder) {
+    const { paymentStatus, deliveryStatus } = order;
 
     let styles = '';
 
-    switch (status.toLowerCase()) {
+    switch (type === "payment" ? paymentStatus.toLowerCase() : deliveryStatus.toLowerCase) {
       case 'processing':
         styles = 'bg-orange-100 text-orange-600';
         break;
@@ -68,7 +68,7 @@ export default function DashboardOrdersTable({
 
     return (
       <span className={`p-2 px-4 text-xs font-medium rounded-full whitespace-nowrap ${styles}`}>
-        {String(order.status).charAt(0).toUpperCase() + String(order.status).slice(1)}
+        {String(type === "payment" ? paymentStatus : deliveryStatus).charAt(0).toUpperCase() + String(type === "payment" ? paymentStatus : deliveryStatus).slice(1)}
       </span>
     );
   }
@@ -174,8 +174,8 @@ export default function DashboardOrdersTable({
               header='Amount'
               body={amountTemplate}
           />
-          {/* <Column field="selectedLocation" header="Delivery Location" /> */}
-          <Column field='status' header='Status' body={statusTemplate} />
+          <Column field='paymentStatus' header='Payment Status' body={(order) => statusTemplate("payment", order)} />
+          <Column field='deliveryStatus' header='Delivery Status' body={(order) => statusTemplate("delivery", order)} />
           <Column field='createdAt' header='Date' body={dateTemplate} />
         </DataTable>
       </div>

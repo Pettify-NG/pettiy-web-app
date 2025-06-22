@@ -184,7 +184,11 @@ export default function OrdersTable({
   };
 
   function amountTemplate(order: IOrder) {
-    return formatCurrency(order.totalAmount);
+    const total = order.totalPriceAll || order.products.reduce((acc: number, curr: any) => {
+      return acc + curr.totalPrice;
+    }, 0);
+
+    return formatCurrency(total);
   }
 
   function actionTemplate(order: IOrder) {
@@ -200,17 +204,20 @@ export default function OrdersTable({
     );
   }
 
-  function statusTemplate(order: IOrder) {
-    const { status } = order;
+  function statusTemplate(type: string, order: IOrder) {
+    const { paymentStatus, deliveryStatus } = order;
 
     let styles = '';
 
-    switch (status.toLowerCase()) {
-      case 'pending':
+    switch (type === "payment" ? paymentStatus.toLowerCase() : deliveryStatus.toLowerCase) {
+      case 'processing':
         styles = 'bg-orange-100 text-orange-600';
         break;
       case 'shipped':
         styles = 'bg-[#E8F8FD] text-[#13B2E4]';
+        break;
+      case 'picked':
+        styles = 'bg-green-100 text-green-600';
         break;
       case 'delivered':
         styles = 'bg-green-100 text-green-600';
@@ -234,7 +241,7 @@ export default function OrdersTable({
 
     return (
       <span className={`p-2 px-4 text-xs font-medium rounded-full whitespace-nowrap ${styles}`}>
-        {String(order.status).charAt(0).toUpperCase() + String(order.status).slice(1)}
+        {String(type === "payment" ? paymentStatus : deliveryStatus).charAt(0).toUpperCase() + String(type === "payment" ? paymentStatus : deliveryStatus).slice(1)}
       </span>
     );
   }
@@ -425,7 +432,8 @@ export default function OrdersTable({
               body={amountTemplate}
               sortable
             />
-            <Column field='status' header='Status' sortable body={statusTemplate} />
+            <Column field='paymentStatus' header='Payment Status' sortable body={(order) => statusTemplate("payment", order)} />
+            <Column field='deliveryStatus' header='Delivery Status' sortable body={(order) => statusTemplate("delivery", order)} />
             <Column field='date' header='Date' body={dateTemplate} sortable />
             <Column field='action' header='Action' body={actionTemplate} />
           </DataTable>
