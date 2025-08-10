@@ -209,7 +209,7 @@ export default function OrdersTable({
 
     let styles = '';
 
-    switch (type === "payment" ? paymentStatus.toLowerCase() : deliveryStatus.toLowerCase) {
+    switch (type === "payment" ? paymentStatus?.toLowerCase() : deliveryStatus?.toLowerCase()) {
       case 'processing':
         styles = 'bg-orange-100 text-orange-600';
         break;

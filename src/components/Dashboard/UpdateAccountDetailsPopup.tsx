@@ -133,6 +133,7 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
                         bankName: bank[0].name,
                         accountNumber: values.accountNumber,
                         accountHolderName: accountName,
+                        bankCode: bank[0].code,
                     }
                 };
 
@@ -140,7 +141,7 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
 
                 httpService
                 .patch(
-                    `${ENDPOINTS.WALLET}${walletId}`, 
+                    `${ENDPOINTS.WALLET}${walletId}/setup-bank-details`, 
                     data, 
                     `Bearer ${token}`
                 )
