@@ -32,6 +32,7 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
     const [accountName, setAccountName] = useState<string>("");
 
     const [banks, setBanks] = useState<any>([]);
+
     useEffect(() => {
         const fetchBanks = async () => {
             const response = await fetch('https://api.paystack.co/bank', {
@@ -40,7 +41,7 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
                 },
             });
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setBanks(data.data); // Array of banks with their codes
         };
         
@@ -110,31 +111,14 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
         }),
         onSubmit: async (values) => {
             try {
+                toast.loading("Submitting...");
                 const bank = banks?.filter((bank: any) => bank.id === Number(values.bankId));
-                // console.log(bank);
-                // const result = await verifyAccount(values.accountNumber, bank[0].code);
-
-                // if (result.isValid) {
-                //     console.log('Account verified:', result.accountName);
-                //     setAccountName(result.accountName);
-                //     // formik.setField("accountHolderName", result.accountName);
-                //     // if(result.accountName.toLowerCase() !== values.accountHolderName.toLowerCase()) {
-                //     //     toast.error("Account Holder name you entered does not match the name associated with account number.");
-                //     //     return;
-                //     // }
-                // } else {
-                //     console.error('Account verification failed:', result.error);
-                //     toast.error(result.error);
-                //     return;
-                // }
 
                 const data = {
-                    accountDetails: {
                         bankName: bank[0].name,
                         accountNumber: values.accountNumber,
                         accountHolderName: accountName,
                         bankCode: bank[0].code,
-                    }
                 };
 
                 console.log('Request Body: ', data);
@@ -147,13 +131,14 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
                 )
                 .then((apiRes) => {
                     console.log('Response: ', apiRes);
+                    toast.dismiss();
 
-                    if (apiRes.data) {
+                    if (apiRes.success) {
                         formik.resetForm();
 
-                        toast.success('Account Details updated.');
-
                         closePopup();
+
+                        toast.success(apiRes.message, { duration: 2000 });
 
                         router.refresh();
                         window.location.reload();
@@ -242,13 +227,6 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
                 <label htmlFor='accountHolderName' className='text-sm text-neutral mb-2 block'>
                     {accountName}
                 </label>
-                {/* <TextInput
-                    placeholder='Enter account holder name...'
-                    id='accountHolderName'
-                    onChange={formik.handleChange}
-                    value={formik.values.accountHolderName}
-                    error={formik.errors.accountHolderName}
-                /> */}
             </div>
 
             <div className="flex justify-end space-x-2">
