@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 import HTTPService from "@/services/http";
-import logo from "../../../../public/1-Photoroom.png"
+import logo from "../../../public/1-Photoroom.png";
 import TextInput from '@/components/Global/TextInput';
 import Button from "@/components/Global/Button";
 
