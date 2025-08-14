@@ -32,7 +32,7 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
     const [isPopupVisible, setPopupVisible] = useState(false);
 
     const [withdrawModal, setWithdrawModal] = useState<boolean>(false);
-    const [inputValue, setInputValue] = useState<string>();
+    const [inputValue, setInputValue] = useState<number>();
     const [inputError, setInputError] = useState<string>("");
 
     const httpService = new HTTPService();
@@ -72,7 +72,7 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
         }
 
         if (numValue <= maxValue) {
-            setInputValue(inputValue);
+            setInputValue(numValue);
         }
     }
 
@@ -104,7 +104,7 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
                 }
             });
         } catch(error) {
-            console.log("Error creating withdrawal request.");
+            console.log(`Error creating withdrawal request:  ${error}`);
             toast.error("Error creating witdrawal request.");
         }
     }
@@ -212,6 +212,7 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
             isOpen={withdrawModal}
             handleClose={() => setWithdrawModal(false)}
             title='Enter withdrawal amount'
+            otherStyles="w-1/2"
         > 
             <TextInput
                 placeholder='Enter amount you want to withdraw...'
@@ -221,11 +222,11 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
                 error={inputError}
             />
             
-            <div className='flex items-center gap-2 justify-between'>
-                <Button onClick={withdraw}>Yes</Button>
+            <div className='flex items-center gap-2 mt-4 justify-between'>
                 <Button variant='outlined' onClick={() =>  setWithdrawModal(false)}>
                     No
                 </Button>
+                <Button className="text-white" onClick={withdraw}>Yes</Button>
             </div>
         </Modal>
         </>

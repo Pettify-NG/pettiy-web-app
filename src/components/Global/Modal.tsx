@@ -11,6 +11,7 @@ interface ModalProps {
   closeButton?: boolean;
   handleClose: () => void;
   children: React.ReactNode;
+  otherStyles?: string;
 }
 
 function CloseButton({ handleClick }: ButtonProps) {
@@ -30,12 +31,13 @@ const Modal = ({
   handleClose,
   closeButton = true,
   children,
+  otherStyles = ""
 }: ModalProps) => {
   if (!isOpen) return;
 
   return (
     <div
-      className={`h-screen w-screen flex items-center justify-center fixed top-0 left-0 bg-[rgba(0,0,0,0.6)] p-4 modal-overlay z-50 duration-500 backdrop-blur-md`}
+      className={`h-screen w-screen flex items-center justify-center fixed top-0 left-0 bg-[rgba(0,0,0,0.6)] p-4 modal-overlay z-50 duration-500 backdrop-blur-md ${otherStyles}`}
     >
       <div className='p-6 w-full max-w-2xl bg-white rounded-2xl duration-500 overflow-y-auto max-h-[80vh]'>
         <div className='flex items-center justify-between mb-8'>
