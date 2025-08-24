@@ -115,10 +115,10 @@ const UpdateAccountDetailsPopup: React.FC<ICreateListingProp> = ({ closePopup, w
                 const bank = banks?.filter((bank: any) => bank.id === Number(values.bankId));
 
                 const data = {
-                        bankName: bank[0].name,
-                        accountNumber: values.accountNumber,
-                        accountHolderName: accountName,
-                        bankCode: bank[0].code,
+                    bankName: bank[0].name,
+                    accountNumber: values.accountNumber,
+                    accountHolderName: accountName,
+                    bankCode: bank[0].code,
                 };
 
                 console.log('Request Body: ', data);

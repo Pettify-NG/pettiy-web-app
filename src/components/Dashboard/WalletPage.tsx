@@ -5,6 +5,8 @@ import { FaShoppingBag } from "react-icons/fa";
 import { AiFillBank } from "react-icons/ai";
 import { CiMoneyBill } from "react-icons/ci";
 import Cookies from "universal-cookie";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 import Pagination from "@/components/Shared/Paginatioin";
 import Button from "@/components/Global/Button";
@@ -15,7 +17,6 @@ import { IWallet } from "@/interfaces/wallet";
 import UpdateAccountDetailsPopup from "./UpdateAccountDetailsPopup";
 import Modal from "../Global/Modal";
 import TextInput from "../Global/TextInput";
-import toast from "react-hot-toast";
 import ENDPOINTS from "@/config/ENDPOINTS";
 import HTTPService from "@/services/http";
 
@@ -25,6 +26,8 @@ interface IWalletPage {
 }
 
 const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): React.JSX.Element => {
+    const router = useRouter();
+
     const card_icon_style = 'h-10 w-10 text-xl flex items-center justify-center rounded-full';
 
     const [seller_info, setSellerInfo] = useLocalStorage<any>("pettify-details", {} as any);
@@ -99,6 +102,9 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
                     toast.success('Withdrawal Request Submitted. An admin will attend to your request shortly.');
 
                     setWithdrawModal(false)
+
+                    router.refresh();
+                    window.location.reload();
                 } else {
                     toast.error(apiRes.message);
                 }
@@ -151,7 +157,7 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
                 </section>
 
                 <button disabled={data?.balance == 0 ? true : false} onClick={() => setWithdrawModal(true)} className={`rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap ${data?.balance == 0 ? "bg-gray-300" : "bg-[#ED770B]"} py-[10px] px-[14px]`} >
-                    Withdraw funds
+                    Withdraw Funds
                 </button>
 
                 <section>
@@ -179,23 +185,22 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
                                     <p>Account details not provided.</p>
                                 }
 
-
                                 <button onClick={() => setPopupVisible(true)} className='rounded-[8px] h-fit w-fit text-[14px] text-white gap-[4px] flex items-center whitespace-nowrap bg-[#ED770B] py-[10px] px-[14px] ' >
                                     Update acount details
                                 </button>
                             </div>
                         </div>
 
-                        <h2 className="text-black my-4 font-semibold text-2xl">Your Transactions</h2>
+                        {/* <h2 className="text-black my-4 font-semibold text-2xl">Your Transactions</h2> */}
 
-                        {/* Tables */}
-                        <div className="w-full my-6">
-                            {/* <PayoutTable 
+                        {/* Table */}
+                        {/* <div className="w-full my-6">
+                            <PayoutTable 
                                 selectedDate={null}
                                 searchValue=""
                                 payouts={null}
-                            /> */}
-                        </div>
+                            />
+                        </div> */}
                     </div>
                 </section>
             </div>
@@ -205,30 +210,28 @@ const WalletPage = ({ availableBalance = 0, pendingBalance = 0 }: IWalletPage): 
                 <UpdateAccountDetailsPopup closePopup={() => setPopupVisible(false)} walletId={data?._id ?? ""} />
             )}
 
-
-
-        {/* Enter withdrawal amount Accessory Modal */}
-        <Modal
-            isOpen={withdrawModal}
-            handleClose={() => setWithdrawModal(false)}
-            title='Enter withdrawal amount'
-            otherStyles="w-1/2"
-        > 
-            <TextInput
-                placeholder='Enter amount you want to withdraw...'
-                id='withdrawalAmount'
-                onChange={handleChange}
-                value={inputValue}
-                error={inputError}
-            />
-            
-            <div className='flex items-center gap-2 mt-4 justify-between'>
-                <Button variant='outlined' onClick={() =>  setWithdrawModal(false)}>
-                    No
-                </Button>
-                <Button className="text-white" onClick={withdraw}>Yes</Button>
-            </div>
-        </Modal>
+            {/* Enter withdrawal amount Accessory Modal */}
+            <Modal
+                isOpen={withdrawModal}
+                handleClose={() => setWithdrawModal(false)}
+                title='Enter withdrawal amount'
+                otherStyles="lg:w-1/3 md:w-1/2 sm:w-full"
+            > 
+                <TextInput
+                    placeholder='Enter amount you want to withdraw...'
+                    id='withdrawalAmount'
+                    onChange={handleChange}
+                    value={inputValue}
+                    error={inputError}
+                />
+                
+                <div className='flex items-center justify-end gap-2 mt-4'>
+                    <Button variant='outlined' onClick={() =>  setWithdrawModal(false)}>
+                        No
+                    </Button>
+                    <Button className="text-white" onClick={withdraw}>Yes</Button>
+                </div>
+            </Modal>
         </>
     )
 }
