@@ -139,6 +139,15 @@ export default function Login() {
 
               <div className='flex items-center justify-end mt-6'>
                 <Link
+                  href='/forgot-password'
+                  className='font-semibold text-black'
+                >
+                  <span className='hover:text-underline text-[#ED770B] hover:opacity-80 cursor-pointer hover:text-gray'>Forgot password?</span>
+                </Link>
+              </div>
+
+              <div className='flex items-center justify-center mt-12'>
+                <Link
                   href='/register'
                   className='font-semibold text-black'
                 >
