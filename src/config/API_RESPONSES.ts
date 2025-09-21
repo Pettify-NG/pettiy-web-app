@@ -14,10 +14,9 @@ export const API_RESPONSES: ResponsesType = {
   },
 
   SIGN_UP: {
-    201: 'Registration Successful. OTP has been sent to your email.',
+    201: 'Registration Successful. An OTP has been sent to your email. Please check your spam folder if you could not find the verification email.',
     302: 'User with this email already exists.',
     404: 'Cannot process request at the moment',
-    
   },
 
   VERIFY_OTP: {
