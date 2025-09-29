@@ -7,12 +7,12 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import * as Yup from 'yup';
+import { useSearchParams } from "next/navigation";
 
 import HTTPService from "@/services/http";
 import logo from "../../../public/1-Photoroom.png";
 import TextInput from '@/components/Global/TextInput';
 import Button from "@/components/Global/Button";
-
 
 const passwordSchema = Yup.string()
   .required("Password is required")
@@ -22,11 +22,14 @@ const passwordSchema = Yup.string()
   .matches(/[0-9]/, "Password must contain at least one number")
   .matches(/[@$!%*?&#]/, "Password must contain at least one special character");
 
-export default function ResetPassword({ params }: { params: { token: string }}) {
+export default function ResetPassword() {
     const [password, setPassword] = useState<string>("");
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
+
+    const searchParams = useSearchParams();
+    const token = searchParams.get("token");
 
     const httpService = new HTTPService();
 
@@ -44,7 +47,7 @@ export default function ResetPassword({ params }: { params: { token: string }}) 
         }
 
         try {
-            const res = await httpService.post(`auth/reset-password/${params.token}`, data);
+            const res = await httpService.post(`auth/reset-password/${token}`, data);
 
             if(res.success) {
                 toast.success(res.message, { duration: 2000 });
